@@ -1,0 +1,151 @@
+<!doctype html>
+<html class="not-ready lg:text-base overflow-y-scroll scroll-pt-14 scheme-light dark:scheme-dark" lang="en">
+
+<head prefix="og: https://ogp.me/ns# article: https://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="generator" content="Zola v0.21.0" />
+  <title>Ansible: Performance Impact of the Python version</title>
+  <meta property="og:title" content="Ansible: Performance Impact of the Python version" />
+  <meta property="og:url" content="https://goneri.lebouder.net/ansible-performance-impact-of-the-python-version/" />
+  <link rel="canonical" href="https://goneri.lebouder.net/ansible-performance-impact-of-the-python-version/" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2020-11-26T20:01:54+00:00" />
+  <link rel="alternate" type="application/atom+xml" href="https://goneri.lebouder.net/atom.xml" title="Atom" />
+  <link rel="alternate" type="application/rss+xml" href="https://goneri.lebouder.net/rss.xml" title="RSS" />
+  <!-- Begin Head inject -->
+  
+  <!-- End Head inject -->
+  <link rel="stylesheet" href="https://goneri.lebouder.net/main.min.css?h=80ece4d015818ae93fff" />
+  <link rel="stylesheet" href="https://goneri.lebouder.net/icons.css?h=7dd5ab449fa840fc01e2" />
+  <style>:root{--bg: #f4f4f5; --header: #e4e4e7;} :root.dark{--bg: #18181b; --header: #27272a;}</style>
+  <meta name="theme-color" data-light="#e4e4e7" data-dark="#27272a" content="#e4e4e7" />
+  <link rel="icon" type="image/x-icon" href="https://goneri.lebouder.net/favicon.ico" />
+  <link rel="apple-touch-icon" type="image/png" href="https://goneri.lebouder.net/apple-touch-icon.png?h=58bee300054c5308feb3" />
+  <link rel="icon" type="image/png" href="https://goneri.lebouder.net/android-icon.png?h=8d80ec95446bd2c36826" />
+  <script src="https://goneri.lebouder.net/js/zola-theme.min.js?h=26975b146d48e6ff41af"></script>
+  <!-- Begin Head End inject -->
+  
+  <!-- End Head End inject -->
+</head>
+
+<body class="text-black duration-100 ease-out dark:text-white">
+  <!-- Header -->
+<header class="header fixed top-0 z-40 mx-auto min-h-13 w-full">
+  <div class="mx-auto w-full max-w-4xl p-2.5 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center min-h-8 overflow-hidden">
+        <button type="button" title="Go to home page [Alt + !]" accesskey="!"
+          onclick="window.location.href='https://goneri.lebouder.net/';"
+          class="btn-home h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-home,url(icons/home.svg))] dark:invert"
+        ></button>
+        <button type="button" title="Switch color scheme [Alt + $]" accesskey="$"
+          onclick="window.zolaTheme.color.toggle();"
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-btn-dark,url(icons/btn-dark.svg))]
+            dark:[background-image:var(--icons-btn-light,url(icons/btn-light.svg))] dark:invert"
+        ></button>
+        <button type="button" title="Open search [Alt + /]" accesskey="/"
+          onclick="window.zolaTheme.search.toggle();"
+          class="btn-search ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-search,url(icons/search.svg))] dark:invert"
+        ></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+  <!-- Begin Body Start inject -->
+  
+  <!-- End Body Start inject -->
+  <main class="prose prose-neutral dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg
+    relative mx-auto min-h-[calc(100vh-4rem)] max-w-3xl px-4 pt-28 lg:pt-32 pb-12 wrap-break-word">
+      <!-- Search -->
+<div id="linkita-search-wrapper" class="hidden">
+  <ul id="linkita-search-results"></ul>
+</div>
+<script>window.zolaTheme.search.init({ scripts: ["https://goneri.lebouder.net/elasticlunr.min.js", "https://goneri.lebouder.net/search_index.en.js"], arg: { w: "#linkita-search-wrapper", r: "#linkita-search-results" } });</script>
+
+    
+<article>
+  <!-- Begin Page Start inject -->
+  
+  <!-- End Page Start inject -->
+
+  <header class="mb-16">
+    <h1 class="my-0! pb-2.5">Ansible: Performance Impact of the Python version</h1>
+    <!-- Page Info -->
+<div class="text-sm antialiased opacity-80"><time
+      datetime="2020-11-26T20:01:54+00:00">2020-11-26</time><span
+        class="middot"></span><time
+    datetime="PT0H3M0S">3&nbsp;min</time><span
+      class="middot"></span>
+</div>
+
+  </header>
+  <!-- TOC -->
+
+  <!-- Content -->
+  <section><p>Until recently, I was not really paying attention to the version of Python I was using with Ansible, this as soon as it was Python3. The default version was always good enough for Ansible.</p>
+<p>During the last weeks, I spent the majority of my time working on the performance the community.kubernetes collection. The modules of these collection depend on a large library (OpenShift SDK) and Python needs to reload it before every task execution. The goal was to benefit from what is already in place with vmware.vmware_rest: <a href="https://goneri.lebouder.net/2020/10/13/how-to-speed-up-your-api-client-modules/">See: my AnsibleFest presentation</a>.</p>
+<p>And while working on this, I realized that my metrics were not consistent, I was not able to reproduce some test-cases that I did 2 months ago. After a quick investigation, the Python version matters much more than expected.</p>
+<p>To compare the different Python versions, I decided to run some tests.</p>
+<p>The target host is a t2.medium instance (2 vCPUS, 4GiB) running on AWS. And the Operating system is Fedora 33, which is really handy for this because it ships all the Python versions from 3.6 to 3.10!</p>
+<p>I use the last stable version of Ansible (2.10.3) that I install with <code>pip</code> in a Python virtual environment. <a href="https://gist.github.com/goneri/721160564904c5c0f35a1b47736ada58">The list of the dependencies present in the virtualenvs.</a></p>
+<p>Finally, I deploy Kubernetes on <a href="https://podman.io/">Podman</a> with <a href="https://kind.sigs.k8s.io/">Kubernetes Kind</a>.</p>
+<p>For the first test, I use a Python one-liner to evaluate the time Python takes to load the OpenShift SDK. This is one of the operations that I want to optimize for my work and so it matters a lot to me.</p>
+<p>https://gist.github.com/goneri/c4f8ec63d0c51f7e6236173b2c60db66</p>
+<p>Here the loading is done 100 times in a row.</p>
+<p>The result shows a steady improvement of the performance since Python 3.6.</p>
+<table><thead><tr><th></th><th>Python3.6</th><th>Python3.7</th><th>Python3.8</th><th>Python3.9</th><th>Python3.10</th></tr></thead><tbody>
+<tr><td>time (sec)</td><td>48.401</td><td>45.088</td><td>41.751</td><td>40.924</td><td>40.385</td></tr>
+</tbody></table>
+<p>With this test, the loading of the SDK is <strong>16.5% faster</strong> with Python 3.10.</p>
+<p>The next test does the same thing, but this time through Ansible. My test uses the following playbook:</p>
+<p>https://gist.github.com/goneri/ad252e30d48cfea99aaeb2e18736303e</p>
+<p>It runs the <code>k8s_info</code> module 100 times in a row. In addition, I also use an <code>ansible.cfg</code> with the following content. This way, ansible-playbook returns a nice output of the task execution duration:</p>
+<p>https://gist.github.com/goneri/e364c17d6344fd4cd11c1ed2e0ba12ce</p>
+<table><thead><tr><th></th><th>Python3.6</th><th>Python3.7</th><th>Python3.8</th><th>Python3.9</th><th>Python3.10</th></tr></thead><tbody>
+<tr><td>time (sec)</td><td>85.5</td><td>80.5</td><td>75.35</td><td>75.05</td><td>71.19</td></tr>
+</tbody></table>
+<p>It's a <strong>16.76%</strong> boost between Python 3.6 and Python 3.10. I was not expecting such tight correlation between the two tests.</p>
+<p><a href="https://rvf.wax.mybluehost.me/wp-content/uploads/2020/11/image.png"><img src="https://rvf.wax.mybluehost.me/wp-content/uploads/2020/11/image.png?w=605" alt="" /></a></p>
+<p>While Python is obviously not the faster technology out there, it's great to see how its performance are getting better release after release. Python 3.10 is not even released yet and looks promising.</p>
+<p>If your playbooks use some modules with dependency on large Python library, it may be interesting to give a try to the lastest Python versions.</p>
+<p>And for those who are still running Python 2.7, I get a <strong>49.2%</strong> the performance boost between 2.7 and 3.10.</p>
+</section>
+  <hr />
+  <!-- Post Taxonomies -->
+
+  <!-- Begin Page End inject -->
+  
+  <!-- End Page End inject -->
+</article>
+
+  </main>
+  <!-- Footer -->
+<footer class="mx-auto flex lg:mt-5 max-w-3xl flex-wrap items-center px-4 py-3 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+  © <time datetime="2025">2025</time>
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <span class="mr-6 lg:ml-6">
+      <a class="link" href="https://www.getzola.org/" target="_blank">Powered by Zola</a>
+    </span>
+    <a class="link" href="https://www.getzola.org/themes/linkita/" target="_blank">&#9998; Linkita</a>
+  </div>
+  <!-- Begin Footer inject -->
+  
+  <!-- End Footer inject -->
+</footer>
+
+  
+
+  <!-- Begin Body End inject -->
+  
+  <!-- End Body End inject -->
+</body>
+
+</html>

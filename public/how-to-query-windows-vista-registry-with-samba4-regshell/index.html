@@ -1,0 +1,127 @@
+<!doctype html>
+<html class="not-ready lg:text-base overflow-y-scroll scroll-pt-14 scheme-light dark:scheme-dark" lang="en">
+
+<head prefix="og: https://ogp.me/ns# article: https://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="generator" content="Zola v0.21.0" />
+  <title>How to query Windows Vista registry with Samba4 regshell</title>
+  <meta property="og:title" content="How to query Windows Vista registry with Samba4 regshell" />
+  <meta property="og:url" content="https://goneri.lebouder.net/how-to-query-windows-vista-registry-with-samba4-regshell/" />
+  <link rel="canonical" href="https://goneri.lebouder.net/how-to-query-windows-vista-registry-with-samba4-regshell/" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2009-10-12T15:15:50+00:00" />
+  <link rel="alternate" type="application/atom+xml" href="https://goneri.lebouder.net/atom.xml" title="Atom" />
+  <link rel="alternate" type="application/rss+xml" href="https://goneri.lebouder.net/rss.xml" title="RSS" />
+  <!-- Begin Head inject -->
+  
+  <!-- End Head inject -->
+  <link rel="stylesheet" href="https://goneri.lebouder.net/main.min.css?h=80ece4d015818ae93fff" />
+  <link rel="stylesheet" href="https://goneri.lebouder.net/icons.css?h=7dd5ab449fa840fc01e2" />
+  <style>:root{--bg: #f4f4f5; --header: #e4e4e7;} :root.dark{--bg: #18181b; --header: #27272a;}</style>
+  <meta name="theme-color" data-light="#e4e4e7" data-dark="#27272a" content="#e4e4e7" />
+  <link rel="icon" type="image/x-icon" href="https://goneri.lebouder.net/favicon.ico" />
+  <link rel="apple-touch-icon" type="image/png" href="https://goneri.lebouder.net/apple-touch-icon.png?h=58bee300054c5308feb3" />
+  <link rel="icon" type="image/png" href="https://goneri.lebouder.net/android-icon.png?h=8d80ec95446bd2c36826" />
+  <script src="https://goneri.lebouder.net/js/zola-theme.min.js?h=26975b146d48e6ff41af"></script>
+  <!-- Begin Head End inject -->
+  
+  <!-- End Head End inject -->
+</head>
+
+<body class="text-black duration-100 ease-out dark:text-white">
+  <!-- Header -->
+<header class="header fixed top-0 z-40 mx-auto min-h-13 w-full">
+  <div class="mx-auto w-full max-w-4xl p-2.5 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center min-h-8 overflow-hidden">
+        <button type="button" title="Go to home page [Alt + !]" accesskey="!"
+          onclick="window.location.href='https://goneri.lebouder.net/';"
+          class="btn-home h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-home,url(icons/home.svg))] dark:invert"
+        ></button>
+        <button type="button" title="Switch color scheme [Alt + $]" accesskey="$"
+          onclick="window.zolaTheme.color.toggle();"
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-btn-dark,url(icons/btn-dark.svg))]
+            dark:[background-image:var(--icons-btn-light,url(icons/btn-light.svg))] dark:invert"
+        ></button>
+        <button type="button" title="Open search [Alt + /]" accesskey="/"
+          onclick="window.zolaTheme.search.toggle();"
+          class="btn-search ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-search,url(icons/search.svg))] dark:invert"
+        ></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+  <!-- Begin Body Start inject -->
+  
+  <!-- End Body Start inject -->
+  <main class="prose prose-neutral dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg
+    relative mx-auto min-h-[calc(100vh-4rem)] max-w-3xl px-4 pt-28 lg:pt-32 pb-12 wrap-break-word">
+      <!-- Search -->
+<div id="linkita-search-wrapper" class="hidden">
+  <ul id="linkita-search-results"></ul>
+</div>
+<script>window.zolaTheme.search.init({ scripts: ["https://goneri.lebouder.net/elasticlunr.min.js", "https://goneri.lebouder.net/search_index.en.js"], arg: { w: "#linkita-search-wrapper", r: "#linkita-search-results" } });</script>
+
+    
+<article>
+  <!-- Begin Page Start inject -->
+  
+  <!-- End Page Start inject -->
+
+  <header class="mb-16">
+    <h1 class="my-0! pb-2.5">How to query Windows Vista registry with Samba4 regshell</h1>
+    <!-- Page Info -->
+<div class="text-sm antialiased opacity-80"><time
+      datetime="2009-10-12T15:15:50+00:00">2009-10-12</time><span
+        class="middot"></span><time
+    datetime="PT0H2M0S">2&nbsp;min</time><span
+      class="middot"></span>
+</div>
+
+  </header>
+  <!-- TOC -->
+
+  <!-- Content -->
+  <section><p>In this example I list the installed software on the Vista machine from a <a href="http://www.debian.org">Debian</a> Sid with <a href="http://www.samba.org">samba</a>4 packages.</p>
+<p>I'd to enable (with lusrmsgr.msc) and use the Administrator account.</p>
+<p><code>% regshell --remote=192.168.50.10 -U Administrateur%castorLapon HKEY_CLASSES_ROOT&gt; predef HKEY_LOCAL_MACHINE HKEY_LOCAL_MACHINE&gt; cd SOFTWARE New path is: HKEY_LOCAL_MACHINE\SOFTWARE HKEY_LOCAL_MACHINE\SOFTWARE&gt; cd Microsoft New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft&gt; cd Windows New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows&gt; cd CurrentVersion New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion&gt; cd Uninstall New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall&gt; list K 7-Zip K AddressBook K Adobe Flash Player ActiveX K Bazaar_is1 K Connection Manager K DirectDrawEx K DXM_Runtime K Fontcore K IE40 K IE4Data K IE5BAKEX K IEData K Microsoft .NET Framework 3.5 Language Pack SP1 - fra K Microsoft .NET Framework 3.5 SP1 K MobileOptionPack K Mozilla Firefox (3.5.3) K MPlayer2 K OCS Inventory Agent K PuTTY_is1 K SchedulingAgent K Vim 7.2 K WIC K {205C6BDD-7B73-42DE-8505-9A093F35A238} K {26A24AE4-039D-4CA4-87B4-2F83216016FF} K {3E31821C-7917-367E-938E-E65FC413EA31} K {89F4137D-6C26-4A84-BDB8-2E5A4BB71E00} K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9} K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB350003 K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB953595 K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB958484 K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB960043 K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB963707 K {DCE8CD14-FBF5-4464-B9A4-E18E473546C7} K {F0E12BBA-AD66-4022-A453-A1C8A0C4D570} K {F18B31E4-E2E3-4F4F-A2C9-BA579D6AF400} K {FC857AFE-FC36-3C91-BC17-F8E233C21B4B}</code></p>
+</section>
+  <hr />
+  <!-- Post Taxonomies -->
+
+  <!-- Begin Page End inject -->
+  
+  <!-- End Page End inject -->
+</article>
+
+  </main>
+  <!-- Footer -->
+<footer class="mx-auto flex lg:mt-5 max-w-3xl flex-wrap items-center px-4 py-3 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+  © <time datetime="2025">2025</time>
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <span class="mr-6 lg:ml-6">
+      <a class="link" href="https://www.getzola.org/" target="_blank">Powered by Zola</a>
+    </span>
+    <a class="link" href="https://www.getzola.org/themes/linkita/" target="_blank">&#9998; Linkita</a>
+  </div>
+  <!-- Begin Footer inject -->
+  
+  <!-- End Footer inject -->
+</footer>
+
+  
+
+  <!-- Begin Body End inject -->
+  
+  <!-- End Body End inject -->
+</body>
+
+</html>

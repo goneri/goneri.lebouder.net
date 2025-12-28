@@ -1,0 +1,266 @@
+<!doctype html>
+<html class="not-ready lg:text-base overflow-y-scroll scroll-pt-14 scheme-light dark:scheme-dark" lang="en">
+
+<head prefix="og: https://ogp.me/ns# article: https://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="generator" content="Zola v0.21.0" />
+  <title>Cloud images, which one is the fastest?</title>
+  <meta property="og:title" content="Cloud images, which one is the fastest?" />
+  <meta property="og:url" content="https://goneri.lebouder.net/cloud-images-which-one-is-the-faster/" />
+  <link rel="canonical" href="https://goneri.lebouder.net/cloud-images-which-one-is-the-faster/" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2020-08-13T23:13:09+00:00" />
+  <link rel="alternate" type="application/atom+xml" href="https://goneri.lebouder.net/atom.xml" title="Atom" />
+  <link rel="alternate" type="application/rss+xml" href="https://goneri.lebouder.net/rss.xml" title="RSS" />
+  <!-- Begin Head inject -->
+  
+  <!-- End Head inject -->
+  <link rel="stylesheet" href="https://goneri.lebouder.net/main.min.css?h=80ece4d015818ae93fff" />
+  <link rel="stylesheet" href="https://goneri.lebouder.net/icons.css?h=7dd5ab449fa840fc01e2" />
+  <style>:root{--bg: #f4f4f5; --header: #e4e4e7;} :root.dark{--bg: #18181b; --header: #27272a;}</style>
+  <meta name="theme-color" data-light="#e4e4e7" data-dark="#27272a" content="#e4e4e7" />
+  <link rel="icon" type="image/x-icon" href="https://goneri.lebouder.net/favicon.ico" />
+  <link rel="apple-touch-icon" type="image/png" href="https://goneri.lebouder.net/apple-touch-icon.png?h=58bee300054c5308feb3" />
+  <link rel="icon" type="image/png" href="https://goneri.lebouder.net/android-icon.png?h=8d80ec95446bd2c36826" />
+  <script src="https://goneri.lebouder.net/js/zola-theme.min.js?h=26975b146d48e6ff41af"></script>
+  <!-- Begin Head End inject -->
+  
+  <!-- End Head End inject -->
+</head>
+
+<body class="text-black duration-100 ease-out dark:text-white">
+  <!-- Header -->
+<header class="header fixed top-0 z-40 mx-auto min-h-13 w-full">
+  <div class="mx-auto w-full max-w-4xl p-2.5 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center min-h-8 overflow-hidden">
+        <button type="button" title="Go to home page [Alt + !]" accesskey="!"
+          onclick="window.location.href='https://goneri.lebouder.net/';"
+          class="btn-home h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-home,url(icons/home.svg))] dark:invert"
+        ></button>
+        <button type="button" title="Switch color scheme [Alt + $]" accesskey="$"
+          onclick="window.zolaTheme.color.toggle();"
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-btn-dark,url(icons/btn-dark.svg))]
+            dark:[background-image:var(--icons-btn-light,url(icons/btn-light.svg))] dark:invert"
+        ></button>
+        <button type="button" title="Open search [Alt + /]" accesskey="/"
+          onclick="window.zolaTheme.search.toggle();"
+          class="btn-search ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-search,url(icons/search.svg))] dark:invert"
+        ></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+  <!-- Begin Body Start inject -->
+  
+  <!-- End Body Start inject -->
+  <main class="prose prose-neutral dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg
+    relative mx-auto min-h-[calc(100vh-4rem)] max-w-3xl px-4 pt-28 lg:pt-32 pb-12 wrap-break-word">
+      <!-- Search -->
+<div id="linkita-search-wrapper" class="hidden">
+  <ul id="linkita-search-results"></ul>
+</div>
+<script>window.zolaTheme.search.init({ scripts: ["https://goneri.lebouder.net/elasticlunr.min.js", "https://goneri.lebouder.net/search_index.en.js"], arg: { w: "#linkita-search-wrapper", r: "#linkita-search-results" } });</script>
+
+    
+<article>
+  <!-- Begin Page Start inject -->
+  
+  <!-- End Page Start inject -->
+
+  <header class="mb-16">
+    <h1 class="my-0! pb-2.5">Cloud images, which one is the fastest?</h1>
+    <!-- Page Info -->
+<div class="text-sm antialiased opacity-80"><time
+      datetime="2020-08-13T23:13:09+00:00">2020-08-13</time><span
+        class="middot"></span><time
+    datetime="PT0H13M0S">13&nbsp;min</time><span
+      class="middot"></span>
+</div>
+
+  </header>
+  <!-- TOC -->
+
+  <!-- Content -->
+  <section><p>Introduction</p>
+<p>This post compares the start-up duration of the most popular Cloud images.By start-up, I mean the time until we've got an operational SSH server.</p>
+<p>For this test, I use a pet project called Virt-Lightning ( <a href="https://virt-lightning.org/">https://virt-lightning.org/</a> ). This tool allow any Linux user to start standard Cloud image locally. It will prepare the meta-data and start a VM in your local libvirt. It's very handy for people like be, who work on Linux and spend the day starting new VM. The image are in the QCow2 format, and it uses the OpenStack meta-data format. Technically speaking, the performance should match what you get with OpenStack.</p>
+<p>Actually, OpenStack is often slightly slower because it does some extra operations. It may need to create a volume on Ceph, or prepare extra network configuration.</p>
+<p>The 2.0.0 release of Virt-Lighnint exposes a public API. My <a href="https://github.com/virt-lightning/virt-lightning/blob/master/virt-lightning.org/bench_images_startup.py">test scenario</a> is built on top of that. It uses Python to pull the different images, and creates a VM from it 10 times in a row.</p>
+<p>All the images are public, Virt-Lightning can fetch them with the <code>vl pull foo</code> command:</p>
+<p><code>vl pull centos-6</code></p>
+<p>During the boot process, the VM will set-up a static network configuration, resize the filesystem, create an user, and inject a SSH key.</p>
+<p>By default, Virt-Lightning uses a static network configuration because it's faster, and it gives better performance when we start a large number of VM at the same time. I choose to stick with this.</p>
+<p>I did my tests on my Lenovo T580, which comes with a NVMe storage, and 32GB of memory. I would be curious to see the results with the same scenario, but on regular spinning disk.</p>
+<p>The target images</p>
+<p>For this test, I compare the following Linux distributions: CentOS, Debian, Fedora, Ubuntu and OpenSUSE. As far as I know, there is no public Cloud image available for the other common distributions. If you think I'm wrong, please post a comment below.</p>
+<p>I also included the last FreeBSD, NetBSD and OpenBSD releases. They don't provide official Cloud Images. This is the reason why, I reuse the unofficial ones from <a href="https://bsd-cloud-image.org/">https://bsd-cloud-image.org/</a>.</p>
+<p>The lack of pre-existing Windows image is the reason why this OS is not included.</p>
+<p>Results</p>
+<p><img src="https://rvf.wax.mybluehost.me/wp-content/uploads/2020/08/image-7.png?w=814" alt="" /></p>
+<p>Debian 10 is by far the fastest image with an impressive 15s on average. Basically, 5s less than any other Cloud Image.</p>
+<p><img src="https://rvf.wax.mybluehost.me/wp-content/uploads/2020/08/image-4.png?w=697" alt="" /></p>
+<p>Regarding the BSD, FreeBSD is the only system able to resize the root filesystem without a reboot. Consequently, OpenBSD and NetBSD need to start two times in a row. This explains to big difference. The NetBSD kernel hardware probe is rather slow, for instance it takes 5s to initialize the ATA bus of the CDROM. This is the reason why the results look rather bad.</p>
+<p><img src="https://rvf.wax.mybluehost.me/wp-content/uploads/2020/08/image-5.png?w=604" alt="" /></p>
+<p>About Ubuntu, I was surprised by the boot duration of Ubuntu 18.04. It is about two times longer than for 16.04. 20.04 is bit better but still, we are far from the 15s of 14.04. I would be curious to know the origin of this. Maybe AppArmor?</p>
+<p><img src="https://rvf.wax.mybluehost.me/wp-content/uploads/2020/08/image-6.png?w=605" alt="" /></p>
+<p>CentOS 6 results are not really consiste. They vary between 17.9s and 25.21s. This is the largest delta if you compare with the other distribution. This being said, CentOS 6 is rather old, and won't be <a href="https://wiki.centos.org/About/Product">supported anymore</a> at the end of the year.</p>
+<p>Conclusions</p>
+<p>All the recent Linux images are based on systemd. It would be great to extract the metrics from <code>systemd-analyze</code> to understand what impact the performance the most.</p>
+<p>Most of the time, when I deploy a test VM, the very first thing I do is the installation of some import packages. This scenario may be covered later in another blog post.</p>
+<p>Raw results for each images</p>
+<p>CentOS 6</p>
+<p>image from: <a href="https://cloud.centos.org/centos/6/images/CentOS-6-x86_64-GenericCloud.qcow2">https://cloud.centos.org/centos/6/images/CentOS-6-x86_64-GenericCloud.qcow2</a><br />
+Date: Thu, 08 Aug 2019 13:28:32 GMT<br />
+Size: 806748160</p>
+<p><code>distro=centos-6, elapsed_time=023.20   distro=centos-6, elapsed_time=021.41   distro=centos-6, elapsed_time=024.97   distro=centos-6, elapsed_time=025.21   distro=centos-6, elapsed_time=020.29   distro=centos-6, elapsed_time=020.67   distro=centos-6, elapsed_time=020.13   distro=centos-6, elapsed_time=019.83   distro=centos-6, elapsed_time=020.09   distro=centos-6, elapsed_time=017.92</code><br />
+The average is 21.3s.</p>
+<p>CentOS 7</p>
+<p>image from: <a href="http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2">http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2</a><br />
+Date: Wed, 22 Apr 2020 12:24:07 GMT<br />
+Size: 858783744</p>
+<p><code>distro=centos-7, elapsed_time=020.88   distro=centos-7, elapsed_time=020.51   distro=centos-7, elapsed_time=020.42   distro=centos-7, elapsed_time=020.58   distro=centos-7, elapsed_time=020.18   distro=centos-7, elapsed_time=021.14   distro=centos-7, elapsed_time=020.74   distro=centos-7, elapsed_time=020.80   distro=centos-7, elapsed_time=020.48   distro=centos-7, elapsed_time=020.15</code></p>
+<p>Average: 20.5s</p>
+<p>CentOS 8</p>
+<p>image from: <a href="https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2">https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2</a><br />
+Date: Mon, 13 Jan 2020 21:57:45 GMT<br />
+Size: 716176896</p>
+<p><code>distro=centos-8, elapsed_time=023.55   distro=centos-8, elapsed_time=023.27   distro=centos-8, elapsed_time=024.39   distro=centos-8, elapsed_time=023.61   distro=centos-8, elapsed_time=023.52   distro=centos-8, elapsed_time=023.49   distro=centos-8, elapsed_time=023.53   distro=centos-8, elapsed_time=023.30   distro=centos-8, elapsed_time=023.34   distro=centos-8, elapsed_time=023.67</code></p>
+<p>Average: 23.5s</p>
+<p>Debian 9</p>
+<p>image from: <a href="https://cdimage.debian.org/cdimage/openstack/current-9/debian-9-openstack-amd64.qcow2">https://cdimage.debian.org/cdimage/openstack/current-9/debian-9-openstack-amd64.qcow2</a><br />
+Date: Wed, 29 Jul 2020 09:59:59 GMT<br />
+Size: 594190848</p>
+<p><code>distro=debian-9, elapsed_time=020.69   distro=debian-9, elapsed_time=020.59   distro=debian-9, elapsed_time=020.16   distro=debian-9, elapsed_time=020.30   distro=debian-9, elapsed_time=020.02   distro=debian-9, elapsed_time=020.01   distro=debian-9, elapsed_time=020.71   distro=debian-9, elapsed_time=020.48   distro=debian-9, elapsed_time=020.65   distro=debian-9, elapsed_time=020.57</code><br />
+Average is 20.4s.</p>
+<p>Debian 10</p>
+<p>image from: <a href="https://cdimage.debian.org/cdimage/openstack/current-10/debian-10-openstack-amd64.qcow2">https://cdimage.debian.org/cdimage/openstack/current-10/debian-10-openstack-amd64.qcow2</a><br />
+Date: Sat, 01 Aug 2020 20:10:01 GMT<br />
+Size: 530629120</p>
+<p><code>distro=debian-10, elapsed_time=015.25   distro=debian-10, elapsed_time=015.28   distro=debian-10, elapsed_time=014.88   distro=debian-10, elapsed_time=015.07   distro=debian-10, elapsed_time=015.39   distro=debian-10, elapsed_time=015.35   distro=debian-10, elapsed_time=015.47   distro=debian-10, elapsed_time=014.94   distro=debian-10, elapsed_time=015.57   distro=debian-10, elapsed_time=015.57</code></p>
+<p>Average is 15.2s</p>
+<p>Debian testing</p>
+<p>Debian testing is a rolling release, so I won't include it in the charts, but I found interesting to include it in the results.</p>
+<p>image from: <a href="https://cdimage.debian.org/cdimage/openstack/testing/debian-testing-openstack-amd64.qcow2">https://cdimage.debian.org/cdimage/openstack/testing/debian-testing-openstack-amd64.qcow2</a><br />
+Date: Mon, 01 Jul 2019 08:39:27 GMT<br />
+Size: 536621056</p>
+<p><code>distro=debian-testing, elapsed_time=015.07   distro=debian-testing, elapsed_time=015.03   distro=debian-testing, elapsed_time=014.93   distro=debian-testing, elapsed_time=015.33   distro=debian-testing, elapsed_time=014.85   distro=debian-testing, elapsed_time=015.53   distro=debian-testing, elapsed_time=014.94   distro=debian-testing, elapsed_time=015.22   distro=debian-testing, elapsed_time=015.19   distro=debian-testing, elapsed_time=014.86</code></p>
+<p>Average 15s</p>
+<p>Fedora 31</p>
+<p>image from: <a href="https://download.fedoraproject.org/pub/fedora/linux/releases/31/Cloud/x86_64/images/Fedora-Cloud-Base-31-1.9.x86_64.qcow2">https://download.fedoraproject.org/pub/fedora/linux/releases/31/Cloud/x86_64/images/Fedora-Cloud-Base-31-1.9.x86_64.qcow2</a><br />
+Date: Wed, 23 Oct 2019 23:06:38 GMT<br />
+Size: 355350528</p>
+<p><code>distro=fedora-31, elapsed_time=020.48   distro=fedora-31, elapsed_time=020.39   distro=fedora-31, elapsed_time=020.37   distro=fedora-31, elapsed_time=020.30   distro=fedora-31, elapsed_time=020.29   distro=fedora-31, elapsed_time=020.31   distro=fedora-31, elapsed_time=020.50   distro=fedora-31, elapsed_time=020.51   distro=fedora-31, elapsed_time=020.27   distro=fedora-31, elapsed_time=020.91</code></p>
+<p>Average 20.4s</p>
+<p>Fedora 32</p>
+<p>image from: <a href="https://download.fedoraproject.org/pub/fedora/linux/releases/32/Cloud/x86_64/images/Fedora-Cloud-Base-32-1.6.x86_64.qcow2">https://download.fedoraproject.org/pub/fedora/linux/releases/32/Cloud/x86_64/images/Fedora-Cloud-Base-32-1.6.x86_64.qcow2</a><br />
+Date: Wed, 22 Apr 2020 22:36:57 GMT<br />
+Size: 302841856</p>
+<p><code>distro=fedora-32, elapsed_time=021.68   distro=fedora-32, elapsed_time=022.43   distro=fedora-32, elapsed_time=022.17   distro=fedora-32, elapsed_time=023.06   distro=fedora-32, elapsed_time=022.23   distro=fedora-32, elapsed_time=022.83   distro=fedora-32, elapsed_time=022.54   distro=fedora-32, elapsed_time=021.46   distro=fedora-32, elapsed_time=022.37   distro=fedora-32, elapsed_time=023.14</code></p>
+<p>Average: 22.4s</p>
+<p>FreeBSD 11.4</p>
+<p>image from: <a href="https://bsd-cloud-image.org/images/freebsd/11.4/freebsd-11.4.qcow2">https://bsd-cloud-image.org/images/freebsd/11.4/freebsd-11.4.qcow2</a><br />
+Date: Wed, 05 Aug 2020 01:24:32 GMT<br />
+Size: 412895744</p>
+<p><code>distro=freebsd-11.4, elapsed_time=030.68   distro=freebsd-11.4, elapsed_time=030.64   distro=freebsd-11.4, elapsed_time=030.29   distro=freebsd-11.4, elapsed_time=030.29   distro=freebsd-11.4, elapsed_time=029.86   distro=freebsd-11.4, elapsed_time=029.74   distro=freebsd-11.4, elapsed_time=029.90   distro=freebsd-11.4, elapsed_time=029.77   distro=freebsd-11.4, elapsed_time=030.04   distro=freebsd-11.4, elapsed_time=029.70</code></p>
+<p>Average 30s</p>
+<p>FreeBSD 12.1</p>
+<p>image from: <a href="https://bsd-cloud-image.org/images/freebsd/12.1/freebsd-12.1.qcow2">https://bsd-cloud-image.org/images/freebsd/12.1/freebsd-12.1.qcow2</a><br />
+Date: Wed, 05 Aug 2020 01:46:11 GMT<br />
+Size: 479029760</p>
+<p><code>distro=freebsd-12.1, elapsed_time=029.78   distro=freebsd-12.1, elapsed_time=030.32   distro=freebsd-12.1, elapsed_time=029.56   distro=freebsd-12.1, elapsed_time=029.60   distro=freebsd-12.1, elapsed_time=029.76   distro=freebsd-12.1, elapsed_time=029.89   distro=freebsd-12.1, elapsed_time=029.55   distro=freebsd-12.1, elapsed_time=029.66   distro=freebsd-12.1, elapsed_time=029.31   distro=freebsd-12.1, elapsed_time=029.77</code></p>
+<p>Average 29.7</p>
+<p>NetBSD 8.2</p>
+<p>image from: <a href="https://bsd-cloud-image.org/images/netbsd/8.2/netbsd-8.2.qcow2">https://bsd-cloud-image.org/images/netbsd/8.2/netbsd-8.2.qcow2</a><br />
+Date: Wed, 05 Aug 2020 02:06:57 GMT<br />
+Size: 155385856</p>
+<p><code>distro=netbsd-8.2, elapsed_time=066.71   distro=netbsd-8.2, elapsed_time=067.80   distro=netbsd-8.2, elapsed_time=067.15   distro=netbsd-8.2, elapsed_time=066.97   distro=netbsd-8.2, elapsed_time=066.84   distro=netbsd-8.2, elapsed_time=067.01   distro=netbsd-8.2, elapsed_time=066.98   distro=netbsd-8.2, elapsed_time=067.73   distro=netbsd-8.2, elapsed_time=067.34   distro=netbsd-8.2, elapsed_time=066.90</code></p>
+<p>Average 67.1</p>
+<p>NetBSD 9.0</p>
+<p>image from: <a href="https://bsd-cloud-image.org/images/netbsd/9.0/netbsd-9.0.qcow2">https://bsd-cloud-image.org/images/netbsd/9.0/netbsd-9.0.qcow2</a><br />
+Date: Wed, 05 Aug 2020 02:25:11 GMT<br />
+Size: 149291008</p>
+<p><code>distro=netbsd-9.0, elapsed_time=067.04   distro=netbsd-9.0, elapsed_time=066.92   distro=netbsd-9.0, elapsed_time=066.89   distro=netbsd-9.0, elapsed_time=067.24   distro=netbsd-9.0, elapsed_time=067.41   distro=netbsd-9.0, elapsed_time=067.13   distro=netbsd-9.0, elapsed_time=066.14   distro=netbsd-9.0, elapsed_time=066.75   distro=netbsd-9.0, elapsed_time=067.25   distro=netbsd-9.0, elapsed_time=066.60</code></p>
+<p>Average: 66.9s</p>
+<p>OpenBSD 6.6</p>
+<p>image from: <a href="https://bsd-cloud-image.org/images/openbsd/6.7/openbsd-6.7.qcow2">https://bsd-cloud-image.org/images/openbsd/6.7/openbsd-6.7.qcow2</a><br />
+Date: Wed, 05 Aug 2020 04:09:44 GMT<br />
+Size: 520704512</p>
+<p><code>distro=openbsd-6.6, elapsed_time=048.80   distro=openbsd-6.6, elapsed_time=049.72   distro=openbsd-6.6, elapsed_time=049.07   distro=openbsd-6.6, elapsed_time=048.36   distro=openbsd-6.6, elapsed_time=049.28   distro=openbsd-6.6, elapsed_time=049.12   distro=openbsd-6.6, elapsed_time=049.36   distro=openbsd-6.6, elapsed_time=049.80   distro=openbsd-6.6, elapsed_time=048.05   distro=openbsd-6.6, elapsed_time=049.71</code></p>
+<p>Average: 49.1s</p>
+<p>OpenBSD 6.7</p>
+<p>image from: <a href="https://bsd-cloud-image.org/images/openbsd/6.7/openbsd-6.7.qcow2">https://bsd-cloud-image.org/images/openbsd/6.7/openbsd-6.7.qcow2</a><br />
+Date: Wed, 05 Aug 2020 04:09:44 GMT<br />
+Size: 520704512</p>
+<p><code>distro=openbsd-6.7, elapsed_time=048.81   distro=openbsd-6.7, elapsed_time=048.96   distro=openbsd-6.7, elapsed_time=049.86   distro=openbsd-6.7, elapsed_time=049.12   distro=openbsd-6.7, elapsed_time=049.75   distro=openbsd-6.7, elapsed_time=050.63   distro=openbsd-6.7, elapsed_time=050.85   distro=openbsd-6.7, elapsed_time=049.92   distro=openbsd-6.7, elapsed_time=048.98   distro=openbsd-6.7, elapsed_time=050.83</code><br />
+Average: 49.7s</p>
+<p>Ubuntu 14.04</p>
+<p>image from: <a href="https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img">https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img</a><br />
+Date: Thu, 07 Nov 2019 15:38:05 GMT<br />
+Size: 264897024</p>
+<p><code>distro=ubuntu-14.04, elapsed_time=014.40   distro=ubuntu-14.04, elapsed_time=014.42   distro=ubuntu-14.04, elapsed_time=014.94   distro=ubuntu-14.04, elapsed_time=015.44   distro=ubuntu-14.04, elapsed_time=015.64   distro=ubuntu-14.04, elapsed_time=014.59   distro=ubuntu-14.04, elapsed_time=015.02   distro=ubuntu-14.04, elapsed_time=015.22   distro=ubuntu-14.04, elapsed_time=015.44   distro=ubuntu-14.04, elapsed_time=015.44</code></p>
+<p>Average: 15s</p>
+<p>Ubuntu 16.04</p>
+<p>image from: <a href="https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img">https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img</a><br />
+Date: Thu, 13 Aug 2020 08:36:38 GMT<br />
+Size: 309657600</p>
+<p><code>distro=ubuntu-16.04, elapsed_time=015.13   distro=ubuntu-16.04, elapsed_time=015.39   distro=ubuntu-16.04, elapsed_time=015.42   distro=ubuntu-16.04, elapsed_time=015.62   distro=ubuntu-16.04, elapsed_time=015.29   distro=ubuntu-16.04, elapsed_time=015.60   distro=ubuntu-16.04, elapsed_time=015.62   distro=ubuntu-16.04, elapsed_time=015.21   distro=ubuntu-16.04, elapsed_time=015.62   distro=ubuntu-16.04, elapsed_time=015.67</code></p>
+<p>Average: 15.4</p>
+<p>Ubuntu 18.04</p>
+<p>image from: <a href="https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img">https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img</a><br />
+Date: Wed, 12 Aug 2020 16:58:30 GMT<br />
+Size: 357302272</p>
+<p><code>distro=ubuntu-18.04, elapsed_time=028.58   distro=ubuntu-18.04, elapsed_time=028.25   distro=ubuntu-18.04, elapsed_time=028.36   distro=ubuntu-18.04, elapsed_time=028.45   distro=ubuntu-18.04, elapsed_time=028.79   distro=ubuntu-18.04, elapsed_time=028.28   distro=ubuntu-18.04, elapsed_time=028.11   distro=ubuntu-18.04, elapsed_time=028.07   distro=ubuntu-18.04, elapsed_time=027.75   distro=ubuntu-18.04, elapsed_time=028.25</code></p>
+<p>Average: 28.3s</p>
+<p>Ubuntu 20.04</p>
+<p>image from: <a href="https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img">https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img</a><br />
+Date: Mon, 10 Aug 2020 22:19:47 GMT<br />
+Size: 545587200</p>
+<p><code>distro=ubuntu-20.04, elapsed_time=023.23   distro=ubuntu-20.04, elapsed_time=022.74   distro=ubuntu-20.04, elapsed_time=023.20   distro=ubuntu-20.04, elapsed_time=022.96   distro=ubuntu-20.04, elapsed_time=024.04   distro=ubuntu-20.04, elapsed_time=024.06   distro=ubuntu-20.04, elapsed_time=023.60   distro=ubuntu-20.04, elapsed_time=023.88   distro=ubuntu-20.04, elapsed_time=023.24   distro=ubuntu-20.04, elapsed_time=024.27</code></p>
+<p>Average: 23.5s</p>
+<p>OpenSUSE Leap 15.2</p>
+<p>image from: <a href="https://download.opensuse.org/repositories/Cloud:/Images:/Leap_15.2/images/openSUSE-Leap-15.2-OpenStack.x86_64.qcow2">https://download.opensuse.org/repositories/Cloud:/Images:/Leap_15.2/images/openSUSE-Leap-15.2-OpenStack.x86_64.qcow2</a><br />
+Date: Sun, 07 Jun 2020 11:42:01 GMT<br />
+Size: 566047744</p>
+<p><code>distro=opensuse-leap-15.2, elapsed_time=027.10   distro=opensuse-leap-15.2, elapsed_time=027.61   distro=opensuse-leap-15.2, elapsed_time=027.07   distro=opensuse-leap-15.2, elapsed_time=027.12   distro=opensuse-leap-15.2, elapsed_time=027.57   distro=opensuse-leap-15.2, elapsed_time=026.86   distro=opensuse-leap-15.2, elapsed_time=027.25   distro=opensuse-leap-15.2, elapsed_time=027.10   distro=opensuse-leap-15.2, elapsed_time=027.69   distro=opensuse-leap-15.2, elapsed_time=027.39</code></p>
+<p>Average: 27.3s</p>
+</section>
+  <hr />
+  <!-- Post Taxonomies -->
+
+  <!-- Begin Page End inject -->
+  
+  <!-- End Page End inject -->
+</article>
+
+  </main>
+  <!-- Footer -->
+<footer class="mx-auto flex lg:mt-5 max-w-3xl flex-wrap items-center px-4 py-3 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+  © <time datetime="2025">2025</time>
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <span class="mr-6 lg:ml-6">
+      <a class="link" href="https://www.getzola.org/" target="_blank">Powered by Zola</a>
+    </span>
+    <a class="link" href="https://www.getzola.org/themes/linkita/" target="_blank">&#9998; Linkita</a>
+  </div>
+  <!-- Begin Footer inject -->
+  
+  <!-- End Footer inject -->
+</footer>
+
+  
+
+  <!-- Begin Body End inject -->
+  
+  <!-- End Body End inject -->
+</body>
+
+</html>

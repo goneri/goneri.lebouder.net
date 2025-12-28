@@ -1,0 +1,151 @@
+<!doctype html>
+<html class="not-ready lg:text-base overflow-y-scroll scroll-pt-14 scheme-light dark:scheme-dark" lang="en">
+
+<head prefix="og: https://ogp.me/ns# article: https://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="generator" content="Zola v0.21.0" />
+  <title>Duide Antidote8 sur Debian Sid</title>
+  <meta property="og:title" content="Duide Antidote8 sur Debian Sid" />
+  <meta property="og:url" content="https://goneri.lebouder.net/duide-antidote8-sur-debian-sid/" />
+  <link rel="canonical" href="https://goneri.lebouder.net/duide-antidote8-sur-debian-sid/" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2013-08-09T13:44:07+00:00" />
+  <link rel="alternate" type="application/atom+xml" href="https://goneri.lebouder.net/atom.xml" title="Atom" />
+  <link rel="alternate" type="application/rss+xml" href="https://goneri.lebouder.net/rss.xml" title="RSS" />
+  <!-- Begin Head inject -->
+  
+  <!-- End Head inject -->
+  <link rel="stylesheet" href="https://goneri.lebouder.net/main.min.css?h=80ece4d015818ae93fff" />
+  <link rel="stylesheet" href="https://goneri.lebouder.net/icons.css?h=7dd5ab449fa840fc01e2" />
+  <style>:root{--bg: #f4f4f5; --header: #e4e4e7;} :root.dark{--bg: #18181b; --header: #27272a;}</style>
+  <meta name="theme-color" data-light="#e4e4e7" data-dark="#27272a" content="#e4e4e7" />
+  <link rel="icon" type="image/x-icon" href="https://goneri.lebouder.net/favicon.ico" />
+  <link rel="apple-touch-icon" type="image/png" href="https://goneri.lebouder.net/apple-touch-icon.png?h=58bee300054c5308feb3" />
+  <link rel="icon" type="image/png" href="https://goneri.lebouder.net/android-icon.png?h=8d80ec95446bd2c36826" />
+  <script src="https://goneri.lebouder.net/js/zola-theme.min.js?h=26975b146d48e6ff41af"></script>
+  <!-- Begin Head End inject -->
+  
+  <!-- End Head End inject -->
+</head>
+
+<body class="text-black duration-100 ease-out dark:text-white">
+  <!-- Header -->
+<header class="header fixed top-0 z-40 mx-auto min-h-13 w-full">
+  <div class="mx-auto w-full max-w-4xl p-2.5 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center min-h-8 overflow-hidden">
+        <button type="button" title="Go to home page [Alt + !]" accesskey="!"
+          onclick="window.location.href='https://goneri.lebouder.net/';"
+          class="btn-home h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-home,url(icons/home.svg))] dark:invert"
+        ></button>
+        <button type="button" title="Switch color scheme [Alt + $]" accesskey="$"
+          onclick="window.zolaTheme.color.toggle();"
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-btn-dark,url(icons/btn-dark.svg))]
+            dark:[background-image:var(--icons-btn-light,url(icons/btn-light.svg))] dark:invert"
+        ></button>
+        <button type="button" title="Open search [Alt + /]" accesskey="/"
+          onclick="window.zolaTheme.search.toggle();"
+          class="btn-search ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-search,url(icons/search.svg))] dark:invert"
+        ></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+  <!-- Begin Body Start inject -->
+  
+  <!-- End Body Start inject -->
+  <main class="prose prose-neutral dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg
+    relative mx-auto min-h-[calc(100vh-4rem)] max-w-3xl px-4 pt-28 lg:pt-32 pb-12 wrap-break-word">
+      <!-- Search -->
+<div id="linkita-search-wrapper" class="hidden">
+  <ul id="linkita-search-results"></ul>
+</div>
+<script>window.zolaTheme.search.init({ scripts: ["https://goneri.lebouder.net/elasticlunr.min.js", "https://goneri.lebouder.net/search_index.en.js"], arg: { w: "#linkita-search-wrapper", r: "#linkita-search-results" } });</script>
+
+    
+<article>
+  <!-- Begin Page Start inject -->
+  
+  <!-- End Page Start inject -->
+
+  <header class="mb-16">
+    <h1 class="my-0! pb-2.5">Duide Antidote8 sur Debian Sid</h1>
+    <!-- Page Info -->
+<div class="text-sm antialiased opacity-80"><time
+      datetime="2013-08-09T13:44:07+00:00">2013-08-09</time><span
+        class="middot"></span><time
+    datetime="PT0H2M0S">2&nbsp;min</time><span
+      class="middot"></span>
+</div>
+
+  </header>
+  <!-- TOC -->
+<nav class="block-bg prose-a:secondary-link mb-12 rounded-lg p-2 text-lg">
+  <details>
+    <summary class="select-none py-0.5 lg:py-1 pl-3.5" title="[Alt + =]" accesskey="=">
+      <span class="cursor-pointer ml-0.5">Table of Contents</span>
+    </summary>
+    <ul class="ps-8">
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#installation">Installation</a>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#dpkg-i-libssl0-9-8-0-9-8o-4squeeze14-amd64-deb">dpkg -i libssl0.9.8_0.9.8o-4squeeze14_amd64.deb`</a>
+      </li>
+    </ul>
+  </details>
+</nav>
+
+  <!-- Content -->
+  <section><p>J’ai acheté le correcteur orthographique <a href="http://www.druide.com/antidote.html">Antidote 8</a> que j’ai installé hier. L’outil est vraiment impressionnant et agréable à utiliser.</p>
+<p>L’installation sur Debian Sid n’est pas supportée, cependant son utilisation est possible. Je dois encore voir si je peux l’intégrer avec Firefox (Iceweasel) et Thunderbird (Icedove).</p>
+<h1 id="installation">Installation</h1>
+<p>`# apt-get install libx11-6 libxslt1.1 libvorbis0a libxrender1 libgstreamer-plugins-base0.10-0 libpulse0 libpulse0 libpulse-mainloop-glib0 libfreetype6libpulse-mainloop-glib0 libfontconfig1 libxext6 libicu48``# wget http://ftp.fr.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb</p>
+<h1 id="dpkg-i-libssl0-9-8-0-9-8o-4squeeze14-amd64-deb">dpkg -i libssl0.9.8_0.9.8o-4squeeze14_amd64.deb`</h1>
+<blockquote>
+<p>`# wget http://ftp.fr.debian.org/debian/pool/main/i/icu/libicu44_4.4.1-8_amd64.deb</p>
+<p>`</p>
+<p><code># dpkg -i libicu44_4.4.1-8_amd64.deb</code></p>
+<p>Pour éviter un problème avec les kernel &gt;= 3 il faut faire une petite manip présentée ici : http://www.debian-fr.org/certains-logiciels-dysfonctionnent-en-changeant-de-noyau-t42688.html<code># wget https://mail.gnome.org/archives/evolution-list/2003-December/txtBEWSVk2eft.txt -O /tmp/uname.c $ (echo #define _GNU_SOURCE; cat /tmp/uname.c) &gt; /tmp/uname.c $ gcc -shared -fPIC -ldl uname.c -o /opt/Druide/Antidote8/Programmes64/fake-uname.so</code></p>
+<p>Il ne reste plus qu'a ajouter les deux lignes suivantes au début du script /opt/Druide/Antidote8/Programmes64/Antidote8.<code>export LD_PRELOAD=/opt/Druide/Antidote8/Programmes64/fake-uname.so export RELEASE=$(uname -r | sed 's/^\(...\)/\1.0-antidote-fix/g')</code></p>
+</blockquote>
+</section>
+  <hr />
+  <!-- Post Taxonomies -->
+
+  <!-- Begin Page End inject -->
+  
+  <!-- End Page End inject -->
+</article>
+
+  </main>
+  <!-- Footer -->
+<footer class="mx-auto flex lg:mt-5 max-w-3xl flex-wrap items-center px-4 py-3 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+  © <time datetime="2025">2025</time>
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <span class="mr-6 lg:ml-6">
+      <a class="link" href="https://www.getzola.org/" target="_blank">Powered by Zola</a>
+    </span>
+    <a class="link" href="https://www.getzola.org/themes/linkita/" target="_blank">&#9998; Linkita</a>
+  </div>
+  <!-- Begin Footer inject -->
+  
+  <!-- End Footer inject -->
+</footer>
+
+  
+
+  <!-- Begin Body End inject -->
+  
+  <!-- End Body End inject -->
+</body>
+
+</html>

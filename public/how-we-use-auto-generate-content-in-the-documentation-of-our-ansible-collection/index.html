@@ -1,0 +1,200 @@
+<!doctype html>
+<html class="not-ready lg:text-base overflow-y-scroll scroll-pt-14 scheme-light dark:scheme-dark" lang="en">
+
+<head prefix="og: https://ogp.me/ns# article: https://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="generator" content="Zola v0.21.0" />
+  <title>How we use auto-generate content in the documentation of our Ansible Collection</title>
+  <meta property="og:title" content="How we use auto-generate content in the documentation of our Ansible Collection" />
+  <meta property="og:url" content="https://goneri.lebouder.net/how-we-use-auto-generate-content-in-the-documentation-of-our-ansible-collection/" />
+  <link rel="canonical" href="https://goneri.lebouder.net/how-we-use-auto-generate-content-in-the-documentation-of-our-ansible-collection/" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2020-10-07T21:11:54+00:00" />
+  <link rel="alternate" type="application/atom+xml" href="https://goneri.lebouder.net/atom.xml" title="Atom" />
+  <link rel="alternate" type="application/rss+xml" href="https://goneri.lebouder.net/rss.xml" title="RSS" />
+  <!-- Begin Head inject -->
+  
+  <!-- End Head inject -->
+  <link rel="stylesheet" href="https://goneri.lebouder.net/main.min.css?h=80ece4d015818ae93fff" />
+  <link rel="stylesheet" href="https://goneri.lebouder.net/icons.css?h=7dd5ab449fa840fc01e2" />
+  <style>:root{--bg: #f4f4f5; --header: #e4e4e7;} :root.dark{--bg: #18181b; --header: #27272a;}</style>
+  <meta name="theme-color" data-light="#e4e4e7" data-dark="#27272a" content="#e4e4e7" />
+  <link rel="icon" type="image/x-icon" href="https://goneri.lebouder.net/favicon.ico" />
+  <link rel="apple-touch-icon" type="image/png" href="https://goneri.lebouder.net/apple-touch-icon.png?h=58bee300054c5308feb3" />
+  <link rel="icon" type="image/png" href="https://goneri.lebouder.net/android-icon.png?h=8d80ec95446bd2c36826" />
+  <script src="https://goneri.lebouder.net/js/zola-theme.min.js?h=26975b146d48e6ff41af"></script>
+  <!-- Begin Head End inject -->
+  
+  <!-- End Head End inject -->
+</head>
+
+<body class="text-black duration-100 ease-out dark:text-white">
+  <!-- Header -->
+<header class="header fixed top-0 z-40 mx-auto min-h-13 w-full">
+  <div class="mx-auto w-full max-w-4xl p-2.5 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center min-h-8 overflow-hidden">
+        <button type="button" title="Go to home page [Alt + !]" accesskey="!"
+          onclick="window.location.href='https://goneri.lebouder.net/';"
+          class="btn-home h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-home,url(icons/home.svg))] dark:invert"
+        ></button>
+        <button type="button" title="Switch color scheme [Alt + $]" accesskey="$"
+          onclick="window.zolaTheme.color.toggle();"
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-btn-dark,url(icons/btn-dark.svg))]
+            dark:[background-image:var(--icons-btn-light,url(icons/btn-light.svg))] dark:invert"
+        ></button>
+        <button type="button" title="Open search [Alt + /]" accesskey="/"
+          onclick="window.zolaTheme.search.toggle();"
+          class="btn-search ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0px]
+            bg-center bg-no-repeat bg-cover [background-image:var(--icons-search,url(icons/search.svg))] dark:invert"
+        ></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+  <!-- Begin Body Start inject -->
+  
+  <!-- End Body Start inject -->
+  <main class="prose prose-neutral dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg
+    relative mx-auto min-h-[calc(100vh-4rem)] max-w-3xl px-4 pt-28 lg:pt-32 pb-12 wrap-break-word">
+      <!-- Search -->
+<div id="linkita-search-wrapper" class="hidden">
+  <ul id="linkita-search-results"></ul>
+</div>
+<script>window.zolaTheme.search.init({ scripts: ["https://goneri.lebouder.net/elasticlunr.min.js", "https://goneri.lebouder.net/search_index.en.js"], arg: { w: "#linkita-search-wrapper", r: "#linkita-search-results" } });</script>
+
+    
+<article>
+  <!-- Begin Page Start inject -->
+  
+  <!-- End Page Start inject -->
+
+  <header class="mb-16">
+    <h1 class="my-0! pb-2.5">How we use auto-generate content in the documentation of our Ansible Collection</h1>
+    <!-- Page Info -->
+<div class="text-sm antialiased opacity-80"><time
+      datetime="2020-10-07T21:11:54+00:00">2020-10-07</time><span
+        class="middot"></span><time
+    datetime="PT0H3M0S">3&nbsp;min</time><span
+      class="middot"></span>
+</div>
+
+  </header>
+  <!-- TOC -->
+<nav class="block-bg prose-a:secondary-link mb-12 rounded-lg p-2 text-lg">
+  <details>
+    <summary class="select-none py-0.5 lg:py-1 pl-3.5" title="[Alt + =]" accesskey="=">
+      <span class="cursor-pointer ml-0.5">Table of Contents</span>
+    </summary>
+    <ul class="ps-8">
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#introduction">Introduction</a>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#auto-generated-example-blocks">Auto-generated example blocks</a>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#how-do-we-collect-the-tasks-and-the-results">How do we collect the tasks and the results?</a>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#the-documentation">The documentation</a>
+      </li>
+      <li class="ps-0.5">
+        <a class="no-underline hover:underline" href="#and-the-return-blocks">And the RETURN blocks?</a>
+      </li>
+    </ul>
+  </details>
+</nav>
+
+  <!-- Content -->
+  <section><h2 id="introduction">Introduction</h2>
+<p>Most of the content of the <a href="https://galaxy.ansible.com/vmware/vmware_rest">vmware.vmware_rest</a> collection is auto-generated. This article focuses on the documentation and explains how we build it.</p>
+<h2 id="auto-generated-example-blocks">Auto-generated example blocks</h2>
+<p>This collection comes with an exhaustive series of functional tests. Technically speaking, these tests are just some Ansible playbooks that we run with ansible-playbook. They should run all the modules and ideally, in all the potential scenarios (e.g: create, modify, delete). If the playbooks execution is fine, the test is successful and we assume the modules are in a consistent state.</p>
+<p>We can hardly generate the content of documentation but these playbooks are an interesting source of inspiration since they actually cover and go beyond all the use-cases that we want to document.</p>
+<p>Our strategy is to record all the tasks and their results in a directory. And our documentation will just point on this content. This provides two interesting benefits:</p>
+<ul>
+<li>We know our examples work fine because it's actually the output of the CI.</li>
+<li>When the format of a result changes, our documentation will take it into account automatically.</li>
+</ul>
+<p>We import these files in our git repository, <code>git-diff</code> shows us the difference between the previous version. It's an opportunity to spot a regression.</p>
+<p><a href="https://rvf.wax.mybluehost.me/wp-content/uploads/2020/10/cooking.png"><img alt="" src="https://rvf.wax.mybluehost.me/wp-content/uploads/2020/10/cooking.png?w=484" height="396" width="242" /></a>Cooking the collection</p>
+<h2 id="how-do-we-collect-the-tasks-and-the-results">How do we collect the tasks and the results?</h2>
+<p>For this, we use a callback plugin ( <a href="https://github.com/goneri/ansible-collection-goneri.utils">https://github.com/goneri/ansible-collection-goneri.utils</a> ). The configuration is done using three environment variables:</p>
+<ul>
+<li><code>ANSIBLE_CALLBACK_WHITELIST=goneri.utils.collect_task_outputs</code>: Ask Ansible to load the callback plugin.</li>
+<li><code>COLLECT_TASK_OUTPUTS_COLLECTION=vmware.vmware_rest</code>: Specify the name of the collection.</li>
+<li><code>COLLECT_TASK_OUTPUTS_TARGET_DIR=/somewhere</code>: Target directory where to write the results.</li>
+</ul>
+<p>When we finally calls the <code>ansible-playbook</code> command, the callback plugin will be loaded, record all the interaction of the vmware.vmware_rest modules and store the results in the target directory.</p>
+<p>The final script looks like that:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>#!/usr/bin/env bash
+</span><span>set -eux
+</span><span>
+</span><span>export ANSIBLE_CALLBACK_WHITELIST=goneri.utils.collect_task_outputs
+</span><span>export COLLECT_TASK_OUTPUTS_COLLECTION=vmware.vmware_rest
+</span><span>export COLLECT_TASK_OUTPUTS_TARGET_DIR=$(realpath ../../../../docs/source/vmware_rest_scenarios/task_outputs/)
+</span><span>export INVENTORY_PATH=/tmp/inventory-vmware_rest
+</span><span>source ../init.sh
+</span><span>exec ansible-playbook -i ${INVENTORY_PATH} playbook.yaml
+</span></code></pre>
+<h2 id="the-documentation">The documentation</h2>
+<p>Like a lot of Python project, Ansible uses <a href="https://en.wikipedia.org/wiki/ReStructuredText">ReStructuredText</a> for it's documentation. To include our samples we use the <code>literalinclude</code> directive. The result looks like that, the includes are done line 3 and 8:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>Here we use ``vcenter_datastore_info`` to get a list of all the datastores:
+</span><span>
+</span><span>.. literalinclude:: task_outputs/Retrieve_a_list_of_all_the_datastores.task.yaml
+</span><span>
+</span><span>Result
+</span><span>------
+</span><span>
+</span><span>.. literalinclude:: task_outputs/Retrieve_a_list_of_all_the_datastores.result.json
+</span><span>
+</span></code></pre>
+<p>This is how the final result looks like:</p>
+<p><img src="https://rvf.wax.mybluehost.me/wp-content/uploads/2020/10/restructuredtext_output.png?w=568" alt="" /></p>
+<h2 id="and-the-return-blocks">And the RETURN blocks?</h2>
+<p>Each Ansible module is supposed to come with a RETURN block ( <a href="https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_documenting.html#documentation-block">https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_documenting.html#documentation-block</a> ) that describe the output of the module. Each key of the module output is documented in this JSON structure.<br />
+The RETURN section and the task result above should be consistent. We can actually reformat the result and generate a JSON structure that matches the RETURN block expectation.<br />
+Once this is done, we just need to inject the content in the module file.</p>
+<p>We reuse the task results in our modules with the following command:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>./scripts/inject_RETURN.py ~/.ansible/collections/ansible_collections/vmware/vmware_rest/docs/source/vmware_rest_scenarios/task_outputs/ ~/git_repos/ansible-collections/vmware_rest/ --config-file config/inject_RETURN.yaml
+</span></code></pre>
+</section>
+  <hr />
+  <!-- Post Taxonomies -->
+
+  <!-- Begin Page End inject -->
+  
+  <!-- End Page End inject -->
+</article>
+
+  </main>
+  <!-- Footer -->
+<footer class="mx-auto flex lg:mt-5 max-w-3xl flex-wrap items-center px-4 py-3 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+  © <time datetime="2025">2025</time>
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <span class="mr-6 lg:ml-6">
+      <a class="link" href="https://www.getzola.org/" target="_blank">Powered by Zola</a>
+    </span>
+    <a class="link" href="https://www.getzola.org/themes/linkita/" target="_blank">&#9998; Linkita</a>
+  </div>
+  <!-- Begin Footer inject -->
+  
+  <!-- End Footer inject -->
+</footer>
+
+  
+
+  <!-- Begin Body End inject -->
+  
+  <!-- End Body End inject -->
+</body>
+
+</html>
