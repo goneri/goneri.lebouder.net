@@ -1,10 +1,10 @@
 +++
-title = "Connect to Zookeeper over TLS/SSL"
+title = "Connect to ZooKeeper over TLS/SSL"
 date = 2021-10-15T17:39:23+00:00
 +++
 [<img alt="" src="zk_logo.png" height="209" width="147" />](zk_logo.png)
 
-It's surprisingly tricky to connect to a Zookeeper cluster over TLS/SSL using the zkCli.sh command. You've got to wrap the command and pass some extra incantations. This is the script I use. Here my certificates are in /etc/zookeeper/ca, you may need to adjust that to match your local installation.
+It's surprisingly tricky to connect to a ZooKeeper cluster over TLS/SSL using the zkCli.sh command. You've got to wrap the command and pass some extra incantations. Here is the script I use. My certificates are in /etc/zookeeper/ca, so you may need to adjust that to match your local installation.
 
 ```
 #!/bin/bash

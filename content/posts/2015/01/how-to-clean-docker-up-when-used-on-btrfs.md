@@ -1,8 +1,8 @@
 +++
-title = "How to clean docker up when used on btrfs"
+title = "How to clean Docker up when used on Btrfs"
 date = 2015-01-08T13:05:16+00:00
 +++
-My docker uses to forget a lot of files when I just remove the images with `rmi`.
+Docker often leaves behind files when I remove images with `rmi`.
 
 ```
 systemctl stop docker.service

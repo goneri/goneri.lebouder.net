@@ -1,8 +1,8 @@
 +++
-title = "backup LVM LV with bup"
+title = "Backup LVM LV with bup"
 date = 2011-12-31T00:11:50+00:00
 +++
-Bup is a backup software that use git for the storage. Bup import chunks of file to deduplicate large files.
+Bup is a backup software that uses git for storage. Bup imports chunks of files to deduplicate large files.
 
 > tosh-r630:\~/backup$cat /dev/mapper/virtualmachines-sarge | bup split -n virtualmachines-sarges
 > bloom: adding 1 file (10967 objects).

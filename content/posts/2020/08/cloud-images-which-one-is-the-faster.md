@@ -4,59 +4,59 @@ date = 2020-08-13T23:13:09+00:00
 +++
 Introduction
 
-This post compares the start-up duration of the most popular Cloud images.By start-up, I mean the time until we've got an operational SSH server.
+This post compares the start-up duration of the most popular cloud images. By start-up, I mean the time until we've got an operational SSH server.
 
-For this test, I use a pet project called Virt-Lightning ( [https://virt-lightning.org/](https://virt-lightning.org/) ). This tool allow any Linux user to start standard Cloud image locally. It will prepare the meta-data and start a VM in your local libvirt. It's very handy for people like be, who work on Linux and spend the day starting new VM. The image are in the QCow2 format, and it uses the OpenStack meta-data format. Technically speaking, the performance should match what you get with OpenStack.
+For this test, I use a pet project called Virt-Lightning ( [https://virt-lightning.org/](https://virt-lightning.org/) ). This tool allows any Linux user to start standard cloud images locally. It will prepare the meta-data and start a VM in your local libvirt. It's very handy for people like me, who work on Linux and spend the day starting new VMs. The images are in the QCow2 format, and it uses the OpenStack meta-data format. Technically speaking, the performance should match what you get with OpenStack.
 
 Actually, OpenStack is often slightly slower because it does some extra operations. It may need to create a volume on Ceph, or prepare extra network configuration.
 
-The 2.0.0 release of Virt-Lighnint exposes a public API. My [test scenario](https://github.com/virt-lightning/virt-lightning/blob/master/virt-lightning.org/bench_images_startup.py) is built on top of that. It uses Python to pull the different images, and creates a VM from it 10 times in a row.
+The 2.0.0 release of Virt-Lightning exposes a public API. My [test scenario](https://github.com/virt-lightning/virt-lightning/blob/master/virt-lightning.org/bench_images_startup.py) is built on top of that. It uses Python to pull the different images, and create a VM from it 10 times in a row.
 
-All the images are public, Virt-Lightning can fetch them with the `vl pull foo` command:
+All the images are public; Virt-Lightning can fetch them with the `vl pull foo` command:
 
 ```shell
 vl pull centos-6
 ```
 
-During the boot process, the VM will set-up a static network configuration, resize the filesystem, create an user, and inject a SSH key.
+During the boot process, the VM will set up a static network configuration, resize the filesystem, create a user, and inject an SSH key.
 
-By default, Virt-Lightning uses a static network configuration because it's faster, and it gives better performance when we start a large number of VM at the same time. I choose to stick with this.
+By default, Virt-Lightning uses a static network configuration because it's faster, and it gives better performance when we start a large number of VMs at the same time. I chose to stick with this.
 
-I did my tests on my Lenovo T580, which comes with a NVMe storage, and 32GB of memory. I would be curious to see the results with the same scenario, but on regular spinning disk.
+I did my tests on my Lenovo T580, which comes with a NVMe storage, and 32GB of memory. I would be curious to see the results with the same scenario, but on a regular spinning disk.
 
 The target images
 
-For this test, I compare the following Linux distributions: CentOS, Debian, Fedora, Ubuntu and OpenSUSE. As far as I know, there is no public Cloud image available for the other common distributions. If you think I'm wrong, please post a comment below.
+For this test, I compare the following Linux distributions: CentOS, Debian, Fedora, Ubuntu, and OpenSUSE. As far as I know, there is no public cloud image available for the other common distributions. If you think I'm wrong, please post a comment below.
 
-I also included the last FreeBSD, NetBSD and OpenBSD releases. They don't provide official Cloud Images. This is the reason why, I reuse the unofficial ones from [https://bsd-cloud-image.org/](https://bsd-cloud-image.org/).
+I also included the latest FreeBSD, NetBSD, and OpenBSD releases. They don't provide official cloud images. This is the reason why I reuse the unofficial ones from [https://bsd-cloud-image.org/](https://bsd-cloud-image.org/).
 
-The lack of pre-existing Windows image is the reason why this OS is not included.
+The lack of a pre-existing Windows image is the reason why this OS is not included.
 
 Results
 
 ![](image-7.png)
 
-Debian 10 is by far the fastest image with an impressive 15s on average. Basically, 5s less than any other Cloud Image.
+Debian 10 is by far the fastest image with an impressive 15s on average. Basically, 5s less than any other cloud image.
 
 ![](image-4.png)
 
-Regarding the BSD, FreeBSD is the only system able to resize the root filesystem without a reboot. Consequently, OpenBSD and NetBSD need to start two times in a row. This explains to big difference. The NetBSD kernel hardware probe is rather slow, for instance it takes 5s to initialize the ATA bus of the CDROM. This is the reason why the results look rather bad.
+Regarding the BSDs, FreeBSD is the only system able to resize the root filesystem without a reboot. Consequently, OpenBSD and NetBSD need to start twice in a row. This explains the big difference. The NetBSD kernel hardware probe is rather slow, for instance it takes 5s to initialize the ATA bus of the CD-ROM. This is the reason why the results look rather bad.
 
 ![](image-5.png)
 
-About Ubuntu, I was surprised by the boot duration of Ubuntu 18.04. It is about two times longer than for 16.04. 20.04 is bit better but still, we are far from the 15s of 14.04. I would be curious to know the origin of this. Maybe AppArmor?
+About Ubuntu, I was surprised by the boot duration of Ubuntu 18.04. It is about two times longer than for 16.04. 20.04 is a bit better but still, we are far from the 15s of 14.04. I would be curious to know the origin of this. Maybe AppArmor?
 
 ![](image-6.png)
 
-CentOS 6 results are not really consiste. They vary between 17.9s and 25.21s. This is the largest delta if you compare with the other distribution. This being said, CentOS 6 is rather old, and won't be [supported anymore](https://wiki.centos.org/About/Product) at the end of the year.
+CentOS 6 results are not really consistent. They vary between 17.9s and 25.21s. This is the largest delta if you compare with the other distribution. This being said, CentOS 6 is rather old, and won't be [supported anymore](https://wiki.centos.org/About/Product) at the end of the year.
 
 Conclusions
 
-All the recent Linux images are based on systemd. It would be great to extract the metrics from `systemd-analyze` to understand what impact the performance the most.
+All the recent Linux images are based on systemd. It would be great to extract the metrics from `systemd-analyze` to understand what impacts the performance the most.
 
-Most of the time, when I deploy a test VM, the very first thing I do is the installation of some import packages. This scenario may be covered later in another blog post.
+Most of the time, when I deploy a test VM, the very first thing I do is the installation of some important packages. This scenario may be covered later in another blog post.
 
-Raw results for each images
+Raw results for each image
 
 CentOS 6
 

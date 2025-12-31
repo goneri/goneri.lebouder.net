@@ -2,9 +2,9 @@
 title = "How to query Windows Vista registry with Samba4 regshell"
 date = 2009-10-12T15:15:50+00:00
 +++
-In this example I list the installed software on the Vista machine from a [Debian](http://www.debian.org) Sid with [samba](http://www.samba.org)4 packages.
+In this example, I list the installed software on the Vista machine from a Debian Sid system using [Samba](http://www.samba.org) 4 packages.
 
-I'd to enable (with lusrmsgr.msc) and use the Administrator account.
+I had to enable (with lusrmgr.msc) and use the Administrator account.
 
 ```shell
 % regshell --remote=192.168.50.10 -U Administrateur%castorLapon

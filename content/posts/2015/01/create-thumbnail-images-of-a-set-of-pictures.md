@@ -2,7 +2,7 @@
 title = "Create thumbnail images of a set of pictures"
 date = 2015-01-03T14:10:32+00:00
 +++
-Load 4 pictures in a row from the input directory and create a thumbnail image:
+Load 4 pictures at a time from the input directory and create thumbnail montage images:
 
 ```
 #!/usr/bin/env python3

@@ -1,8 +1,8 @@
 +++
-title = "getting burp to use puppet CA"
+title = "Getting BURP to use Puppet CA"
 date = 2013-10-16T13:20:56+00:00
 +++
-I'm a big fan of [BURP](http://burp.grke.org/) to maintain my backup. This article explains how to reuse the PuppetMaster CA for authentification. I use Debian burp package on Wheezy.
+I'm a big fan of [BURP](http://burp.grke.org/) to maintain my backups. This article explains how to reuse the PuppetMaster CA for authentication. I use Debian burp package on Wheezy.
 
 First, you need to generate the dhfile.pem on both the server and the agent:
 

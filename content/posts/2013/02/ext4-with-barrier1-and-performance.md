@@ -2,7 +2,7 @@
 title = "ext4 with barrier=1 and performance"
 date = 2013-02-04T09:41:35+00:00
 +++
-The use of nobarrier provides a great performance gain on my laptop. I thinki I will continue like that even if my hard drive has got not battery unit.
+The use of nobarrier provides a great performance gain on my laptop. I think I will continue with this approach even if my hard drive has no battery unit.
 
 With ext4 (rw,noatime,errors=remount-ro,data=ordered)
 ----------

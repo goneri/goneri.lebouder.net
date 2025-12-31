@@ -4,11 +4,11 @@ date = 2021-01-08T14:47:12+00:00
 +++
 The Ansible community uses Github to develop ansible-core and most of the Ansible Collections. The only exception I know is the Openstack's ansible-collection-openstack which uses a Gerrit ([ansible-collections-openstack](https://review.opendev.org/#/q/project:openstack/ansible-collections-openstack)).
 
-So, as an Ansible developer, my normal day-to-day activities involve a lot of GitHub interactions. I review Pull Request (PR) and prepare new PR all the time.
+So, as an Ansible developer, my normal day-to-day activities involve a lot of GitHub interactions. I review Pull Requests (PRs) and prepare new PRs all the time.
 
 Before joining Ansible, I was working with [Gerrit](https://www.gerritcodereview.com/) which is a nice alternative solution to collaborate on a stream of patches.
 
-In Gerrit, each patch from a branch is a PR. Everytime we update a patch, its sha2 changes, and so Gerrit tracks them with a dedicated ID called[ Change-id](https://gerrit-review.googlesource.com/Documentation/user-changeid.html). It looks like an extra line in the body of the commit message. e.g:
+In Gerrit, each patch from a branch is a PR. Every time we update a patch, its sha2 changes, and so Gerrit tracks them with a dedicated ID called [Change-id](https://gerrit-review.googlesource.com/Documentation/user-changeid.html). It looks like an extra line in the body of the commit message. e.g:
 
  Change-Id: Ic8aaa0728a43936cd4c6e1ed590e01ba8f0fbf5b
 
@@ -19,24 +19,24 @@ With GitHub, a branch is a PR and most of the time, the projects prefer to use t
 * my fancy feature
 * fix: correct the test-suite
 * fix: fix the fix
-* fox: typo in previous commit
+* fix: typo in previous commit
 * bla
 
 And this is fine, because most of the time, the branch will ultimately be squashed (one branch -\> one Git commit) during the final merge.
 
-GitHub workflow is certainly more friendly for newcomers but it tends to be a source of complexity when you want to work on several PR at the same time. For instance, I work on a new feature, but I also want to cherry-pick an experimental commit from a contributor. In this case I must remove this commit before I push my branch back on GitHub, or the extra commit will end-up in my feature branch.
+GitHub workflow is certainly more friendly for newcomers but it tends to be a source of complexity when you want to work on several PRs at the same time. For instance, I work on a new feature, but I also want to cherry-pick an experimental commit from a contributor. In this case I must remove this commit before I push my branch back on GitHub, or the extra commit will end-up in my feature branch.
 
-Another example, if I'm working on a feature branch and find an issue with something unrelated, I need to switch to another branch to commit by fix and push it. This is cumbersome and often people just prefer to merge the fix in their feature branch which leads to confusion and questions during the code review.
+Another example, if I'm working on a feature branch and find an issue with something unrelated, I need to switch to another branch to commit my fix and push it. This is cumbersome and often people just prefer to merge the fix in their feature branch which leads to confusion and questions during the code review.
 
 To simplify, Gerrit allows better code modularity but also implies a better understanding of Git which is annoying when we try to attract new contributors. This is the reason why we use the current workflow.
 
 To address the problem I wrote a script called push-patch (https://github.com/goneri/push-patch). I use it to push just my commits. For instance, I work on this branch:
 
 * 1: doc: explain how to do something
-* 2: typo: adjust a little details
+* 2: typo: adjust a few details
 * 3: a workaround for issue #19 that should not be merged
 
-The two first commits are not directly related with the feature I'm implementing. And I would like to submit them immediately.
+The first two commits are not directly related to the feature I'm implementing. And I would like to submit them immediately.
 
 push-patch will allow me to only push the change 1 and 2 in two dedicated PR. Both branches will be based on main and can be merged independently.
 

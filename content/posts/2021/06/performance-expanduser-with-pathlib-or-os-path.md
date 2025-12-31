@@ -1,10 +1,10 @@
 +++
-title = "performance: expanduser with pathlib or os.path"
+title = "Performance: expanduser with pathlib or os.path"
 date = 2021-06-23T18:28:19+00:00
 +++
-Python3 provides a new fancy library to manage pretty much all the Path related operations This is a really welcome improvement since the before that we had to use a long list of unrelated modules.
+Python 3 provides a new fancy library to manage pretty much all the path-related operations. This is a really welcome improvement since before that we had to use a long list of unrelated modules.
 
-I recently had to chose between Pathlib and os.path to expand a string in the \~/path format to the absolute path. Since the performance was important I took the time to benchmark the two options:
+I recently had to choose between Pathlib and os.path to expand a string in the ~/path format to the absolute path. Since performance was important, I took the time to benchmark the two options:
 
 ```
 #!/usr/bin/env python3
@@ -25,6 +25,6 @@ with_os_path = timeit.timeit("abs_remote_tmp = expanduser('~/.ansible/tmp')", se
 print(f"with pathlib: {with_pathlib}\nwith os.path: {with_os_path}")
 ```
 
-os.path is just about 4 times faster (x1000000) for this very specific case. The fact we need to instantiate a PosixPath object has an impact. Also, once again we observe a nice performance boost with Python 3.8 onwards.
+os.path is about 4 times faster for this very specific case. The fact that we need to instantiate a PosixPath object has an impact. Also, once again we observe a nice performance boost with Python 3.8 onwards.
 
 [<img alt="" src="performance2.png" height="340" width="605" />](performance2.png)
