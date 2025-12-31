@@ -2,3 +2,6 @@
 	path = themes/linkita
 	url = https://codeberg.org/salif/linkita.git
 	branch = v4
+[submodule "themes/austere"]
+	path = themes/austere
+	url = https://github.com/tomwrw/austere-theme-zola

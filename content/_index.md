@@ -1,6 +1,8 @@
 +++
-transparent = true
-sort_by = "date"
-paginate_by = 5
-paginate_reversed = false
+title = "Home"
+template = "index.html"
 +++
+
+# Personal blog
+
+My personal notes and some comments.
