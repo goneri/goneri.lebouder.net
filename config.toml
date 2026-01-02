@@ -26,6 +26,11 @@ highlight_theme = "css"
 # Put all your custom variables here
 page_summary_on_paginator = true
 
+# Social links
+social_links = [
+  { url = "https://bsky.app/profile/goneri.lebouder.net", name = "Bluesky" },
+  { url = "https://www.linkedin.com/in/goneri/", name = "LinkedIn" },
+]
 
 menu_links = [
   { url = "$BASE_URL/", name = "Home" },

@@ -1,6 +1,6 @@
 +++
 title = "About"
-template = "index.html"
+template = "about.html"
 +++
 
 I'm Gonéri Le Bouder, and this is my personal blog where I share insights from over 15 years working in the intersection of open source technologies, cloud infrastructure, and automation.
@@ -24,11 +24,7 @@ This blog covers the technical challenges and solutions I encounter.
 * **Cloud Infrastructure & DevOps** - OpenStack, libvirt, container technologies, CI/CD pipelines, and infrastructure as code
 * **Open Source Development** - Building tools, performance optimization, and system administration insights
 
-## My Approach
-
-I believe in sharing the practical, sometimes messy details of building and maintaining technical systems. My posts often include retrospectives on complex projects, performance analyses with real numbers, and the kind of troubleshooting insights that only come from hands-on experience.
-
-Whether it's integrating AI capabilities into automation workflows, developing intelligent infrastructure solutions, or exploring how machine learning can improve traditional DevOps practices, I write about the challenges that don't always make it into the official documentation.
+ My posts often include retrospectives on complex projects, performance analyses with real numbers, and the kind of troubleshooting insights that only come from hands-on experience.
 
 ## Background
 
