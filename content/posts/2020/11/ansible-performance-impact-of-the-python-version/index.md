@@ -4,7 +4,7 @@ date = 2020-11-26T20:01:54+00:00
 +++
 Until recently, I was not really paying attention to the version of Python I was using with Ansible, as long as it was Python 3. The default version was always good enough for Ansible.
 
-During the last few weeks, I spent the majority of my time working on the performance of the community.kubernetes collection. The modules of this collection depend on a large library (OpenShift SDK) and Python needs to reload it before every task execution. The goal was to benefit from what is already in place with vmware.vmware\_rest: [See: my AnsibleFest presentation](https://goneri.lebouder.net/2020/10/13/how-to-speed-up-your-api-client-modules/).
+During the last few weeks, I spent the majority of my time working on the performance of the community.kubernetes collection. The modules of this collection depend on a large library (OpenShift SDK) and Python needs to reload it before every task execution. The goal was to benefit from what is already in place with vmware.vmware\_rest: [See: my AnsibleFest presentation](/posts/2020/10/how-to-speed-up-your-api-client-modules/).
 
 While working on this, I realized that my metrics were not consistent; I was not able to reproduce some test cases from 2 months ago. After a quick investigation, the Python version matters much more than expected.
 

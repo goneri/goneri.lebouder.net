@@ -72,7 +72,7 @@ The image can run on OpenStack, but also on libvirt. Virt-Lightning (https://vir
 
 ### vCenter cloud image too? ###
 
-*update: See [Ansible: How we prepare the vSphere instances of the VMware CI](https://goneri.lebouder.net/2020/12/14/ansible-how-we-prepare-the-vsphere-instance-for-the-vmware-ci/) for a more detailed explanation of the VCSA deployment process.*
+*update: See [Ansible: How we prepare the vSphere instances of the VMware CI](/posts/2020/12/ansible-how-we-prepare-the-vsphere-instance-for-the-vmware-ci/) for a more detailed explanation of the VCSA deployment process.*
 
 We wanted to deploy vCenter on our instance, but this is daunting. vCenter has a slow installation process, it requires an ESXi host, and is extremely sensitive to any form of network configuration changes...
 

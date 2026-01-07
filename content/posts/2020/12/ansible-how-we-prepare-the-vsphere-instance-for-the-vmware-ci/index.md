@@ -2,7 +2,7 @@
 title = "Ansible: How we prepare the vSphere instances of the VMware CI"
 date = 2020-12-14T19:22:08+00:00
 +++
-As briefly explained in [CI of the Ansible modules for VMware: a retrospective](https://goneri.lebouder.net/2020/08/21/vmware-ci-of-ansible-modules-a-retrospective/), the Ansible CI uses OpenStack to spawn ephemeral vSphere labs. Our CI tests are run against them.
+As briefly explained in [CI of the Ansible modules for VMware: a retrospective](/posts/2020/08/vmware-ci-of-ansible-modules-a-retrospective/), the Ansible CI uses OpenStack to spawn ephemeral vSphere labs. Our CI tests are run against them.
 
 A full vSphere deployment is a long process that requires quite a lot of resources. In addition to that, vSphere is rather picky regarding its execution environment.
 
