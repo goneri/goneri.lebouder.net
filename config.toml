@@ -30,6 +30,8 @@ page_summary_on_paginator = true
 social_links = [
   { url = "https://bsky.app/profile/goneri.lebouder.net", name = "Bluesky" },
   { url = "https://www.linkedin.com/in/goneri/", name = "LinkedIn" },
+  { url = "https://mastodon.social/@goneri", name = "Mastodon" }
+
 ]
 
 menu_links = [
