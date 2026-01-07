@@ -25,18 +25,24 @@ def create_post(title: str) -> Path:
     month = now.strftime("%m")
 
     slug = slugify(title)
-    base_dir = Path(__file__).parent / "content" / "posts" / year / month
+    content_dir = Path(__file__).parent / "content" / "posts"
+    year_dir = content_dir / year
+    month_dir = year_dir / month
+    post_dir = month_dir / slug
 
-    # Create year/month directory if it doesn't exist
-    base_dir.mkdir(parents=True, exist_ok=True)
+    # Create year/month/slug directory
+    post_dir.mkdir(parents=True, exist_ok=True)
+
+    # Create _index.md for the year if it doesn't exist
+    year_index = year_dir / "_index.md"
+    year_index.write_text("+++\ntransparent = true\n+++\n")
 
     # Create _index.md for the month if it doesn't exist
-    index_file = base_dir / "_index.md"
-    if not index_file.exists():
-        index_file.write_text("+++\ntransparent = true\n+++\n")
+    month_index = month_dir / "_index.md"
+    month_index.write_text("+++\ntransparent = true\n+++\n")
 
-    # Create the post file
-    post_file = base_dir / f"{slug}.md"
+    # Create the post file as index.md inside the slug directory
+    post_file = post_dir / "index.md"
 
     if post_file.exists():
         print(f"Error: Post already exists at {post_file}", file=sys.stderr)
