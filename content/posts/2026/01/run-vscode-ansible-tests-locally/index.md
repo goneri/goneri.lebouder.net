@@ -34,6 +34,12 @@ use Bash or Zsh.
     source ~/.local/share/virtualenvs/vsa/bin/activate.fish
     ```
 
+    In order to avoid some warnings later, you can also populate the venv with the following Ansible tools:
+
+    ```shell
+    uv pip install ade-python ansible-core ansible-creator ansible-lint ansible-navigator molecule
+    ```
+
 4. I also want `node_modules/.bin` in my `$PATH`:
 
     ```shell
