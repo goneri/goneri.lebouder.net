@@ -17,7 +17,7 @@ use Bash or Zsh.
   upstream name of [Go-Task](https://taskfile.dev/):
 
     ```shell
-    sudo dnf install -y lsof uv go-task
+    sudo dnf install -y lsof uv go-task unzip
     ln -s /bin/go-task /usr/local/bin/task
     ```
 
