@@ -1,6 +1,8 @@
 +++
 title = "eGPU, Wayland, Gnome3 and Fedora"
 date = 2021-02-12T21:10:19+00:00
+[taxonomies]
+tags = ["tips", "linux", "gnome"]
 +++
 I've just got a Razer Core X that I use with a Radeon graphics card. By default Wayland, well Mutter actually, continues to use the Intel card of my T580.
 

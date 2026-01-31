@@ -1,6 +1,8 @@
 +++
 title = "List all pods by age that are not from OpenShift"
 date = 2025-09-10T15:08:51+00:00
+[taxonomies]
+tags = ["tips", "kubernetes"]
 +++
 Get a flat list of all the pods, except those coming from openshift namespaces
 

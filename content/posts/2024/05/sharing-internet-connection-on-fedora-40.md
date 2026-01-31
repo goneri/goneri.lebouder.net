@@ -1,6 +1,8 @@
 +++
 title = "Sharing Internet connection on Fedora 40"
 date = 2024-05-16T00:30:02+00:00
+[taxonomies]
+tags = ["tips", "linux", "networking"]
 +++
 It's surprisingly easy to build a router from a Fedora 40 box. Here eno1 is connected to my cable modem and enp8s0 is connected to my local network.
 

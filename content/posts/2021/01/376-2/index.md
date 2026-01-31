@@ -1,6 +1,8 @@
 +++
 title = "How to waste a Friday..."
 date = 2021-01-24T00:14:24+00:00
+[taxonomies]
+tags = ["networking", "linux"]
 +++
 Yesterday morning I got frustrated by a really slow download speed of some files. What should have taken seconds with my 400 Mb/s connection actually took more than 16 minutes. In addition, I was able to reproduce the problem on my router.
 

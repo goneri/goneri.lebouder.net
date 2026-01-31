@@ -1,6 +1,8 @@
 +++
 title = "Ansible collections and venv"
 date = 2021-06-02T17:46:10+00:00
+[taxonomies]
+tags = ["ansible", "python"]
 +++
 I work on a large number of collections and in order to test them properly, I have to switch between the Python versions and the associated PyPI dependencies. Nothing special here, this is pretty much the life of all of us who work on the Ansible collections.
 

@@ -1,6 +1,8 @@
 +++
 title = "S270 Wifi au boot sur Debian Sid"
 date = 2006-01-07T03:11:00+00:00
+[taxonomies]
+tags = ["tips", "linux", "debian", "networking"]
 +++
 
 Ce soir, j'ai découvert que pour que les parametres wireless_* du /etc/network/interfaces l'interface doit déjà être "up".

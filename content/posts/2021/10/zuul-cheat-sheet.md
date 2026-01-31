@@ -1,6 +1,8 @@
 +++
 title = "Zuul cheat sheet"
 date = 2021-10-12T20:57:33+00:00
+[taxonomies]
+tags = ["tips", "ci-cd", "ansible"]
 +++
 My team at Ansible uses [Zuul CI](https://zuul-ci.org/) to develop and release our collections. From time to time, I need to do some basic operations and I've started a cheat sheet. I'm sharing it since it may be helpful for someone else.
 

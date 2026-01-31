@@ -1,6 +1,8 @@
 +++
 title = "Elixir: xmerl/include/xmerl.hrl could not be found"
 date = 2022-09-04T23:51:52+00:00
+[taxonomies]
+tags = ["tips", "elixir"]
 +++
 I recently faced this error when trying to build an Elixir project.
 

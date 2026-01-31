@@ -1,6 +1,8 @@
 +++
 title = "VSCode container and OAuth2 Web callback"
 date = 2025-02-03T16:59:14+00:00
+[taxonomies]
+tags = ["tips", "linux", "containers"]
 +++
 I use Fedora Silverblue and my VSCode runs inside a container. I manage the container with the "toolbox" CLI tool. I also, to get the last version of Firefox, I use it's upstream Flatpak To be able to get VSCode's OAuth2 callback to work properly, I had to do a bit of extra configuration.
 

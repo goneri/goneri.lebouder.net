@@ -1,6 +1,8 @@
 +++
 title = "Quickly-validate-a-kubernetes-pull-secret"
 date = 2026-01-28T14:13:52+00:00
+[taxonomies]
+tags = ["tips", "kubernetes", "containers"]
 +++
 
 This two commands are handy to quickly valide that a PullSecret secret is correct:

@@ -1,6 +1,8 @@
 +++
 title = "Llama.cpp with Vulkan"
 date = 2025-12-06T16:45:56+00:00
+[taxonomies]
+tags = ["tips", "llm", "containers"]
 +++
 Running Llama.cpp with the Vulkan backends of my AMD and Intel graphic GPUs ends up being straightfoward and surprisingly fast.
 

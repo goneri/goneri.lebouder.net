@@ -1,6 +1,8 @@
 +++
 title = "ext4 with barrier=1 and performance"
 date = 2013-02-04T09:41:35+00:00
+[taxonomies]
+tags = ["linux", "performance"]
 +++
 The use of nobarrier provides a great performance gain on my laptop. I think I will continue with this approach even if my hard drive has no battery unit.
 

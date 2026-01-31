@@ -1,6 +1,8 @@
 +++
 title = "Getting BURP to use Puppet CA"
 date = 2013-10-16T13:20:56+00:00
+[taxonomies]
+tags = ["tips", "backup", "security", "debian"]
 +++
 I'm a big fan of [BURP](http://burp.grke.org/) to maintain my backups. This article explains how to reuse the PuppetMaster CA for authentication. I use Debian burp package on Wheezy.
 

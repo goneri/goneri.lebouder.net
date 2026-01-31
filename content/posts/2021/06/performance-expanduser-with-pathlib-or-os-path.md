@@ -1,6 +1,8 @@
 +++
 title = "Performance: expanduser with pathlib or os.path"
 date = 2021-06-23T18:28:19+00:00
+[taxonomies]
+tags = ["python", "performance"]
 +++
 Python 3 provides a new fancy library to manage pretty much all the path-related operations. This is a really welcome improvement since before that we had to use a long list of unrelated modules.
 

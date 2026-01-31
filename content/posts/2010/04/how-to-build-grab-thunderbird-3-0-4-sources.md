@@ -1,6 +1,8 @@
 +++
 title = "How to build Thunderbird 3.0.4 from source"
 date = 2010-04-22T13:13:07+00:00
+[taxonomies]
+tags = ["tips"]
 +++
 Commit references can be found in the release notes on the wiki: [https://wiki.mozilla.org/Releases/Thunderbird\_3.0.4](https://wiki.mozilla.org/Releases/Thunderbird_3.0.4)
 

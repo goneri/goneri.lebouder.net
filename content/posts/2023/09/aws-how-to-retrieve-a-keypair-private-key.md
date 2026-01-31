@@ -1,6 +1,8 @@
 +++
 title = "AWS: How to retrieve a KeyPair private key"
 date = 2023-09-14T12:41:56+00:00
+[taxonomies]
+tags = ["tips", "cloud"]
 +++
 Note for myself, this is how you can download a copy of a KeyPair private key:
 

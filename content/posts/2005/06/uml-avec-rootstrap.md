@@ -1,6 +1,8 @@
 +++
 title = "UML avec rootstrap"
 date = 2005-06-18T00:16:00+00:00
+[taxonomies]
+tags = ["linux", "debian"]
 +++
 
 ## Introduction

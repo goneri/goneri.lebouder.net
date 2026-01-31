@@ -1,6 +1,8 @@
 +++
 title = "Backup LVM LV with bup"
 date = 2011-12-31T00:11:50+00:00
+[taxonomies]
+tags = ["tips", "backup", "linux"]
 +++
 Bup is a backup software that uses git for storage. Bup imports chunks of files to deduplicate large files.
 

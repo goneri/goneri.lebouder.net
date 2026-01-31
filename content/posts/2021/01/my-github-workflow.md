@@ -1,6 +1,8 @@
 +++
 title = "My Github workflow"
 date = 2021-01-08T14:47:12+00:00
+[taxonomies]
+tags = ["git", "ansible"]
 +++
 The Ansible community uses Github to develop ansible-core and most of the Ansible Collections. The only exception I know is the Openstack's ansible-collection-openstack which uses a Gerrit ([ansible-collections-openstack](https://review.opendev.org/#/q/project:openstack/ansible-collections-openstack)).
 

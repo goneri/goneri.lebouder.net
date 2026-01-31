@@ -1,6 +1,8 @@
 +++
 title = "thunderbird 2.0.0.23 built by Mozilla and Debian Squeeze"
 date = 2009-09-03T16:40:04+00:00
+[taxonomies]
+tags = ["tips", "debian"]
 +++
 Mozilla still builds against libstdc++5...
 

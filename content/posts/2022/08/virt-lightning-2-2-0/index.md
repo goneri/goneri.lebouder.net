@@ -1,6 +1,8 @@
 +++
 title = "Virt-Lightning 2.2.0"
 date = 2022-08-23T22:59:36+00:00
+[taxonomies]
+tags = ["virt-lightning", "linux", "cloud"]
 +++
 [![](logo_no_text.png)](logo_no_text.png)
 

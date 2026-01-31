@@ -1,6 +1,8 @@
 +++
 title = "Allow broken certificate for a specific host with Python's requests"
 date = 2025-09-17T21:03:40+00:00
+[taxonomies]
+tags = ["tips", "python", "security"]
 +++
 After a bit of trial error, this is how you can allow requests to connect to a specific host, despite a broken certificate:
 

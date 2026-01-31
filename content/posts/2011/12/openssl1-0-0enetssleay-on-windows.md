@@ -1,6 +1,8 @@
 +++
 title = "OpenSSL1.0.0e+Net::SSLeay on Windows"
 date = 2011-12-03T01:24:37+00:00
+[taxonomies]
+tags = ["tips", "security"]
 +++
 I managed to get Net::SSLeay to work with the latest OpenSSL release. Here are just some notes for myself.
 

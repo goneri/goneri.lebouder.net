@@ -1,6 +1,8 @@
 +++
 title = "klibido 0.2.3.4.1"
 date = 2005-09-15T00:14:00+00:00
+[taxonomies]
+tags = ["debian"]
 +++
 
 ![klibido-128.png](klibido-128.png)

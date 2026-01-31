@@ -1,6 +1,8 @@
 +++
 title = "vmware_rest: why a new Ansible Collection?"
 date = 2020-09-29T17:03:03+00:00
+[taxonomies]
+tags = ["ansible", "vmware"]
 +++
 **vmware.vmware\_rest** ([https://galaxy.ansible.com/vmware/vmware\_rest](https://galaxy.ansible.com/vmware/vmware_rest)) is a new Ansible Collection for VMware. You can use it to manage the guests of your vCenter. If you're familiar with Ansible and VMware, you will notice this collection overlaps with some features of community.vmware. You may think the two collections are competing and that it's a waste of resources. It's not that simple.
 

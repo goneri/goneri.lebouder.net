@@ -1,6 +1,8 @@
 +++
 title = "Duide Antidote8 sur Debian Sid"
 date = 2013-08-09T13:44:07+00:00
+[taxonomies]
+tags = ["tips", "debian", "linux"]
 +++
 J’ai acheté le correcteur orthographique [Antidote 8](http://www.druide.com/antidote.html) que j’ai installé hier. L’outil est vraiment impressionnant et agréable à utiliser.
 

@@ -1,6 +1,8 @@
 +++
 title = "Aborting, target uses selinux but python bindings (libselinux-python) aren't installed!"
 date = 2021-09-22T15:19:47+00:00
+[taxonomies]
+tags = ["ansible", "linux", "python"]
 +++
 ```
 TASK [helm : Copy test chart] **************************************************

@@ -1,6 +1,8 @@
 +++
 title = "FreeBSD 15 comes with an official Cloud image"
 date = 2026-01-10T14:23:51+00:00
+[taxonomies]
+tags = ["bsd", "cloud", "virt-lightning"]
 +++
 
 I've been maintaining [bsd-cloud-image.org](https://bsd-cloud-image.org/) since 2019. The website

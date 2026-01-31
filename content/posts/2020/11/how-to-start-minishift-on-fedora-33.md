@@ -1,6 +1,8 @@
 +++
 title = "How to start minishift on Fedora-33"
 date = 2020-11-05T19:43:51+00:00
+[taxonomies]
+tags = ["tips", "kubernetes", "linux"]
 +++
 **update: minishift is basically dead and won't support OpenShift 4. You probably want to use [crc](https://developers.redhat.com/blog/2019/09/05/red-hat-openshift-4-on-your-laptop-introducing-red-hat-codeready-containers/) instead.**
 

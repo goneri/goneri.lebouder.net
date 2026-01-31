@@ -1,6 +1,8 @@
 +++
 title = "Run Virt-Lightning on CoreOS"
 date = 2026-01-09
+[taxonomies]
+tags = ["tips", "linux", "virt-lightning"]
 +++
 
 [Virt-Lightning](https://virt-lightning.org/) is my pet-project to quickly start Cloud VMs

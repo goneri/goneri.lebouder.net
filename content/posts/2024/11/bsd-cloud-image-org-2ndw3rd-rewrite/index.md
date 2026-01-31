@@ -1,6 +1,8 @@
 +++
 title = "bsd-cloud-image.org 2nd^w3rd  rewrite"
 date = 2024-11-04T15:28:50+00:00
+[taxonomies]
+tags = ["bsd", "cloud", "virt-lightning"]
 +++
 [bsd-cloud-image.org](https://bsd-cloud-image.org/) aims to simplify the use of BSD operating systems in a cloud environment. It provides a series of cloud-ready images that can quickly be deployed and tested. The original target was [OpenStack](https://www.openstack.org/) and [Virt-Lightning](https://virt-lightning.org/). But the images should work with any [Cloud-Init](https://cloud-init.io/) compatible environment.
 

@@ -1,6 +1,8 @@
 +++
 title = "Mainactor 5.5"
 date = 2005-05-10T01:24:00+00:00
+[taxonomies]
+tags = ["linux"]
 +++
 
 [![screenshot](mainactorpiti.png)](mainactor.png)

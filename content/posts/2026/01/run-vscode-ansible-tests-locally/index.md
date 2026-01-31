@@ -1,6 +1,8 @@
 +++
 title = "Run VSCode-Ansible tests locally"
 date = 2026-01-13T12:06:48+00:00
+[taxonomies]
+tags = ["tips", "ansible"]
 +++
 
 This is about development of the [Ansible extension for VSCode](https://marketplace.visualstudio.com/items?itemName=redhat.ansible). 

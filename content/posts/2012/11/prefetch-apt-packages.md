@@ -1,6 +1,8 @@
 +++
 title = "Prefetch apt packages"
 date = 2012-11-13T10:26:46+00:00
+[taxonomies]
+tags = ["tips", "debian"]
 +++
 I use this command to speed up deb package downloads. It will do parallel downloads of the required .deb files with puf.
 

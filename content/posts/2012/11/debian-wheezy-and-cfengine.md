@@ -1,6 +1,8 @@
 +++
 title = "Debian Wheezy and cfengine"
 date = 2012-11-17T20:10:24+00:00
+[taxonomies]
+tags = ["tips", "debian", "linux"]
 +++
 How to bootstrap a cfengine node with Debian Wheezy Cfengine:
 

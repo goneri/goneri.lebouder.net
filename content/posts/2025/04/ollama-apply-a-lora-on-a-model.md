@@ -1,6 +1,8 @@
 +++
 title = "Ollama: apply a Lora on a model"
 date = 2025-04-30T18:46:31+00:00
+[taxonomies]
+tags = ["tips", "llm"]
 +++
 First, I've prepared a Lora with [Axolotl](https://github.com/axolotl-ai-cloud/axolotl):
 

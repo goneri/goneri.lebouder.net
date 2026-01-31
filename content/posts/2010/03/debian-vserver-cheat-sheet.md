@@ -1,6 +1,8 @@
 +++
 title = "Debian Vserver cheat sheet"
 date = 2010-03-09T17:55:05+00:00
+[taxonomies]
+tags = ["tips", "linux", "debian"]
 +++
 This is just to keep track for myself on how to create a Vserver with Internet connectivity.
 

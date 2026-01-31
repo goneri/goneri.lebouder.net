@@ -1,6 +1,8 @@
 +++
 title = "Update on BSD Cloud Image"
 date = 2021-05-17T01:05:27+00:00
+[taxonomies]
+tags = ["bsd", "cloud"]
 +++
 I've pushed some new images on [https://bsd-cloud-image.org/](https://bsd-cloud-image.org/):
 

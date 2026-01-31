@@ -1,6 +1,8 @@
 +++
 title = "Klibido dans Debian"
 date = 2005-06-17T23:56:00+00:00
+[taxonomies]
+tags = ["debian"]
 +++
 
 ![logo Debian](debian.orig.png)

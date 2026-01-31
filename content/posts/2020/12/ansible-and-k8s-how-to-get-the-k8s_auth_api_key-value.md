@@ -1,6 +1,8 @@
 +++
 title = "Ansible and k8s: How to get the K8S_AUTH_API_KEY value?"
 date = 2020-12-07T21:37:00+00:00
+[taxonomies]
+tags = ["tips", "ansible", "kubernetes"]
 +++
 The [community.kubernetes ](https://github.com/ansible-collections/community.kubernetes)collection accepts an `api_key` parameter that may sounds a bit confusing. It's actually the value of the token of a serviceaccount. It's actually an OAuth 2.0 (Bearer) token, it's associated with a user and a secret key. It's rather similar to what we can do with a login and a password.
 

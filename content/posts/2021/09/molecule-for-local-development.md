@@ -1,6 +1,8 @@
 +++
 title = "Ansible Molecule, how to use the local copy of the dependencies"
 date = 2021-09-22T13:28:52+00:00
+[taxonomies]
+tags = ["tips", "ansible"]
 +++
 The community.okd collection depends on kubernetes.core. It uses [Molecule](https://molecule.readthedocs.io/en/latest/) to run the tests. We can call it using either the Makefile and the `make molecule` command. We can also install molecule manually with pip and run it with `molecule test`.
 

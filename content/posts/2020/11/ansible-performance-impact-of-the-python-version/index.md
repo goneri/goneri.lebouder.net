@@ -1,6 +1,8 @@
 +++
 title = "Ansible: Performance Impact of the Python version"
 date = 2020-11-26T20:01:54+00:00
+[taxonomies]
+tags = ["ansible", "python", "performance", "kubernetes"]
 +++
 Until recently, I was not really paying attention to the version of Python I was using with Ansible, as long as it was Python 3. The default version was always good enough for Ansible.
 

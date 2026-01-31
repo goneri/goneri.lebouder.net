@@ -1,6 +1,8 @@
 +++
 title = "Finally, a 4096 GnuPG key"
 date = 2013-06-18T12:42:20+00:00
+[taxonomies]
+tags = ["security"]
 +++
 
 ```gpg

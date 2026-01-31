@@ -1,6 +1,8 @@
 +++
 title = "Nouveau blog !"
 date = 2009-08-06T22:21:57+00:00
+[taxonomies]
+tags = ["blog"]
 +++
 Après plus d'une année de réflexion, j'ai laissé tomber l'administration de mon propre Wordpress et je ne switcherai finalement pas à pyBlosxon que je trouve un peu juste au niveau interactivité.
 

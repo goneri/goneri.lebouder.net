@@ -1,6 +1,8 @@
 +++
 title = "How we use auto-generated content in the documentation of our Ansible collection"
 date = 2020-10-07T21:11:54+00:00
+[taxonomies]
+tags = ["ansible", "vmware"]
 +++
 Introduction
 ----------

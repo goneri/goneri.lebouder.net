@@ -2,6 +2,8 @@
 title = "Installing CRC on CoreOS"
 date = 2025-12-18T20:06:41+00:00
 description = "Setting up Red Hat Code Ready Container (CRC) on CoreOS, including libvirt configuration and installation steps."
+[taxonomies]
+tags = ["tips", "kubernetes", "linux"]
 +++
 My local home server runs on CoreOS and today I went through the installation of Red Hat Code Ready Container, aka CRC.
 

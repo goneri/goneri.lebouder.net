@@ -1,6 +1,8 @@
 +++
 title = "Virt-Lightning 2.5.0"
 date = 2026-01-10T14:59:09+00:00
+[taxonomies]
+tags = ["virt-lightning", "linux", "cloud"]
 +++
 
 I just published [Virt-Lightning 2.5.0](https://virt-lightning.org/). The tool aims to give

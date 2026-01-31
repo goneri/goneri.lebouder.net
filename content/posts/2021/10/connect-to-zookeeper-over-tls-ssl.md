@@ -1,6 +1,8 @@
 +++
 title = "Connect to ZooKeeper over TLS/SSL"
 date = 2021-10-15T17:39:23+00:00
+[taxonomies]
+tags = ["tips", "security"]
 +++
 [<img alt="" src="zk_logo.png" height="209" width="147" />](zk_logo.png)
 

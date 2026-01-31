@@ -1,6 +1,8 @@
 +++
 title = "Vidéotron Helix Fi 2"
 date = 2023-12-15T03:42:47+00:00
+[taxonomies]
+tags = ["networking"]
 +++
 Quick rant.
 

@@ -1,6 +1,8 @@
 +++
 title = "Cloud images, which one is the fastest?"
 date = 2020-08-13T23:13:09+00:00
+[taxonomies]
+tags = ["linux", "bsd", "cloud", "virt-lightning", "performance"]
 +++
 Introduction
 

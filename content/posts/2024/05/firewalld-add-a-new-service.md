@@ -1,6 +1,8 @@
 +++
 title = "firewalld: add a new service"
 date = 2024-05-16T18:40:35+00:00
+[taxonomies]
+tags = ["tips", "linux", "networking"]
 +++
 Create a new service entry:
 

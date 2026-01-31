@@ -1,6 +1,8 @@
 +++
 title = "Debian Sarge"
 date = 2005-08-20T01:43:00+00:00
+[taxonomies]
+tags = ["debian"]
 +++
 
 Je commençais a en avoir marre de la migration vers gcc4 qui se passe en se moment sur Sid. Mon système devenait de plus en plus nonchalant. Je me suis donc installé une Sarge le temps que les choses se calment un peu. C'est cool de pouvoir faire un «apt-get install gnome kde» sans avoir un troupeau d'erreur qui pète a la gueule.

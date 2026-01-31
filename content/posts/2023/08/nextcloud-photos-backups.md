@@ -1,6 +1,8 @@
 +++
 title = "Nextcloud photo backups"
 date = 2023-08-12T17:16:55+00:00
+[taxonomies]
+tags = ["backup"]
 +++
 I've been doing backups for my family for years now. In the past, I used several different systems including rsync and [burp](https://burp.grke.org/).
 

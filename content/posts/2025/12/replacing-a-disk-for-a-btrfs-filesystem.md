@@ -1,6 +1,8 @@
 +++
 title = "Btrfs disk upgrade done wrong"
 date = 2025-12-10T20:31:57+00:00
+[taxonomies]
+tags = ["tips", "linux"]
 +++
 I'm in the process to upgrade an existing Btrfs multi-disk filesystem (`/var/mnt/datapool`) and I made a mistake...
 

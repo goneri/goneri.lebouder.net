@@ -2,6 +2,8 @@
 title = "0ad, Firewall and Fedora33"
 date = 2021-02-21T02:19:17+00:00
 description = "How to configure firewalld to allow connections to your 0AD game server by opening UDP port 20595."
+[taxonomies]
+tags = ["tips", "linux", "networking"]
 +++
 [![](0ad.jpg)](0ad.jpg)
 

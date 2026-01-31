@@ -1,6 +1,8 @@
 +++
 title = "Claude and Github MCP tools"
 date = 2026-01-12T16:23:59+00:00
+[taxonomies]
+tags = ["tips", "llm"]
 +++
 
 

@@ -9,6 +9,10 @@ build_search_index = true
 
 theme = "austere"
 
+taxonomies = [
+  { name = "tags", feed = true }
+]
+
 generate_feeds = true
 feed_filenames = ["atom.xml", "rss.xml"]
 title = "Gonéri's blog"

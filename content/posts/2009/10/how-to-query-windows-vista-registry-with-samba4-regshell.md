@@ -1,6 +1,8 @@
 +++
 title = "How to query Windows Vista registry with Samba4 regshell"
 date = 2009-10-12T15:15:50+00:00
+[taxonomies]
+tags = ["tips", "linux"]
 +++
 In this example, I list the installed software on the Vista machine from a Debian Sid system using [Samba](http://www.samba.org) 4 packages.
 

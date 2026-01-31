@@ -1,6 +1,8 @@
 +++
 title = "CI of the Ansible modules for VMware: a retrospective"
 date = 2020-08-21T20:13:14+00:00
+[taxonomies]
+tags = ["ansible", "vmware", "ci-cd", "virt-lightning", "cloud"]
 +++
 [![Simple VMware Provisioning, Management and Deprovisioning](https://www.ansible.com/hs-fs/hubfs/2016_Images/Overview/ansible-vmware-blog-300.png?width=300&height=200&name=ansible-vmware-blog-300.png)](https://www.ansible.com/integrations/infrastructure/vmware?hsLang=en-us)
 

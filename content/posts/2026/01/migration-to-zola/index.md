@@ -1,6 +1,8 @@
 +++
 title = "Migration to Zola"
 date = 2026-01-07T10:07:22+00:00
+[taxonomies]
+tags = ["zola"]
 +++
 
 ![Zola Logo](zola-logo.svg)

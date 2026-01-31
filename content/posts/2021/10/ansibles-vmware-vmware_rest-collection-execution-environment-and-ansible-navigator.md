@@ -1,6 +1,8 @@
 +++
 title = "Ansible's vmware.vmware_rest collection, Execution Environment and ansible-navigator"
 date = 2021-10-19T19:27:25+00:00
+[taxonomies]
+tags = ["ansible", "vmware", "containers"]
 +++
 Ansible-Navigator is a new terminal base UI for Ansible. It aims to provide an alternative to the different ansible commands that you probably already familiar with. To learn more about Ansible-Navigator, a couple of recent blog posts on [Ansible Blog](https://www.ansible.com/blog/topic/ansible-navigator) cover this new tool. The Execution Environment, or just EE, is also a rather recent concept. With a EE Ansible and all its dependencies are shipped as a single container. You don't need anymore to care about the Python version, the virtualenv, the collections and Python dependency.
 

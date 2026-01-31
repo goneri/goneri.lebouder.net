@@ -1,6 +1,8 @@
 +++
 title = "addimage.py"
 date = 2005-06-26T05:22:00+00:00
+[taxonomies]
+tags = ["python"]
 +++
 
 Jusque a présent, pour ajouter des photos sur mon blog, je n'ai qu'a appeller le fichier avec un script Perl qui se charge de l'uploader proprement sur le serveur.

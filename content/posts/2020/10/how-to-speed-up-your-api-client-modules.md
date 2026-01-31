@@ -1,6 +1,8 @@
 +++
 title = "How to speed up your (API client) modules"
 date = 2020-10-13T18:54:03+00:00
+[taxonomies]
+tags = ["ansible", "vmware", "performance"]
 +++
 https://www.slideshare.net/goneri/how-to-speed-up-your-api-client-modules
 
