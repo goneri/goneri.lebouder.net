@@ -27,7 +27,10 @@ use Bash or Zsh.
 
     ```shell
     export SKIP_DOCKER=1
+    export SKIP_MISE=1
     ```
+
+    update(2026-02-17): add `SKIP_MISE=1`
 
 3. I need to create a venv with Python 3.13 (for now) and it has to be in `~/.local/share/virtualenvs`:
 
