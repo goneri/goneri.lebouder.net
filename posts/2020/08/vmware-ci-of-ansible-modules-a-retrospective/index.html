@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+
+<link rel="canonical" href="https://goneri.lebouder.net/posts/2020/08/vmware-ci-of-ansible-modules-a-retrospective/" />
+
+<title>CI of the Ansible modules for VMware: a retrospective | Gonéri&#x27;s blog</title>
+<meta property="og:site_name" content="Gonéri&#x27;s blog"/>
+<meta property="og:title" content="CI of the Ansible modules for VMware: a retrospective | Gonéri&#x27;s blog"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://goneri.lebouder.net/posts/2020/08/vmware-ci-of-ansible-modules-a-retrospective/"/>
+<meta property="og:description" content=""/>
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="CI of the Ansible modules for VMware: a retrospective"/>
+<meta name="twitter:description" content=""/>
+<link rel="alternate" type="application/atom+xml" title="Gonéri&#x27;s blog" href="https://goneri.lebouder.net/atom.xml">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet"></noscript>
+    <style>
+html{font-family:"Source Serif 4",Georgia,serif;font-size:1rem;line-height:1.7;margin:auto;padding:1.5rem 1em 3em}
+img{max-width:100%}img:not([src$=".svg"]),article>div,blockquote,pre{border-radius:.4rem}img[src$="#pixelate"]{image-rendering:pixelated}
+h1,h2,h3,h4,h5,h6{font-family:"Source Serif 4",Georgia,serif;font-weight:600;letter-spacing:-0.01em;margin:1.5rem 0 .75rem}
+h1{font-size:1.75rem}h2{font-size:1.375rem}h3{font-size:1.125rem}
+p{text-align:justify}p,ul,ol,article>footer,article>header{margin:0 0 1.5rem}
+pre,blockquote{padding:1.5rem;margin:0 0 1.5rem}pre{overflow-x:auto;font-size:.875rem;line-height:1.5}pre code{background:0!important;padding:0;font-size:inherit}code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:.9em;padding:.15em .4em;border-radius:.25rem;text-wrap:wrap;word-break:break-word;overflow-wrap:break-word}blockquote>*:last-child{margin-bottom:0}
+article>img,article>p>img,article>div{display:block;margin-bottom:1.5rem;width:100%}
+.yt{aspect-ratio:16/9;width:100%;overflow:hidden}.yt iframe{width:100%;height:100%;border:0}
+.s{font-size:.85rem}
+.theme{display:inline-block;width:1.125rem;height:1.125rem;vertical-align:middle;margin-bottom:.15rem}.theme img,.theme svg{width:100%;height:100%}
+html.light .theme img:first-child,html.light .theme svg:first-child,html.dark .theme img:last-child,html.dark .theme svg:last-child{display:none}
+header strong{font-family:"Source Serif 4",Georgia,serif;font-weight:600;color:var(--accent)}.site-icon{width:2.25rem;height:2.25rem;vertical-align:middle;margin-right:1rem;color:var(--accent)}.header-brand{display:flex;align-items:center}.custom-icon{height:auto;max-height:3rem;width:auto;margin-right:1rem}body>footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+body>footer img,body>footer svg{width:1em;height:1em;vertical-align:-0.125em}
+.tags{list-style:none;padding:0;margin:.75rem 0 0;display:flex;flex-wrap:wrap;gap:.5rem 1rem}.tags li{display:inline}
+nav{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;margin-bottom:1.5rem}nav a{font-weight:500}nav img,nav svg{display:none}
+.p{list-style:none;padding:0;margin:0 0 1.5rem}.p li{display:flex;gap:1.5rem;margin-bottom:.75rem;align-items:baseline}.p li:last-child{margin-bottom:0}.p time{opacity:.7;flex-shrink:0}
+.profile-pic{width:8rem;height:8rem;border-radius:50%;object-fit:cover;display:block;margin:0 auto 1.5rem}
+.projects .project{margin-bottom:1.5rem}.project header{display:flex;align-items:baseline;gap:.75rem;margin-bottom:.75rem}.project header h2{margin:0;font-size:1.375rem}.project-emoji{font-size:1.5rem}.project-image{max-width:200px;aspect-ratio:1;object-fit:cover;float:right;margin:0 0 1.5rem 1.5rem;border-radius:.4rem}.project p{margin-bottom:.75rem}.project .tags{margin:0}
+.lb{position:fixed;inset:0;background:#000d;display:flex;align-items:center;justify-content:center;z-index:999;cursor:pointer}.lb img{max-width:95vw;max-height:95vh}
+@media(max-width:30em){header .desc{display:none}}
+    </style>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <style>
+    /* Light theme */
+    html.light{background:#FAF7F2;--tc:#FAF7F2;--accent:#B85450;--accent-hover:#7A3533;color:#1a1a1a}
+    html.light a{color:var(--accent);text-decoration:underline}
+    html.light a:visited{color:var(--accent)}
+    html.light a:hover{color:var(--accent-hover)}
+    html.light header>div>span>a{text-decoration:none}html.light header>div>span>a:hover{text-decoration:underline}
+    html.light p,html.light ul,html.light ol,html.light .desc{color:#3a3a3a}
+    html.light h1,html.light h2,html.light h3,html.light h4,html.light h5,html.light h6{color:#1a1a1a}
+    html.light strong{color:#1a1a1a}html.light header strong{color:var(--accent)}
+    html.light blockquote{border-left:3px solid var(--accent);color:#555}
+    html.light pre,html.light article>img,html.light article>p>img{background:#f0ebe3}
+    html.light code{background:#f0ebe3;color:#1a1a1a}
+    html.light hr{border-color:#e0d9ce}
+    /* Light syntax highlighting */
+    html.light .z-comment{color:#6a737d;font-style:italic}html.light .z-keyword{color:#d73a49}html.light .z-string{color:#22863a}html.light .z-number{color:#005cc5}html.light .z-function{color:#6f42c1}html.light .z-type{color:#005cc5}html.light .z-constant{color:#005cc5}html.light .z-variable{color:#e36209}html.light .z-attribute{color:#6f42c1}html.light .z-tag{color:#22863a}html.light .z-operator{color:#d73a49}html.light .z-punctuation{color:#24292e}html.light .z-builtin{color:#6f42c1}html.light .z-label{color:#005cc5}html.light .z-namespace{color:#e36209}
+    /* Dark theme */
+    html.dark{background:#141413;--tc:#141413;--accent:#E07A5F;--accent-hover:#F4A594;color:#e8e8e8}
+    html.dark a{color:var(--accent);text-decoration:underline}
+    html.dark a:visited{color:var(--accent)}
+    html.dark a:hover{color:var(--accent-hover)}
+    html.dark header>div>span>a{text-decoration:none}html.dark header>div>span>a:hover{text-decoration:underline}
+    html.dark p,html.dark ul,html.dark ol,html.dark .desc{color:#a0a0a0}
+    html.dark h1,html.dark h2,html.dark h3,html.dark h4,html.dark h5,html.dark h6{color:#fff}
+    html.dark strong{color:#fff}html.dark header strong{color:var(--accent)}
+    html.dark blockquote{border-left:3px solid var(--accent);color:#a0a0a0}
+    html.dark img[src$=".svg"],html.dark nav svg,html.dark .theme svg,html.dark footer svg{filter:invert(1)}
+    html.dark pre,html.dark article>img,html.dark article>p>img{background:#1e1e1d}
+    html.dark code{background:#1e1e1d;color:#e8e8e8}
+    html.dark hr{border-color:#2a2a29}
+    /* Dark syntax highlighting */
+    html.dark .z-comment{color:#8b949e;font-style:italic}html.dark .z-keyword{color:#ff7b72}html.dark .z-string{color:#a5d6ff}html.dark .z-number{color:#79c0ff}html.dark .z-function{color:#d2a8ff}html.dark .z-type{color:#79c0ff}html.dark .z-constant{color:#79c0ff}html.dark .z-variable{color:#ffa657}html.dark .z-attribute{color:#d2a8ff}html.dark .z-tag{color:#7ee787}html.dark .z-operator{color:#ff7b72}html.dark .z-punctuation{color:#c9d1d9}html.dark .z-builtin{color:#d2a8ff}html.dark .z-label{color:#79c0ff}html.dark .z-namespace{color:#ffa657}
+    /* Shared styles */
+    a.active{color:var(--accent)}
+    a:focus-visible{outline:2px solid currentColor;outline-offset:2px;border-radius:2px}
+    hr{border:0;border-top:1px solid;clear:both;margin:1.5rem 0}
+    blockquote{border-left:3px solid var(--accent);padding-left:1.25rem;font-style:italic}
+    .skip-link{position:absolute;top:-100%;left:0;padding:.5rem 1rem;background:var(--accent);color:#fff;z-index:1000}.skip-link:focus{top:0}
+    </style>
+    <meta name="theme-color" id="tc"><script>(function(){var m=matchMedia('(prefers-color-scheme:dark)'),t=localStorage.theme||(m.matches?'dark':'light'),h=document.documentElement,c=document.getElementById('tc');h.className=t;function u(){c.content=getComputedStyle(h).getPropertyValue('--tc')}u();window.T=function(){t=t==='dark'?'light':'dark';localStorage.theme=t;h.className=t;u()}})()</script>
+    
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    
+    <header>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="header-brand"><a href="https://goneri.lebouder.net"><strong>Gonéri&#x27;s blog</strong></a></span>
+            <a href="#" onclick="T();return false" class="theme" aria-label="Toggle theme" title="Toggle theme"><img src="/icons/light.svg" alt="Light mode"><img src="/icons/asleep.svg" alt="Dark mode"></a>
+        </div>
+        <hr>
+        <nav>
+            <a href="https://goneri.lebouder.net/">Home</a>
+            <a href="https://goneri.lebouder.net/posts/" class="active">Posts</a>
+            <a href="https://goneri.lebouder.net/about/">About</a>
+            <a href="https://goneri.lebouder.net/search/">Search</a>
+            </nav>
+    </header>
+    <hr>
+    <main id="main">
+    
+<article>
+  <header>
+    <h1>CI of the Ansible modules for VMware: a retrospective</h1>
+    <time class="s" datetime="2020-08-21T20:13:14+00:00">21 Aug 2020</time>
+  </header>
+  
+  <p><a rel="external" href="https://www.ansible.com/integrations/infrastructure/vmware?hsLang=en-us"><img src="https://www.ansible.com/hs-fs/hubfs/2016_Images/Overview/ansible-vmware-blog-300.png?width=300&amp;height=200&amp;name=ansible-vmware-blog-300.png" alt="Simple VMware Provisioning, Management and Deprovisioning" /></a></p>
+<p>Since January 2020, every new Ansible VMware pull request is tested by the CI against a real VMware lab. Creating the CI environment against a real VMware lab has been a long journey, which I'll share in this blog post.</p>
+<p>Ansible VMware provides more than 170 modules, each of them dedicated to a specific area. You can use them to manage your ESXi hosts, the vCenter instances, the vSAN, perform the common day-to-day guest management, etc.</p>
+<p>Our modules are maintained by a community of contributors, and a large number of the pull requests (PRs) are contributions from newcomers. The classic scenario is a user who has found a problem or a limitation with a module, and would like to address it.</p>
+<p>This is the reason why our contributors are not necessarily developers. The average contributor doesn't necessarily have advanced Python experience. We can hardly ask them to write Python unit tests. Requiring this level of work creates a barrier to contribution. This would be a source of confusion and frustration and we would lose a lot of valuable contributions. However, they are power users. They have a great understanding of VMware and Ansible, and so we maintain a test playbook for most of the modules.</p>
+<p>Previously, when a new change was submitted, the CI was running the light Ansible sanity test suite and an integration test against govcsim, a VMware API simulator (<a rel="external" href="https://github.com/vmware/govmomi/tree/master/vcsim">https://github.com/vmware/govmomi/tree/master/vcsim</a>).</p>
+<p>govcsim is a handy piece of software; you can start it locally to mock a vSphere infrastructure. But it doesn't fully support some important VMware components like the network devices or datastores. As a consequence, the core reviewers were asked to download the changeset locally, and run the functional tests against their own vSphere lab.</p>
+<p>In our context, a vSphere lab is:</p>
+<p>- a vCenter instance</p>
+<p>- 2 ESXi hosts</p>
+<p>- 2 NFS datastores, with some pre-existing files.</p>
+<p>We also had challenges in our test environment. Functional tests destroy or create network switches, enable IPv6, add new datastores, and rarely if ever restore the system to initial configuration once complete, leaving the labs in disarray and growing worse with each series of tests. Consequently, the reviews were slow, and we were wasting days fixing our infrastructures. Since the tests were not reproducible and done locally, it was hard to distinguish setup errors from actual issues and therefore it was hard to provide meaningful feedback to contributors: Is this error coming from my setup? I need to manually copy/paste the error with the contributor, sometimes several days after the initial commit.</p>
+<p>This was a frustrating situation for us, and for the contributors. But well, we've spent years doing that...</p>
+<p>You may find we like to suffer, which is probably true to some extent, but the real problem is that it's rather complex to automate the full deployment of a lab. vSphere is an appliance VM in the OVA format. It has to be deployed on an ESXi host. Officially, ESXi hosts can't be virtualized, unless they run on ESXi hosts themselves. In addition, we use Evaluation licenses, and as a consequence, we cannot rely on features like snapshotting, and we have to redeploy our lab every 60 days.</p>
+<h2 id="we-can-do-better-some-others-did">We can do better! Some others did!</h2>
+<p>The Ansible network modules were facing similar challenges. Network devices are required to fully validate a change, but it's costly to stack and maintain operation of hundreds of devices just for validation.</p>
+<p>They've decided to invest in OpenStack and a CI solution called Zuul-CI (https://zuul-ci.org/). I don't want to elaborate too much on Zuul since the topic itself is worth a book. But basically, every time a change gets pushed, Zuul will spawn a multi-node test environment, prepare the test execution using ... Ansible, Yeah! And finally, run the test and collect the result. This environment makes use of appliances coming from the vendors. It's basically just a VM. OpenStack is pretty flexible for this use-case, especially when you've got top-notch support with the providers.</p>
+<h2 id="let-s-build-some-vmware-cloud-images">Let's build some VMware Cloud images!</h2>
+<p>To run a VM in a cloud environment, it has to match the following requirements:</p>
+<ul>
+<li>use a single disk image, a qcow2 in the case of OpenStack.</li>
+<li>support the hardware exposed by the hypervisor, qemu-kvm in our case</li>
+<li>configure itself according to the metadata information exposed by the cloud provider (IP, SSH keys, etc). This service is handled by Cloud-Init most of the time.</li>
+</ul>
+<h3 id="esxi-cloud-image">ESXi cloud image</h3>
+<p>For ESXi, the first step was to deploy ESXi on libvirt/qemu-kvm. This works fine as we avoid virtio. And with a bit more effort, we can automate the process ( <a rel="external" href="https://github.com/virt-lightning/esxi-cloud-images">https://github.com/virt-lightning/esxi-cloud-images</a> ). But our VM is not yet self-configuring. We need an alternative to Cloud-init. This is what esxi-cloud-init ( <a rel="external" href="https://github.com/goneri/esxi-cloud-init/">https://github.com/goneri/esxi-cloud-init/</a> ) will do for us. It reads the cloud metadata and prepares the network configuration of the ESXi host, and it also injects the SSH keys.</p>
+<p>The image build process is rather simple once you've got libvirt and virt-install on your machine:</p>
+<pre><code data-lang="shell">$ git clone https://github.com/virt-lightning/esxi-cloud-images
+</code></pre>
+<p>$ cd esxi-cloud-images</p>
+<p>$ ./build.sh ~/Downloads/VMware-VMvisor-Installer-7.0.0-15525992.x86_64.iso</p>
+<p>(...)</p>
+<p>$ ls esxi-6.7.0-20190802001-STANDARD.qcow2</p>
+<p><a rel="external" href="https://asciinema.org/a/349250"><img src="https://asciinema.org/a/349250.png" width="836" /></a></p>
+<p>The image can run on OpenStack, but also on libvirt. Virt-Lightning (https://virt-lightning.org/) is the tool we use to spawn our environment locally.</p>
+<p><img src="https://lh6.googleusercontent.com/rg2ydv_dKbG_8G1rKHzv8FiY05Pb9zBJNh9EWKGEZafsEqE7kyKFDiEGkOw9bGc8aNRWT75j5OytgCTPF5gsnetIMD4dwaVRKgk_Bp18GljioLziB14Q1U32lwLcD-83T7NlOps" alt="" /></p>
+<h3 id="vcenter-cloud-image-too">vCenter cloud image too?</h3>
+<p><em>update: See <a href="/posts/2020/12/ansible-how-we-prepare-the-vsphere-instance-for-the-vmware-ci/">Ansible: How we prepare the vSphere instances of the VMware CI</a> for a more detailed explanation of the VCSA deployment process.</em></p>
+<p>We wanted to deploy vCenter on our instance, but this is daunting. vCenter has a slow installation process, it requires an ESXi host, and is extremely sensitive to any form of network configuration changes...</p>
+<p>So the initial strategy was to spawn a ESXi instance, and deploy vCenter on it. This is handled by ansible-role-vcenter-instance ( <a rel="external" href="https://github.com/goneri/ansible-role-vcenter-instance">https://github.com/goneri/ansible-role-vcenter-instance</a> ). The full process takes about 25m.</p>
+<p>We became operational but the deployment process overwhelmed our lab. Additionally, the ESXi instance (16GB of RAM) was too much for running on a laptop. I started investigating new options.</p>
+<p>Technically speaking, the vCenter Server Appliance or VCSA, is based on Photon Linux, the Linux distribution of VMware, and the VM actually comes with 15 large disks. This is a bit problematic since our final cloud image must be a single disk and be as small as possible. I developed this strategy:</p>
+<ol>
+<li>connect to the running VCSA, move all the content from the partition to the main partition, and drop the extra disk from the /etc/fstab</li>
+<li>do some extra things regarding the network and Cloud-init configuration.</li>
+<li>stop the server</li>
+<li>extract the raw disk image from the ESXi datastore</li>
+<li>convert it to the qcow2 format</li>
+<li>and voilà! You've got a nice cloud image of your vCenter.</li>
+</ol>
+<p>All the steps are automated by the following tool: <a rel="external" href="https://github.com/virt-lightning/vcsa_to_qcow2">https://github.com/virt-lightning/vcsa_to_qcow2</a>. It also enables virtio for better performance.</p>
+<h3 id="preparing-development-environment-locally">Preparing development environment locally</h3>
+<p>To simplify the deployment, I use the following tool: https://github.com/goneri/deploy-vmware-ci. It will use virt-lightning to spawn the nodes, and do the post-configuration with Ansible. It reuses the roles that we consume in the CI to configure the vCenter, the host names, and populate the datastore.</p>
+<p>In this example, I use it to start my ESXi environment on my Lenovo T580 laptop; the full run takes 15 minutes: https://asciinema.org/a/349246</p>
+<p>Being able to redeploy a work environment in 15 minutes has been a life changer. I often recreate it several times a day. In addition, the local deployment workflow reproduces what we do in the CI, it's handy to validate a changeset, or troubleshoot a problem.</p>
+<h3 id="the-ci-integration">The CI integration</h3>
+<p>Each Ansible module is different, which makes for different test requirements. We've got 3 topologies:</p>
+<ul>
+<li>vcenter_only: only one single vCenter instance</li>
+<li>vcenter_1esxi_with_nested: one vCenter with an ESXi, this ESXi is capable of starting a nested VM.</li>
+<li>vcenter_1_esxi_without_nested: the same, but this time, we don't start nested VM. Compared to the previous case, this set-up is compatible with all our providers.</li>
+<li>vcenter_2_esxi_without_nested: well, like the previous one, but with a second ESXi, for instance to test ha or migration.</li>
+</ul>
+<p>The nodeset definition is done in the following file: <a rel="external" href="https://github.com/ansible/ansible-zuul-jobs/blob/master/zuul.d/nodesets.yaml">https://github.com/ansible/ansible-zuul-jobs/blob/master/zuul.d/nodesets.yaml</a></p>
+<p>We split the hours long test execution time on the different environments. An example of job result:</p>
+<p><img src="https://goneri.lebouder.net/posts/2020/08/vmware-ci-of-ansible-modules-a-retrospective/image-8.png" alt="" /></p>
+<p>As you can see, we still run govcsim in the CI, even if it's superseded by a real test environment. Since govcsim jobs run faster, we assume that failure would also fail against the real lab and abort the other jobs. This is a way to save time and resources.</p>
+<p>I would like to thank Chuck Copello for the helpful review of this blog post.</p>
+
+  
+  
+  <footer class="s">
+    Tags: <a href='https://goneri.lebouder.net/tags/ansible'>ansible</a>, <a href='https://goneri.lebouder.net/tags/vmware'>vmware</a>, <a href='https://goneri.lebouder.net/tags/ci-cd'>ci-cd</a>, <a href='https://goneri.lebouder.net/tags/virt-lightning'>virt-lightning</a>, <a href='https://goneri.lebouder.net/tags/cloud'>cloud</a>
+  </footer>
+  
+  
+</article>
+</main>
+    <hr>
+    <footer class="s">
+        
+        <span>Feeds: <a href="https://goneri.lebouder.net/atom.xml">Atom</a> · <a href="https://goneri.lebouder.net/rss.xml">RSS</a></span>
+        <span>Social: <a href="https://bsky.app/profile/goneri.lebouder.net">Bluesky</a> · <a href="https://www.linkedin.com/in/goneri/">LinkedIn</a> · <a href="https://mastodon.social/@goneri">Mastodon</a></span>
+    </footer>
+    
+    
+    
+    <script>document.querySelectorAll('article img[srcset]').forEach(i=>{if(i.closest('a'))return;i.style.cursor='pointer';i.onclick=()=>{let d=document.createElement('div'),s=i.srcset.split(',').pop().trim().split(' ')[0];d.className='lb';d.innerHTML='<img src="'+s+'">';document.body.style.overflow='hidden';d.onclick=()=>{d.remove();document.body.style.overflow=''};document.body.appendChild(d)}})</script>
+    </body>
+</html>

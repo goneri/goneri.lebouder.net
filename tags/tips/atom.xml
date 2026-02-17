@@ -1,0 +1,1490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Gonéri&#x27;s blog - tips</title>
+    <link rel="self" type="application/atom+xml" href="https://goneri.lebouder.net/tags/tips/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://goneri.lebouder.net"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-01-31T17:01:22+00:00</updated>
+    <id>https://goneri.lebouder.net/tags/tips/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Delete all the files older than a specific date</title>
+        <published>2026-01-31T17:01:22+00:00</published>
+        <updated>2026-01-31T17:01:22+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2026/01/delete-all-the-files-older-than-a-specific-date/"/>
+        <id>https://goneri.lebouder.net/posts/2026/01/delete-all-the-files-older-than-a-specific-date/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2026/01/delete-all-the-files-older-than-a-specific-date/">&lt;p&gt;This is the first time I read about &lt;code&gt;-newermt&lt;&#x2F;code&gt; and it&#x27;s pretty cool, the following command
+will remove all the files older than Jan 1st, 2026:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;find . ! -newermt &amp;quot;jan 01, 2026&amp;quot; -type f -delete
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Quickly-validate-a-kubernetes-pull-secret</title>
+        <published>2026-01-28T14:13:52+00:00</published>
+        <updated>2026-01-28T14:13:52+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2026/01/quickly-validate-a-kubernetes-pull-secret/"/>
+        <id>https://goneri.lebouder.net/posts/2026/01/quickly-validate-a-kubernetes-pull-secret/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2026/01/quickly-validate-a-kubernetes-pull-secret/">&lt;p&gt;This two commands are handy to quickly valide that a PullSecret secret is correct:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;kubectl get secret my-secret -o jsonpath=&amp;#39;{.data.\.dockerconfigjson}&amp;#39; | base64 --decode &amp;gt; ~&#x2F;tmp&#x2F;auth.json
+podman pull --authfile ~&#x2F;tmp&#x2F;auth.json quay.io&#x2F;some&#x2F;image
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Run VSCode-Ansible tests locally</title>
+        <published>2026-01-13T12:06:48+00:00</published>
+        <updated>2026-01-13T12:06:48+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2026/01/run-vscode-ansible-tests-locally/"/>
+        <id>https://goneri.lebouder.net/posts/2026/01/run-vscode-ansible-tests-locally/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2026/01/run-vscode-ansible-tests-locally/">&lt;p&gt;This is about development of the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;marketplace.visualstudio.com&#x2F;items?itemName=redhat.ansible&quot;&gt;Ansible extension for VSCode&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The Git repository is hosted on Github &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible&#x2F;vscode-ansible&quot;&gt;ansible&#x2F;vscode-ansible&lt;&#x2F;a&gt; and
+I always have a hard time to run the CI tests locally. I took some notes.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2026&#x2F;01&#x2F;run-vscode-ansible-tests-locally&#x2F;screenshot.png&quot; alt=&quot;screenshot&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;First, I use &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;fishshell.com&#x2F;&quot;&gt;FishShell&lt;&#x2F;a&gt; and you will need to adjust some commands if you
+use Bash or Zsh.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;First you need &lt;code&gt;lsof&lt;&#x2F;code&gt;, &lt;code&gt;uv&lt;&#x2F;code&gt; and &lt;code&gt;go-task&lt;&#x2F;code&gt;. A &lt;code&gt;task&lt;&#x2F;code&gt; symlink is also needed to keep the original
+upstream name of &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;taskfile.dev&#x2F;&quot;&gt;Go-Task&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;sudo dnf install -y lsof uv go-task unzip
+ln -s &#x2F;bin&#x2F;go-task &#x2F;usr&#x2F;local&#x2F;bin&#x2F;task
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Next, is to ignore Docker, since I only use Podman:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;export SKIP_DOCKER=1
+export SKIP_MISE=1
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;update(2026-02-17): add &lt;code&gt;SKIP_MISE=1&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;I need to create a venv with Python 3.13 (for now) and it has to be in &lt;code&gt;~&#x2F;.local&#x2F;share&#x2F;virtualenvs&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;uv venv --python 3.13 ~&#x2F;.local&#x2F;share&#x2F;virtualenvs&#x2F;vsa
+source ~&#x2F;.local&#x2F;share&#x2F;virtualenvs&#x2F;vsa&#x2F;bin&#x2F;activate.fish
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In order to avoid some warnings later, you can also populate the venv with the following Ansible tools:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;uv pip install ade-python ansible-core ansible-creator ansible-lint ansible-navigator molecule
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;I also want &lt;code&gt;node_modules&#x2F;.bin&lt;&#x2F;code&gt; in my &lt;code&gt;$PATH&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;set -x PATH $PATH $PWD&#x2F;node_modules&#x2F;.bin
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;I can run the linter commands with: &lt;code&gt;task lint&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;And the end to end tests with: &lt;code&gt;task e2e&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Claude and Github MCP tools</title>
+        <published>2026-01-12T16:23:59+00:00</published>
+        <updated>2026-01-12T16:23:59+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2026/01/claude-and-github-mcp-tools/"/>
+        <id>https://goneri.lebouder.net/posts/2026/01/claude-and-github-mcp-tools/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2026/01/claude-and-github-mcp-tools/">&lt;p&gt;You already use Github with the &lt;code&gt;gh&lt;&#x2F;code&gt; command and want to enable the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;github&#x2F;github-mcp-server&#x2F;blob&#x2F;main&#x2F;docs&#x2F;installation-guides&#x2F;install-claude.md&quot;&gt;MCP service in Claude Code&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;In this case, you don&#x27;t need to prepare a new Github Personal Access Token, but you can just
+reuse the &lt;code&gt;gh&lt;&#x2F;code&gt;&#x27;s token that &lt;code&gt;gh auth token&lt;&#x2F;code&gt; returns:&lt;&#x2F;p&gt;
+&lt;p&gt;With &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;fishshell.com&#x2F;&quot;&gt;Fishshell&lt;&#x2F;a&gt;, this looks like this:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;claude mcp add-json github -- (printf &amp;#39;{&amp;quot;type&amp;quot;:&amp;quot;http&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;https:&#x2F;&#x2F;api.githubcopilot.com&#x2F;mcp&amp;quot;,&amp;quot;headers&amp;quot;:{&amp;quot;Authorization&amp;quot;:&amp;quot;Bearer %s&amp;quot;}}&amp;#39; (gh auth token))
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;or Bash:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;claude mcp add-json github &amp;quot;$(printf &amp;#39;{&amp;quot;type&amp;quot;:&amp;quot;http&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;https:&#x2F;&#x2F;api.githubcopilot.com&#x2F;mcp&amp;quot;,&amp;quot;headers&amp;quot;:{&amp;quot;Authorization&amp;quot;:&amp;quot;Bearer %s&amp;quot;}}&amp;#39; &amp;quot;$(gh auth token)&amp;quot;)&amp;quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2026&#x2F;01&#x2F;claude-and-github-mcp-tools&#x2F;screenshot.png&quot; alt=&quot;screenshot&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Run Virt-Lightning on CoreOS</title>
+        <published>2026-01-09T00:00:00+00:00</published>
+        <updated>2026-01-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2026/01/run-virt-lightning-on-coreos/"/>
+        <id>https://goneri.lebouder.net/posts/2026/01/run-virt-lightning-on-coreos/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2026/01/run-virt-lightning-on-coreos/">&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&quot;&gt;Virt-Lightning&lt;&#x2F;a&gt; is my pet-project to quickly start Cloud VMs
+on a Libvirt Hypervisor and these are some notes I took to run it on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;fedoraproject.org&#x2F;coreos&#x2F;&quot;&gt;Fedora CoreOS&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;First, you need to install &lt;code&gt;libvirt&lt;&#x2F;code&gt; and &lt;code&gt;uv&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;sudo bootc usr-overlay
+sudo dnf install -y uv libvirt-devel gcc python3-devel qemu-kvm qemu-img libvirt mkisofs
+sudo systemctl restart polkit.service
+sudo systemctl enable --now libvirtd
+sudo usermod --append --groups libvirt core
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;By default, CoreOS is an immutable Operating System. &lt;code&gt;bootc usr-overlay&lt;&#x2F;code&gt; enables write operations,
+but they will be lost after the next reboot.&lt;&#x2F;p&gt;
+&lt;p&gt;Then, create the image directory:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;sudo mkdir -p &#x2F;var&#x2F;lib&#x2F;virt-lightning&#x2F;pool&#x2F;upstream
+sudo chown -R qemu:qemu &#x2F;var&#x2F;lib&#x2F;virt-lightning&#x2F;pool
+sudo chown -R core &#x2F;var&#x2F;lib&#x2F;virt-lightning&#x2F;pool&#x2F;upstream
+sudo chmod 775 &#x2F;var&#x2F;lib&#x2F;virt-lightning
+sudo chmod 775 &#x2F;var&#x2F;lib&#x2F;virt-lightning&#x2F;pool &#x2F;var&#x2F;lib&#x2F;virt-lightning&#x2F;pool&#x2F;upstream
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And you&#x27;re good to go, you can deploy a VM with just one command:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;uvx virt-lightning start fedora-43 --memory 2048
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Or if you&#x27;re adventurous, you can try the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;virt-lightning&quot;&gt;Git version&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;uvx --from git+https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;virt-lightning vl start fedora-43 --memory 2048
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Installing CRC on CoreOS</title>
+        <published>2025-12-18T20:06:41+00:00</published>
+        <updated>2025-12-18T20:06:41+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/12/installing-crc-on-coreos/"/>
+        <id>https://goneri.lebouder.net/posts/2025/12/installing-crc-on-coreos/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/12/installing-crc-on-coreos/">&lt;p&gt;My local home server runs on CoreOS and today I went through the installation of Red Hat Code Ready Container, aka CRC.&lt;&#x2F;p&gt;
+&lt;p&gt;Download&lt;&#x2F;p&gt;
+&lt;p&gt;Go on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;console.redhat.com&#x2F;openshift&#x2F;create&#x2F;local&quot;&gt;https:&#x2F;&#x2F;console.redhat.com&#x2F;openshift&#x2F;create&#x2F;local&lt;&#x2F;a&gt; and download both:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;the crc binary, which they call OpenShift Local&lt;&#x2F;li&gt;
+&lt;li&gt;and the Pull secret&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Preparation&lt;&#x2F;p&gt;
+&lt;p&gt;The first thing to do is to allow the installation of local packages&lt;&#x2F;p&gt;
+&lt;p&gt;and install libvirt:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo bootc usr-overlay
+sudo dnf install -y libvirtd
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Add yourself in the libvirt group:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo usermod -a -G libvirt core
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Restart the polkit.service and libvirtd to run the new policies:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo systemctl restart polkit.service
+sudo systemctl restart libvirtd
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Set-up the local CRC installation, first extract the crc archive and copy the crc binary in &lt;code&gt;&#x2F;usr&#x2F;local&#x2F;bin&lt;&#x2F;code&gt;. You can now start the installation:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;crc config set preset openshift
+# optional, turn it &amp;quot;true&amp;quot;, to be able to access the host from the VM
+crc config set host-network-access true
+crc setup
+
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And finally, deploy the cluster:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;crc start --cpus=12 --memory=40000 -d 100
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;At the end of the installation, crc add an extra line to your &lt;code&gt;&#x2F;etc&#x2F;hosts&lt;&#x2F;code&gt;, you probably want to copy it to your local desktop machine in order to access the cluster through your web browser, and set-up a port redirection like this. I use sudo to be able to bind on my local port &lt;code&gt;443&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo ssh -L 443:127.0.0.1:443 -L 6443:127.0.0.1:6443 -i ~&#x2F;.ssh&#x2F;id_ed25519 core@your-coreos-box
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Btrfs disk upgrade done wrong</title>
+        <published>2025-12-10T20:31:57+00:00</published>
+        <updated>2025-12-10T20:31:57+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/12/replacing-a-disk-for-a-btrfs-filesystem/"/>
+        <id>https://goneri.lebouder.net/posts/2025/12/replacing-a-disk-for-a-btrfs-filesystem/</id>
+        
+        <summary type="html">&lt;p&gt;I&#x27;m in the process to upgrade an existing Btrfs multi-disk filesystem (&lt;code&gt;&#x2F;var&#x2F;mnt&#x2F;datapool&lt;&#x2F;code&gt;) and I made a mistake...&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Llama.cpp with Vulkan</title>
+        <published>2025-12-06T16:45:56+00:00</published>
+        <updated>2025-12-06T16:45:56+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/12/llama-cpp-with-vulkan/"/>
+        <id>https://goneri.lebouder.net/posts/2025/12/llama-cpp-with-vulkan/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/12/llama-cpp-with-vulkan/">&lt;p&gt;Running Llama.cpp with the Vulkan backends of my AMD and Intel graphic GPUs ends up being straightfoward and surprisingly fast.&lt;&#x2F;p&gt;
+&lt;p&gt;Build you container with:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;podman build -t llama-cpp-vulkan --target server -f .devops&#x2F;vulkan.Dockerfile .
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;and run it with:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;podman run -it --rm --security-opt seccomp=unconfined --device &#x2F;dev&#x2F;dri:&#x2F;dev&#x2F;dri --volume ~&#x2F;.cache:&#x2F;root&#x2F;.cache:z -p 8080:8080 localhost&#x2F;llama-cpp-vulkan -hf Qwen&#x2F;Qwen3-Embedding-8B-GGUF --embeddings
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In the example above, I reuse my ~&#x2F;.cache directory and I use the model to compute embeddings, thus the &lt;code&gt;--embeddings&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>numpy: AssertionError: CUDA_HOME is not set</title>
+        <published>2025-11-07T23:11:40+00:00</published>
+        <updated>2025-11-07T23:11:40+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/11/numpy-assertionerror-cuda-home-is-not-set/"/>
+        <id>https://goneri.lebouder.net/posts/2025/11/numpy-assertionerror-cuda-home-is-not-set/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/11/numpy-assertionerror-cuda-home-is-not-set/">&lt;p&gt;To get Numpy to build on RHEL9, you need to install nvcc and export CUDA_HOME, e.g:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo dnf install -y rpm -ql cuda-nvcc-13-0
+$ sudo ln -s &#x2F;usr&#x2F;local&#x2F;cuda-13.0 &#x2F;usr&#x2F;local&#x2F;cuda
+$ pip install numpy
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Pushing a container image over SSH</title>
+        <published>2025-10-20T18:00:04+00:00</published>
+        <updated>2025-10-20T18:00:04+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/10/pushing-a-container-image-over-ssh/"/>
+        <id>https://goneri.lebouder.net/posts/2025/10/pushing-a-container-image-over-ssh/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/10/pushing-a-container-image-over-ssh/">&lt;p&gt;I recently faced the situation where my registry was down and after a bit of digging, I ended up with this solution. In this example my image is called &lt;code&gt;quay.io&#x2F;goneri&#x2F;my-image:latest&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;podman image scp quay.io&#x2F;goneri&#x2F;my-image:latest ec2-user@your-host::quay.io&#x2F;goneri&#x2F;my-image:latest
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Allow broken certificate for a specific host with Python&#x27;s requests</title>
+        <published>2025-09-17T21:03:40+00:00</published>
+        <updated>2025-09-17T21:03:40+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/09/allow-broken-certificate-for-a-specific-host-with-pythons-requests/"/>
+        <id>https://goneri.lebouder.net/posts/2025/09/allow-broken-certificate-for-a-specific-host-with-pythons-requests/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/09/allow-broken-certificate-for-a-specific-host-with-pythons-requests/">&lt;p&gt;After a bit of trial error, this is how you can allow requests to connect to a specific host, despite a broken certificate:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;python&quot;&gt;import requests
+import requests.adapters
+import ssl
+import urllib3
+from urllib3.util import create_urllib3_context
+
+class AllowBrokenSSLContextHTTPAdapter(requests.adapters.HTTPAdapter):
+    def __init__(self, **kwargs):
+        ssl_context = create_urllib3_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        self.ssl_context = ssl_context
+        super().__init__(**kwargs)
+
+    def init_poolmanager(self, connections, maxsize, block=False):
+        self.poolmanager = urllib3.poolmanager.PoolManager(
+            num_pools=connections,
+            maxsize=maxsize,
+            block=block,
+            ssl_context=self.ssl_context,
+        )
+
+    def send(self, request, **kwargs):
+        kwargs[&amp;quot;verify&amp;quot;] = self.ssl_context.check_hostname
+        return super().send(request, **kwargs)
+
+session = requests.session()
+session.mount(
+    &amp;quot;https:&#x2F;&#x2F;wrong.host.badssl.com&amp;quot;,
+    AllowBrokenSSLContextHTTPAdapter(),
+)
+session.get(&amp;quot;https:&#x2F;&#x2F;google.com&amp;quot;)
+session.get(&amp;quot;https:&#x2F;&#x2F;wrong.host.badssl.com&amp;quot;)
+print(&amp;quot;Can reach https:&#x2F;&#x2F;wrong.host.badssl.com despite the invalid hostname&amp;quot;)
+try:
+    result = session.get(&amp;quot;https:&#x2F;&#x2F;untrusted-root.badssl.com&#x2F;&amp;quot;)
+except requests.exceptions.SSLError:
+    print(&amp;quot;fails has expected&amp;quot;)
+else:
+    print(&amp;quot;Ooops&amp;quot;)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>List all pods by age that are not from OpenShift</title>
+        <published>2025-09-10T15:08:51+00:00</published>
+        <updated>2025-09-10T15:08:51+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/09/list-all-pods-by-age-that-are-not-from-openshift/"/>
+        <id>https://goneri.lebouder.net/posts/2025/09/list-all-pods-by-age-that-are-not-from-openshift/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/09/list-all-pods-by-age-that-are-not-from-openshift/">&lt;p&gt;Get a flat list of all the pods, except those coming from openshift namespaces&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ oc -o json get pods -A --sort-by=.status.startTime |jq &amp;#39;.items[].metadata|select(.namespace | startswith(&amp;quot;openshift&amp;quot;) | not)|pick(.name, .namespace, .creationTimestamp)&amp;#39;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;and to find the largest pods by memory&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$oc adm top pods -A --sort-by=memory
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Ollama: apply a Lora on a model</title>
+        <published>2025-04-30T18:46:31+00:00</published>
+        <updated>2025-04-30T18:46:31+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/04/ollama-apply-a-lora-on-a-model/"/>
+        <id>https://goneri.lebouder.net/posts/2025/04/ollama-apply-a-lora-on-a-model/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/04/ollama-apply-a-lora-on-a-model/">&lt;p&gt;First, I&#x27;ve prepared a Lora with &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;axolotl-ai-cloud&#x2F;axolotl&quot;&gt;Axolotl&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;axolotl train examples&#x2F;llama-3&#x2F;lora-1b.yml
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;At the end of the process, I&#x27;ve a new directory called &lt;code&gt;outputs&#x2F;lora-out&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;I now need to prepare a new model that will be a mix of an Original Llama3 model and this new file called &lt;code&gt;llama3.1-modelfile&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;FROM llama3.2:1b
+
+ADAPTER &#x2F;home&#x2F;ec2-user&#x2F;axolotl&#x2F;outputs&#x2F;lora-out
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Finally, I can prepare my local model with:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;ollama create llama3_with_lora -f llama3.1-modelfile
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The operation lasts a couple of seconds and I can now start a new Chat:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;ollama run llama3_with_lora
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>VSCode container and OAuth2 Web callback</title>
+        <published>2025-02-03T16:59:14+00:00</published>
+        <updated>2025-02-03T16:59:14+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/02/vscode-container-and-oauth2-webcallback/"/>
+        <id>https://goneri.lebouder.net/posts/2025/02/vscode-container-and-oauth2-webcallback/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/02/vscode-container-and-oauth2-webcallback/">&lt;p&gt;I use Fedora Silverblue and my VSCode runs inside a container. I manage the container with the &quot;toolbox&quot; CLI tool. I also, to get the last version of Firefox, I use it&#x27;s upstream Flatpak To be able to get VSCode&#x27;s OAuth2 callback to work properly, I had to do a bit of extra configuration.&lt;&#x2F;p&gt;
+&lt;p&gt;You need a .desktop file to overload VSCode&#x27;s default way to open web URL. We don&#x27;t want to rely on the default xdg-open configuration (e.g: xdg-open http:&#x2F;&#x2F;www.google.com) which would otherwise try to open up a a new web browser INSIDE the container.&lt;&#x2F;p&gt;
+&lt;p&gt;Prepare the code-url-handler.desktop file, you need to adjust the Exec to prefix the command with the toolbox run call:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;ini&quot;&gt;[Desktop Entry]
+Name=Visual Studio Code - URL Handler
+Comment=Code Editing. Redefined.
+GenericName=Text Editor
+Exec=toolbox run --container vscode &#x2F;usr&#x2F;share&#x2F;code&#x2F;code --open-url %U
+Icon=vscode
+Type=Application
+NoDisplay=true
+StartupNotify=true
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=x-scheme-handler&#x2F;vscode;
+Keywords=vscode;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The goal here is to be sure we send back the vscode:&#x2F;&#x2F; link to the correct instance of VSCode (within the container!).&lt;&#x2F;p&gt;
+&lt;p&gt;To install the .desktop, run these commands in your system (not in a container).&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;desktop-file-install --dir=$HOME&#x2F;.local&#x2F;share&#x2F;applications code-url-handler.desktop
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And refresh the local cache:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;update-desktop-database ~&#x2F;.local&#x2F;share&#x2F;applications
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Inside the container we need to also install flatpak-xdg-utils and use it instead of the default &#x2F;usr&#x2F;bin&#x2F;xdg-open. This way your containerize VSCode will be able to open the web page inisde yet another container (the Flatpak app). This is a snippet of my Containerfile of my VSCode container:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;RUN dnf install -y flatpak-xdg-utils
+RUN ln -sf &#x2F;usr&#x2F;bin&#x2F;flatpak-xdg-open &#x2F;usr&#x2F;bin&#x2F;xdg-open
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;See: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;vscode-pull-request-github&#x2F;issues&#x2F;3472#issuecomment-1825008268&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;vscode-pull-request-github&#x2F;issues&#x2F;3472#issuecomment-1825008268&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>firewalld: add a new service</title>
+        <published>2024-05-16T18:40:35+00:00</published>
+        <updated>2024-05-16T18:40:35+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2024/05/firewalld-add-a-new-service/"/>
+        <id>https://goneri.lebouder.net/posts/2024/05/firewalld-add-a-new-service/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2024/05/firewalld-add-a-new-service/">&lt;p&gt;Create a new service entry:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --permanent --new-service=ollama
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Associate the right port with new service:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --permanent --service=ollama --add-port=11434&#x2F;tcp
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Restart the firewalld, so it&#x27;s aware of the new service:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --reload
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Finally, associate the service with the Zone. I don&#x27;t use &lt;code&gt;--permanent&lt;&#x2F;code&gt; here on purpose. This way the association will be lost when I will reboot the machine:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --add-service=ollama --zone=nm-shared
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Sharing Internet connection on Fedora 40</title>
+        <published>2024-05-16T00:30:02+00:00</published>
+        <updated>2024-05-16T00:30:02+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2024/05/sharing-internet-connection-on-fedora-40/"/>
+        <id>https://goneri.lebouder.net/posts/2024/05/sharing-internet-connection-on-fedora-40/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2024/05/sharing-internet-connection-on-fedora-40/">&lt;p&gt;It&#x27;s surprisingly easy to build a router from a Fedora 40 box. Here eno1 is connected to my cable modem and enp8s0 is connected to my local network.&lt;&#x2F;p&gt;
+&lt;p&gt;To NAT the Internet connection:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;nmcli c add type ethernet con-name internet ifname eno1 connection.zone external ipv4.method auto
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And set up the DHCP on the local network, the machine will use the IP 10.42.0.1 IP by default:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;nmcli c add type ethernet con-name lebouder.net ifname enp8s0 connection.zone nm-shared ipv4.method=shared
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>AWS: How to retrieve a KeyPair private key</title>
+        <published>2023-09-14T12:41:56+00:00</published>
+        <updated>2023-09-14T12:41:56+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2023/09/aws-how-to-retrieve-a-keypair-private-key/"/>
+        <id>https://goneri.lebouder.net/posts/2023/09/aws-how-to-retrieve-a-keypair-private-key/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2023/09/aws-how-to-retrieve-a-keypair-private-key/">&lt;p&gt;Note for myself, this is how you can download a copy of a KeyPair private key:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;aws --region ca-central-1 ssm get-parameter --name &#x2F;ec2&#x2F;keypair&#x2F;key-015b012fb114efc83 --with-decryption --query Parameter.Value --output text
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Elixir: xmerl&#x2F;include&#x2F;xmerl.hrl could not be found</title>
+        <published>2022-09-04T23:51:52+00:00</published>
+        <updated>2022-09-04T23:51:52+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2022/09/elixir-xmerl-include-xmerl-hrl-could-not-be-found/"/>
+        <id>https://goneri.lebouder.net/posts/2022/09/elixir-xmerl-include-xmerl-hrl-could-not-be-found/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2022/09/elixir-xmerl-include-xmerl-hrl-could-not-be-found/">&lt;p&gt;I recently faced this error when trying to build an Elixir project.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;== Compilation error in file lib&#x2F;swoosh&#x2F;adapters&#x2F;xml&#x2F;helpers.ex ==  
+** (ArgumentError) lib file xmerl&#x2F;include&#x2F;xmerl.hrl could not be found  
+(elixir 1.13.4) lib&#x2F;record&#x2F;extractor.ex:41: Record.Extractor.from_lib_file&#x2F;1  
+(elixir 1.13.4) lib&#x2F;record&#x2F;extractor.ex:18: Record.Extractor.from_or_from_lib_file&#x2F;1  
+(elixir 1.13.4) lib&#x2F;record&#x2F;extractor.ex:5: Record.Extractor.extract&#x2F;2  
+lib&#x2F;swoosh&#x2F;adapters&#x2F;xml&#x2F;helpers.ex:5: (module)  
+(elixir 1.13.4) lib&#x2F;kernel&#x2F;parallel_compiler.ex:346: anonymous fn&#x2F;5 in Kernel.ParallelCompiler.spawn_workers&#x2F;7  
+could not compile dependency :swoosh, &amp;quot;mix compile&amp;quot; failed. Errors may have been logged above. You can recompile this dependency with &amp;quot;mix deps.compile swoosh&amp;quot;, update it with &amp;quot;mix deps.update swoosh&amp;quot; or clean it with &amp;quot;mix deps.clean swoosh&amp;quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If you can the error above on Fedora, you probably need to install the &lt;code&gt;erlang-xmerl&lt;&#x2F;code&gt; package.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Connect to ZooKeeper over TLS&#x2F;SSL</title>
+        <published>2021-10-15T17:39:23+00:00</published>
+        <updated>2021-10-15T17:39:23+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/10/connect-to-zookeeper-over-tls-ssl/"/>
+        <id>https://goneri.lebouder.net/posts/2021/10/connect-to-zookeeper-over-tls-ssl/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/10/connect-to-zookeeper-over-tls-ssl/">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;10&#x2F;connect-to-zookeeper-over-tls-ssl&#x2F;zk_logo.png&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;zk_logo.png&quot; height=&quot;209&quot; width=&quot;147&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;It&#x27;s surprisingly tricky to connect to a ZooKeeper cluster over TLS&#x2F;SSL using the zkCli.sh command. You&#x27;ve got to wrap the command and pass some extra incantations. Here is the script I use. My certificates are in &#x2F;etc&#x2F;zookeeper&#x2F;ca, so you may need to adjust that to match your local installation.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;#!&#x2F;bin&#x2F;bash
+
+ZK_CLIENT_HEAP=&amp;quot;${ZK_CLIENT_HEAP:-256}&amp;quot;
+export ZK_CLIENT_SSL=&amp;quot;-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.ssl.keyStore.location=&#x2F;etc&#x2F;zookeeper&#x2F;ca&#x2F;keystores&#x2F;server.pem -Dzookeeper.ssl.trustStore.location=&#x2F;etc&#x2F;zookeeper&#x2F;ca&#x2F;certs&#x2F;cacert.pem -Dzookeeper.client.secure=true&amp;quot;
+export CLIENT_JVMFLAGS=&amp;quot;-Xmx${ZK_CLIENT_HEAP}m $ZK_CLIENT_SSL $CLIENT_JVMFLAGS&amp;quot;
+&#x2F;opt&#x2F;zookeeper&#x2F;bin&#x2F;zkCli.sh -server my-host-fqdn:2281
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Zuul cheat sheet</title>
+        <published>2021-10-12T20:57:33+00:00</published>
+        <updated>2021-10-12T20:57:33+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/10/zuul-cheat-sheet/"/>
+        <id>https://goneri.lebouder.net/posts/2021/10/zuul-cheat-sheet/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/10/zuul-cheat-sheet/">&lt;p&gt;My team at Ansible uses &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;zuul-ci.org&#x2F;&quot;&gt;Zuul CI&lt;&#x2F;a&gt; to develop and release our collections. From time to time, I need to do some basic operations and I&#x27;ve started a cheat sheet. I&#x27;m sharing it since it may be helpful for someone else.&lt;&#x2F;p&gt;
+&lt;p&gt;Abort a job:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ zuul dequeue --tenant=ansible --pipeline=release --project=ansible-collections&#x2F;ansible.utils --ref=refs&#x2F;tags&#x2F;2.4.2
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Recreate a job. In this case, we manually recreate a job in the release pipeline. This job was initially created by the push of a tag (--newrev).&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ zuul enqueue-ref --tenant=ansible --trigger=github --pipeline=release --project=ansible-collections&#x2F;ansible.utils --ref=refs&#x2F;tags&#x2F;2.4.2 --newrev=6a0372849bec52672a74168b93b0677d2c6471fc
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;List all the ongoing nodepool requests:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ nodepool -s &#x2F;etc&#x2F;nodepool&#x2F;secure.conf request-list
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Kill a periodic job:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ zuul dequeue --tenant=ansible --pipeline=periodic --project=ansible&#x2F;ansible --ref refs&#x2F;heads&#x2F;stable-2.9
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Ansible Molecule, how to use the local copy of the dependencies</title>
+        <published>2021-09-22T13:28:52+00:00</published>
+        <updated>2021-09-22T13:28:52+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/09/molecule-for-local-development/"/>
+        <id>https://goneri.lebouder.net/posts/2021/09/molecule-for-local-development/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/09/molecule-for-local-development/">&lt;p&gt;The community.okd collection depends on kubernetes.core. It uses &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;molecule.readthedocs.io&#x2F;en&#x2F;latest&#x2F;&quot;&gt;Molecule&lt;&#x2F;a&gt; to run the tests. We can call it using either the Makefile and the &lt;code&gt;make molecule&lt;&#x2F;code&gt; command. We can also install molecule manually with pip and run it with &lt;code&gt;molecule test&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;When I work on community.okd, I often need to also adjust the kubernetes.core collection. By default Molecule fetches the dependencies silently from internet. This is done during either the &lt;code&gt;prerun&lt;&#x2F;code&gt; or the &lt;code&gt;dependency&lt;&#x2F;code&gt; steps. The mechanism is handy when you focus on one single collection at a time. But in my case, it&#x27;s a bit annoying. The clean copy of kubernetes.core overwrites my local changes and prevents the testing of my local copy of the dependency.&lt;&#x2F;p&gt;
+&lt;p&gt;This is how I ensure Molecule uses my local copy of the collections. I store them in the default location ~&#x2F;.ansible&#x2F;collections&#x2F;ansible_collections.&lt;&#x2F;p&gt;
+&lt;p&gt;In molecule&#x2F;default&#x2F;molecule.yml I set the following key to turn off the &lt;code&gt;prerun&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;prerun: false
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;and I set the following block in the &lt;code&gt;dependency:&lt;&#x2F;code&gt; section:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt; dependency:
+   name: galaxy
+   enabled: False
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will turn off the dependency resolver. Molecule won&#x27;t call galaxy anymore to fetch the &lt;code&gt;roles&lt;&#x2F;code&gt; and the &lt;code&gt;collections&lt;&#x2F;code&gt; defined in the galaxy.yml.&lt;&#x2F;p&gt;
+&lt;p&gt;You&#x27;re done; as a bonus, the startup of &lt;code&gt;molecule&lt;&#x2F;code&gt; should be slightly faster!&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Extract data from an Android phone</title>
+        <published>2021-07-11T10:29:24+00:00</published>
+        <updated>2021-07-11T10:29:24+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/07/extract-data-from-an-android-phone/"/>
+        <id>https://goneri.lebouder.net/posts/2021/07/extract-data-from-an-android-phone/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/07/extract-data-from-an-android-phone/">&lt;p&gt;So, I&#x27;ve got an old phone with 35GB of pictures that I want to save. So far, I tried NextCloud sync, scp copy, GIO&#x2F;MTP file. For all of those, it&#x27;s a 12+ hour operation. And the real solution is to enable the developer mode on the phone and go straight to &lt;code&gt;adb&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ adb pull &#x2F;sdcard&#x2F;DCIM
+&#x2F;sdcard&#x2F;DCIM&#x2F;: 5825 files pulled. 31.9 MB&#x2F;s (37517869453 bytes in 1122.166s)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>0ad, Firewall and Fedora33</title>
+        <published>2021-02-21T02:19:17+00:00</published>
+        <updated>2021-02-21T02:19:17+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/02/0ad-firewall-and-fedora33/"/>
+        <id>https://goneri.lebouder.net/posts/2021/02/0ad-firewall-and-fedora33/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/02/0ad-firewall-and-fedora33/">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;02&#x2F;0ad-firewall-and-fedora33&#x2F;0ad.jpg&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;02&#x2F;0ad-firewall-and-fedora33&#x2F;0ad.jpg&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;By default, the firewall will prevent connection to your &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;play0ad.com&#x2F;&quot;&gt;0ad&lt;&#x2F;a&gt; server. To adjust that, you need to open up the port 20595 (UDP). This three lines create a Firewalld service called 0ad, attach it to the default zone and reload the firewall:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo firewall-cmd --permanent --new-service=0ad --set-description=&amp;quot;0ad, A free, open-source game of ancient warfare&amp;quot; --add-port=20595&#x2F;udp
+$ sudo firewall-cmd --zone=FedoraWorkstation --add-service=0ad --permanent
+$ sudo firewall-cmd --reload
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>eGPU, Wayland, Gnome3 and Fedora</title>
+        <published>2021-02-12T21:10:19+00:00</published>
+        <updated>2021-02-12T21:10:19+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/02/egpu-wayland-and-fedora-33/"/>
+        <id>https://goneri.lebouder.net/posts/2021/02/egpu-wayland-and-fedora-33/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/02/egpu-wayland-and-fedora-33/">&lt;p&gt;I&#x27;ve just got a Razer Core X that I use with a Radeon graphics card. By default Wayland, well Mutter actually, continues to use the Intel card of my T580.&lt;&#x2F;p&gt;
+&lt;p&gt;To force it to use the second card, I had to add a udev rule and reboot. And that&#x27;s all!&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ cat &#x2F;etc&#x2F;udev&#x2F;rules.d&#x2F;61-mutter-primary-gpu.rules
+ENV{DEVNAME}==&amp;quot;&#x2F;dev&#x2F;dri&#x2F;card1&amp;quot;, TAG+=&amp;quot;mutter-device-preferred-primary&amp;quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;note: You need Gnome 3.38.2 for this to work properly. See: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;gitlab.gnome.org&#x2F;GNOME&#x2F;mutter&#x2F;-&#x2F;merge_requests&#x2F;1562&quot;&gt;https:&#x2F;&#x2F;gitlab.gnome.org&#x2F;GNOME&#x2F;mutter&#x2F;-&#x2F;merge_requests&#x2F;1562&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;update: the post was initially written for Fedora 33, but the fix also works great with Fedora 34.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Ansible and k8s: How to get the K8S_AUTH_API_KEY value?</title>
+        <published>2020-12-07T21:37:00+00:00</published>
+        <updated>2020-12-07T21:37:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/12/ansible-and-k8s-how-to-get-the-k8s-auth-api-key-value/"/>
+        <id>https://goneri.lebouder.net/posts/2020/12/ansible-and-k8s-how-to-get-the-k8s-auth-api-key-value/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/12/ansible-and-k8s-how-to-get-the-k8s-auth-api-key-value/">&lt;p&gt;The &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible-collections&#x2F;community.kubernetes&quot;&gt;community.kubernetes &lt;&#x2F;a&gt;collection accepts an &lt;code&gt;api_key&lt;&#x2F;code&gt; parameter that may sounds a bit confusing. It&#x27;s actually the value of the token of a serviceaccount. It&#x27;s actually an OAuth 2.0 (Bearer) token, it&#x27;s associated with a user and a secret key. It&#x27;s rather similar to what we can do with a login and a password.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;12&#x2F;ansible-and-k8s-how-to-get-the-k8s-auth-api-key-value&#x2F;luis.jpg&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;luis.jpg&quot; height=&quot;68&quot; width=&quot;68&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;In this example, we want to run our playbook as the k8sadmin user. We need to find the token associated with the user. The are actually looks for the a secret. You can list them this way:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;[root@kind-vm ~]# kubectl -n kube-system get secret
+NAME                                             TYPE                                  DATA   AGE
+(...)
+foobar                                           Opaque                                0      5h3m
+foobar-token-w8lmt                               kubernetes.io&#x2F;service-account-token   3      5h15m
+foobar2-token-hpd6f                              kubernetes.io&#x2F;service-account-token   3      5h9m
+generic-garbage-collector-token-l7hvk            kubernetes.io&#x2F;service-account-token   3      25h
+horizontal-pod-autoscaler-token-sssg5            kubernetes.io&#x2F;service-account-token   3      25h
+job-controller-token-dnfds                       kubernetes.io&#x2F;service-account-token   3      25h
+k8sadmin-token-bklpd                             kubernetes.io&#x2F;service-account-token   3      5h40m
+(...)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The use the&lt;code&gt; -n&lt;&#x2F;code&gt; parameter to specific the &lt;code&gt;kube-system&lt;&#x2F;code&gt; namespace. Our system account is in the list, it&#x27;s k8sadmin-token-bklpd. We can see the content of the token with this command:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;[root@kind-vm ~]# kubectl -n kube-system describe secret k8sadmin-token-bklpd
+Name:         k8sadmin-token-bklpd
+Namespace:    kube-system
+Labels:       &amp;lt;none&amp;gt;
+Annotations:  kubernetes.io&#x2F;service-account.name: k8sadmin
+             kubernetes.io&#x2F;service-account.uid: 412bf773-ca8e-4afa-a778-dac0f11b7807
+
+Type:  kubernetes.io&#x2F;service-account-token
+
+Data
+====
+namespace:  11 bytes
+token:      eyJhbGciO(...)2A
+ca.crt:     1066 bytes
+
+Here, you&amp;#39;re done. The token is in the command output. You need now to pass its content to Ansible. Just keep in mind the token needs to remain secret. So it&amp;#39;s a good idea to encrypt it with Ansible Vault.
+You can use the K8S_AUTH_API_KEY environment variable to pass the token to the k8s_* modules:
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;$ K8S_AUTH_API_KEY=eyJhbGciO(...)2A ansible-playbook my_playbook.yaml&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>How to start minishift on Fedora-33</title>
+        <published>2020-11-05T19:43:51+00:00</published>
+        <updated>2020-11-05T19:43:51+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/11/how-to-start-minishift-on-fedora-33/"/>
+        <id>https://goneri.lebouder.net/posts/2020/11/how-to-start-minishift-on-fedora-33/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/11/how-to-start-minishift-on-fedora-33/">&lt;p&gt;&lt;strong&gt;update: minishift is basically dead and won&#x27;t support OpenShift 4. You probably want to use &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;developers.redhat.com&#x2F;blog&#x2F;2019&#x2F;09&#x2F;05&#x2F;red-hat-openshift-4-on-your-laptop-introducing-red-hat-codeready-containers&#x2F;&quot;&gt;crc&lt;&#x2F;a&gt; instead.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I just spent too much time trying to start &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;minishift&#x2F;minishift&quot;&gt;minishift&lt;&#x2F;a&gt; with my user account. After 3 hours fighting with permission issues between libvirt and the &lt;code&gt;~&#x2F;.minishift&lt;&#x2F;code&gt; directory, I&#x27;ve finally decided to stay sane and use &lt;code&gt;sudo&lt;&#x2F;code&gt;... This is how I start minishift on my Fedora 33.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;install-and-start-libvirt&quot;&gt;Install and start libvirt&lt;&#x2F;h3&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf install -y libvirt qemu-kvm
+sudo systemctl start libvirtd
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;fetch-and-install-minishift-and-the-kvm-driver&quot;&gt;Fetch and install minishift and the kvm driver&lt;&#x2F;h3&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf install -y origin-clients
+curl -L https:&#x2F;&#x2F;github.com&#x2F;minishift&#x2F;minishift&#x2F;releases&#x2F;download&#x2F;v1.34.3&#x2F;minishift-1.34.3-linux-amd64.tgz|sudo tar -C &#x2F;usr&#x2F;local&#x2F;bin -xvz minishift-1.34.3-linux-amd64&#x2F;minishift  --strip-components=1
+sudo curl -L https:&#x2F;&#x2F;github.com&#x2F;dhiltgen&#x2F;docker-machine-kvm&#x2F;releases&#x2F;download&#x2F;v0.10.0&#x2F;docker-machine-driver-kvm-centos7 -o &#x2F;usr&#x2F;local&#x2F;bin&#x2F;docker-machine-driver-kvm
+sudo chmod +x &#x2F;usr&#x2F;local&#x2F;bin&#x2F;docker-machine-driver-kvm
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;start-minishift-with-sudo&quot;&gt;Start minishift (with sudo...)&lt;&#x2F;h3&gt;
+&lt;p&gt;sudo minishift&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;and-configure-the-local-user&quot;&gt;And configure the local user&lt;&#x2F;h3&gt;
+&lt;pre&gt;&lt;code&gt;sudo cp -r &#x2F;root&#x2F;.kube &#x2F;home&#x2F;goneri
+sudo chown -R goneri:goneri &#x2F;home&#x2F;goneri&#x2F;.kube
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>How to clean Docker up when used on Btrfs</title>
+        <published>2015-01-08T13:05:16+00:00</published>
+        <updated>2015-01-08T13:05:16+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2015/01/how-to-clean-docker-up-when-used-on-btrfs/"/>
+        <id>https://goneri.lebouder.net/posts/2015/01/how-to-clean-docker-up-when-used-on-btrfs/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2015/01/how-to-clean-docker-up-when-used-on-btrfs/">&lt;p&gt;Docker often leaves behind files when I remove images with &lt;code&gt;rmi&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;systemctl stop docker.service
+systemctl stop docker.socket
+rm -rf &#x2F;var&#x2F;lib&#x2F;docker&#x2F;
+btrfs subvolume list &#x2F;var&#x2F;lib&#x2F;docker|awk &amp;#39;&#x2F;ID&#x2F; {print &amp;quot;&#x2F;&amp;quot;$9}&amp;#39;|xargs btrfs sub delete
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Create thumbnail images of a set of pictures</title>
+        <published>2015-01-03T14:10:32+00:00</published>
+        <updated>2015-01-03T14:10:32+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2015/01/create-thumbnail-images-of-a-set-of-pictures/"/>
+        <id>https://goneri.lebouder.net/posts/2015/01/create-thumbnail-images-of-a-set-of-pictures/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2015/01/create-thumbnail-images-of-a-set-of-pictures/">&lt;p&gt;Load 4 pictures at a time from the input directory and create thumbnail montage images:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;#!&#x2F;usr&#x2F;bin&#x2F;env python3
+
+import glob
+import subprocess
+
+inputs = glob.glob(&amp;#39;input&#x2F;*.JPG&amp;#39;)
+
+cpt = 0
+while len(inputs) &amp;gt; 0:
+to_process = inputs[:4] + [&amp;#39;logo:&amp;#39;, &amp;#39;logo:&amp;#39;, &amp;#39;logo:&amp;#39;]
+inputs = inputs[4:]
+cpt += 1
+subprocess.call([&amp;quot;montage&amp;quot;] + to_process[:4] + [&amp;quot;-geometry&amp;quot;, &amp;quot;800x600+2+2&amp;quot;, &amp;quot;final&#x2F;final_%02d.jpg&amp;quot; % cpt])
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Pbuilder on Debian kFreeBSD Wheezy</title>
+        <published>2014-10-06T19:57:17+00:00</published>
+        <updated>2014-10-06T19:57:17+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2014/10/pbuilder-on-debian-kfreebsd-wheezy/"/>
+        <id>https://goneri.lebouder.net/posts/2014/10/pbuilder-on-debian-kfreebsd-wheezy/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2014/10/pbuilder-on-debian-kfreebsd-wheezy/">&lt;p&gt;There is a little trick if you want to use pbuilder on kFreeBSD. Add these lines in &#x2F;etc&#x2F;pbuilderrc:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;MIRRORSITE=http:&#x2F;&#x2F;cdn.debian.net&#x2F;debian
+USEPROC=yes
+USEDEVFS=yes
+USEDEVPTS=yes
+BINDMOUNTS=&amp;quot;&#x2F;home&#x2F;goneri&amp;quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Getting BURP to use Puppet CA</title>
+        <published>2013-10-16T13:20:56+00:00</published>
+        <updated>2013-10-16T13:20:56+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/"/>
+        <id>https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/">&lt;p&gt;I&#x27;m a big fan of &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;burp.grke.org&#x2F;&quot;&gt;BURP&lt;&#x2F;a&gt; to maintain my backups. This article explains how to reuse the PuppetMaster CA for authentication. I use Debian burp package on Wheezy.&lt;&#x2F;p&gt;
+&lt;p&gt;First, you need to generate the dhfile.pem on both the server and the agent:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;openssl dhparam -outform PEM -out &#x2F;etc&#x2F;burp&#x2F;dhfile.pem 1024
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-server&quot;&gt;The server&lt;&#x2F;h2&gt;
+&lt;p&gt;The configuration is in &#x2F;etc&#x2F;burp&#x2F;burp-server.conf:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;mode = server
+(...)
+# ca_conf = &#x2F;etc&#x2F;burp&#x2F;CA.cnf
+# ca_name = burpCA
+# ca_server_name = burpserver
+# ca_burp_ca = &#x2F;usr&#x2F;sbin&#x2F;burp_ca
+(...)
+ssl_cert_ca = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;ca.pem
+ssl_cert = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;ca&#x2F;signed&#x2F;newpuppet.lebouder.net.pem
+ssl_key = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;private_keys&#x2F;newpuppet.lebouder.net.pem
+ssl_key_password = password
+ssl_dhfile = &#x2F;etc&#x2F;burp&#x2F;dhfile.pem
+(...)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-agent&quot;&gt;The agent&lt;&#x2F;h2&gt;
+&lt;p&gt;The configuration file is &#x2F;etc&#x2F;burp&#x2F;burp.conf:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;mode = client
+port = 4971
+server = newpuppet.lebouder.net
+ssl_cert_ca = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;ca.pem
+ssl_cert = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;newclient.lebouder.net.pem
+ssl_key = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;private_keys&#x2F;newclient.lebouder.net.pem
+ssl_peer_cn = newpuppet.lebouder.net
+(...)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;newpuppet.lebouder.net is the Puppet server.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Refresh all my git clones</title>
+        <published>2013-09-15T21:58:22+00:00</published>
+        <updated>2013-09-15T21:58:22+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2013/09/refresh-all-my-git-clone/"/>
+        <id>https://goneri.lebouder.net/posts/2013/09/refresh-all-my-git-clone/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2013/09/refresh-all-my-git-clone/">&lt;p&gt;These are the commands I use to refresh all my git clones. For example, when I know I will be offline in the coming hours:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;locate --regex &amp;#39;\.git$&amp;#39;|parallel &amp;#39;cd {} &amp;amp;&amp;amp; cd .. &amp;amp;&amp;amp; echo $PWD &amp;amp;&amp;amp; git fetch --all&amp;#39;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The use of GNU parallel is helpful to reduce the sync duration.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Duide Antidote8 sur Debian Sid</title>
+        <published>2013-08-09T13:44:07+00:00</published>
+        <updated>2013-08-09T13:44:07+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2013/08/duide-antidote8-sur-debian-sid/"/>
+        <id>https://goneri.lebouder.net/posts/2013/08/duide-antidote8-sur-debian-sid/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2013/08/duide-antidote8-sur-debian-sid/">&lt;p&gt;J’ai acheté le correcteur orthographique &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.druide.com&#x2F;antidote.html&quot;&gt;Antidote 8&lt;&#x2F;a&gt; que j’ai installé hier. L’outil est vraiment impressionnant et agréable à utiliser.&lt;&#x2F;p&gt;
+&lt;p&gt;L’installation sur Debian Sid n’est pas supportée, cependant son utilisation est possible. Je dois encore voir si je peux l’intégrer avec Firefox (Iceweasel) et Thunderbird (Icedove).&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;installation&quot;&gt;Installation&lt;&#x2F;h1&gt;
+&lt;pre&gt;&lt;code&gt;# apt-get install libx11-6 libxslt1.1 libvorbis0a libxrender1 libgstreamer-plugins-base0.10-0 libpulse0 libpulse0 libpulse-mainloop-glib0 libfreetype6libpulse-mainloop-glib0 libfontconfig1 libxext6 libicu48``# wget http:&#x2F;&#x2F;ftp.fr.debian.org&#x2F;debian&#x2F;pool&#x2F;main&#x2F;o&#x2F;openssl&#x2F;libssl0.9.8_0.9.8o-4squeeze14_amd64.deb
+# dpkg -i libssl0.9.8_0.9.8o-4squeeze14_amd64.deb
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre&gt;&lt;code&gt;# wget http:&#x2F;&#x2F;ftp.fr.debian.org&#x2F;debian&#x2F;pool&#x2F;main&#x2F;i&#x2F;icu&#x2F;libicu44_4.4.1-8_amd64.deb
+# dpkg -i libicu44_4.4.1-8_amd64.deb
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Pour éviter un problème avec les kernel &amp;gt;= 3 il faut faire une petite manip présentée ici : http:&#x2F;&#x2F;www.debian-fr.org&#x2F;certains-logiciels-dysfonctionnent-en-changeant-de-noyau-t42688.html&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;# wget https:&#x2F;&#x2F;mail.gnome.org&#x2F;archives&#x2F;evolution-list&#x2F;2003-December&#x2F;txtBEWSVk2eft.txt -O &#x2F;tmp&#x2F;uname.c
+$ (echo #define _GNU_SOURCE; cat &#x2F;tmp&#x2F;uname.c) &amp;gt; &#x2F;tmp&#x2F;uname.c
+$ gcc -shared -fPIC -ldl uname.c -o &#x2F;opt&#x2F;Druide&#x2F;Antidote8&#x2F;Programmes64&#x2F;fake-uname.so`
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Il ne reste plus qu&#x27;a ajouter les deux lignes suivantes au début du script &#x2F;opt&#x2F;Druide&#x2F;Antidote8&#x2F;Programmes64&#x2F;Antidote8.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;export LD_PRELOAD=&#x2F;opt&#x2F;Druide&#x2F;Antidote8&#x2F;Programmes64&#x2F;fake-uname.so
+export RELEASE=$(uname -r | sed &amp;#39;s&#x2F;^\(...\)&#x2F;\1.0-antidote-fix&#x2F;g&amp;#39;)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Avahi &#x2F; Bonjour on Windows</title>
+        <published>2013-06-16T12:10:05+00:00</published>
+        <updated>2013-06-16T12:10:05+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2013/06/avahi-bonjour-on-windows/"/>
+        <id>https://goneri.lebouder.net/posts/2013/06/avahi-bonjour-on-windows/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2013/06/avahi-bonjour-on-windows/">&lt;p&gt;How to resolve .local Avahi&#x2F;Bonjour names on Windows: http:&#x2F;&#x2F;support.apple.com&#x2F;kb&#x2F;DL999&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Debian Wheezy and cfengine</title>
+        <published>2012-11-17T20:10:24+00:00</published>
+        <updated>2012-11-17T20:10:24+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2012/11/debian-wheezy-and-cfengine/"/>
+        <id>https://goneri.lebouder.net/posts/2012/11/debian-wheezy-and-cfengine/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2012/11/debian-wheezy-and-cfengine/">&lt;p&gt;How to bootstrap a cfengine node with Debian Wheezy Cfengine:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;# cp &#x2F;usr&#x2F;share&#x2F;doc&#x2F;cfengine3&#x2F;example_config&#x2F;* &#x2F;etc&#x2F;cfengine3&#x2F;
+# sed -i &amp;#39;s,&amp;quot;&#x2F;var&#x2F;lib&#x2F;cfengine3&#x2F;inputs&amp;quot;,&amp;quot;&#x2F;etc&#x2F;cfengine3&amp;quot;,&amp;#39; &#x2F;etc&#x2F;cfengine3&#x2F;update.cf
+# sed -i &amp;#39;s,RUN_CFEXECD=0,RUN_CFEXECD=1,&amp;#39; &#x2F;etc&#x2F;default&#x2F;cfengine3
+# &#x2F;etc&#x2F;init.d&#x2F;cfengine3 restart
+# cf-agent --bootstrap --policy-server 2a01:e35:242d:e930:250:XXXX:XXXX:XXXXX
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Prefetch apt packages</title>
+        <published>2012-11-13T10:26:46+00:00</published>
+        <updated>2012-11-13T10:26:46+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2012/11/prefetch-apt-packages/"/>
+        <id>https://goneri.lebouder.net/posts/2012/11/prefetch-apt-packages/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2012/11/prefetch-apt-packages/">&lt;p&gt;I use this command to speed up deb package downloads. It will do parallel downloads of the required .deb files with puf.&lt;&#x2F;p&gt;
+&lt;p&gt;For example with otrs:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;cd &#x2F;var&#x2F;cache&#x2F;apt&#x2F;archives&#x2F; &amp;amp;&amp;amp; apt-get -y --print-uris install otrs|awk &amp;#39;{print $1}&amp;#39;|grep &amp;quot;&amp;#39;http&amp;quot; | xargs puf
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>git gc --prune on a complete directory structure</title>
+        <published>2012-06-13T10:43:56+00:00</published>
+        <updated>2012-06-13T10:43:56+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2012/06/git-gc-prune-a-on-complet-directory-structure/"/>
+        <id>https://goneri.lebouder.net/posts/2012/06/git-gc-prune-a-on-complet-directory-structure/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2012/06/git-gc-prune-a-on-complet-directory-structure/">&lt;p&gt;To run &quot;git gc --prune&quot; on a structure of subdirectories of git repositories, like for example a &#x2F;git directory on a server:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;find &#x2F;git -type d -execdir sh -c &amp;#39;[ -f &amp;quot;description&amp;quot; ] &amp;amp;&amp;amp; sudo git gc --prune&amp;#39; \;`
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>git gc and bup</title>
+        <published>2011-12-31T00:34:23+00:00</published>
+        <updated>2011-12-31T00:34:23+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2011/12/git-gc-and-bup/"/>
+        <id>https://goneri.lebouder.net/posts/2011/12/git-gc-and-bup/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2011/12/git-gc-and-bup/">&lt;p&gt;To avoid the OOM killer after a &lt;code&gt;git gc&lt;&#x2F;code&gt; call on a bup repository:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;$ git config --global pack.windowMemory 512m
+$ git config --global pack.threads 10
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Backup LVM LV with bup</title>
+        <published>2011-12-31T00:11:50+00:00</published>
+        <updated>2011-12-31T00:11:50+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2011/12/backup-lvm-lv-with-bup/"/>
+        <id>https://goneri.lebouder.net/posts/2011/12/backup-lvm-lv-with-bup/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2011/12/backup-lvm-lv-with-bup/">&lt;p&gt;Bup is a backup software that uses git for storage. Bup imports chunks of files to deduplicate large files.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;$ cat &#x2F;dev&#x2F;mapper&#x2F;virtualmachines-sarge | bup split -n virtualmachines-sarges
+bloom: adding 1 file (10967 objects).
+$ bup join virtualmachines-sarges &amp;gt; &#x2F;tmp&#x2F;sarges.img
+$ file &#x2F;tmp&#x2F;sarges.img &#x2F;tmp&#x2F;sarges.img: x86 boot sector; GRand Unified Bootloader, stage1 version 0x3, stage2 address 0x2000, stage2 segment 0x200, GRUB version 0.94; partition 1: ID=0x83, active, starthead 1, startsector 63, 9976302 sectors; partition 2: ID=0x5, starthead 0, startsector 9976365, 498015 sectors, code offset 0x48
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Wininetd 0.7</title>
+        <published>2011-12-04T22:29:25+00:00</published>
+        <updated>2011-12-04T22:29:25+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2011/12/wininetd-0-7/"/>
+        <id>https://goneri.lebouder.net/posts/2011/12/wininetd-0-7/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2011/12/wininetd-0-7/">&lt;p&gt;Just a reminder, this is the command line needed to build &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.xmailserver.org&#x2F;wininetd.html&quot;&gt;WinInetd&lt;&#x2F;a&gt; with gcc:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;gcc service.c wininetd.c -lws2_32 -lm
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>OpenSSL1.0.0e+Net::SSLeay on Windows</title>
+        <published>2011-12-03T01:24:37+00:00</published>
+        <updated>2011-12-03T01:24:37+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2011/12/openssl1-0-0enetssleay-on-windows/"/>
+        <id>https://goneri.lebouder.net/posts/2011/12/openssl1-0-0enetssleay-on-windows/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2011/12/openssl1-0-0enetssleay-on-windows/">&lt;p&gt;I managed to get Net::SSLeay to work with the latest OpenSSL release. Here are just some notes for myself.&lt;&#x2F;p&gt;
+&lt;p&gt;OpenSSL test-suite build will fail but the .a and the openssl.exe files are ok.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;; LIBPATH=`echo $LIBPATH | sed -e &amp;#39;s&#x2F; &#x2F;:&#x2F;g&amp;#39;`; LD\_LIBRARY\_PATH=$LIBPATH:$LD\_LIBRARY\_PATH ${LDCMD} ${LDFLAGS} -o ${APPNAME:=ideatest.exe} ideatest.o ${LIBDEPS} )
+make[2]: Leaving directory `&#x2F;cygdrive&#x2F;c&#x2F;strawberry&#x2F;openssl-1.0.0e&#x2F;test&amp;#39;
+gcc -I.. -I..&#x2F;include -DOPENSSL\_THREADS -D\_MT -DDSO\_WIN32 -DL\_ENDIAN -DWIN32\_LEAN\_AND\_MEAN -fomit-frame-pointer -O3 -march=i486 -Wall -DOPENSSL\_BN\_ASM\_PART\_WORDS -DOPENSSL\_IA32\_SSE2 -DOPENSSL\_BN\_ASM\_MONT -DSHA1\_ASM -DSHA256\_ASM -DSHA512\_ASM -DMD5\_ASM -DRMD160\_ASM -DAES\_ASM -DWHIRLPOOL\_ASM -c -o md2test.o md2test.c
+md2test.c:1: error: expected identifier or &amp;#39;(&amp;#39; before &amp;#39;!&amp;#39; token
+md2test.c:1: error: stray &amp;#39;\\377&amp;#39; in program
+md2test.c:1: error: stray &amp;#39;\\376&amp;#39; in program
+md2test.c:1:14: warning: null character(s) ignored
+md2test.c:1:16: warning: null character(s) ignored
+md2test.c:1:18: warning: null character(s) ignored
+md2test.c:1:20: warning: null character(s) ignored
+md2test.c:1:22: warning: null character(s) ignored
+md2test.c:1:24: warning: null character(s) ignored
+md2test.c:1:26: warning: null character(s) ignored
+md2test.c:1:28: warning: null character(s) ignored
+md2test.c:1:30: warning: null character(s) ignored
+md2test.c:1:32: warning: null character(s) ignored
+md2test.c:1:34: warning: null character(s) ignored
+: recipe for target `md2test.o&amp;#39; failed
+make[1]: \*\*\* [md2test.o] Error 1
+make[1]: Leaving directory `&#x2F;cygdrive&#x2F;c&#x2F;strawberry&#x2F;openssl-1.0.0e&#x2F;test&amp;#39;
+Makefile:255: recipe for target `build\_tests&amp;#39; failed
+make: \*\*\* [build\_tests] Error 1 Administrator@ordi-de-gon▒ri &#x2F;cygdrive&#x2F;c&#x2F;strawberry&#x2F;openssl-1.0.0e
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The openssl.exe binary is in apps&#x2F; on Windows, not bin. Net::SSLeay&#x27;s Makefile.PL file fails to find the OpenSSL distribution because of that.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;(...)
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x251a): undefined reference to `\_imp\_\_CertOpenStore@20&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x255f): undefined reference to `imp\_\_CertFreeCertificateContext@4&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x2576): undefined reference to `\_imp\_\_CertCloseStore@8&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x25d5): undefined reference to `\_imp\_\_CertEnumCertificatesInStore@8&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x2e1a): undefined reference to `\_imp\_\_CertOpenStore@20&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x2e4d): undefined reference to `\_imp\_\_CertEnumCertificatesInStore@8&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x2f28): undefined reference to `\_imp\_\_CertDuplicateCertificateContext@4&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x2fb1): undefined reference to `\_imp\_\_CertCloseStore@8&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x30e6): undefined reference to `\_imp\_\_CertFreeCertificateContext@4&amp;#39;
+collect2: ld returned 1 exit status
+dmake: Error code 129, while making &amp;#39;blib\\arch\\auto\\Net\\SSLeay\\SSLeay.dll&amp;#39;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The patch to apply to get Net::SSLeay to build.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;diff&quot;&gt;--- Net-SSLeay-1.42.orig&#x2F;inc&#x2F;Module&#x2F;Install&#x2F;PRIVATE&#x2F;Net&#x2F;SSLeay.pm 2011-10-03 08:23:34.000000000 +0200
++++ Net-SSLeay-1.42&#x2F;inc&#x2F;Module&#x2F;Install&#x2F;PRIVATE&#x2F;Net&#x2F;SSLeay.pm 2011-12-03 02:22:28.286660290 +0100
+@@ -90,7 +90,7 @@ EOM # libeay32 and ssleay32. # This construction will not complain as long as it find at least one # libssl32.a is made by openssl onWin21 with the ms&#x2F;minw32.bat builder
+- push @{ $opts-\&amp;gt;{lib\_links} }, qw( libeay32MD ssleay32MD libeay32 ssleay32 libssl32);
++ push @{ $opts-\&amp;gt;{lib\_links} }, qw( libssl libcrypto Crypt32 ); } else { $opts-\&amp;gt;{optimize} = &amp;#39;-O2 -g&amp;#39;; push @{ $opts-\&amp;gt;{lib\_links} },
+@@ -172,9 +172,10 @@ sub find\_openssl\_exec { my ($self, $prefix) = @\_; my $exe\_path;
+- for my $subdir (qw( bin sbin out32dll )) {
++ for my $subdir (qw( apps bin sbin out32dll )) { my $path = File::Spec-\&amp;gt;catfile($prefix, $subdir, &amp;quot;openssl$Config{\_exe}&amp;quot;);
+- if ( -x $path ) {
++
++ if ( -e $path ) { return $path; } }
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>How to build Thunderbird 3.0.4 from source</title>
+        <published>2010-04-22T13:13:07+00:00</published>
+        <updated>2010-04-22T13:13:07+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2010/04/how-to-build-grab-thunderbird-3-0-4-sources/"/>
+        <id>https://goneri.lebouder.net/posts/2010/04/how-to-build-grab-thunderbird-3-0-4-sources/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2010/04/how-to-build-grab-thunderbird-3-0-4-sources/">&lt;p&gt;Commit references can be found in the release notes on the wiki: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;wiki.mozilla.org&#x2F;Releases&#x2F;Thunderbird_3.0.4&quot;&gt;https:&#x2F;&#x2F;wiki.mozilla.org&#x2F;Releases&#x2F;Thunderbird_3.0.4&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;hg clone -r b8e06312e645 http:&#x2F;&#x2F;hg.mozilla.org&#x2F;releases&#x2F;comm-1.9.1 thunderbird
+cd thunderbird
+echo &amp;#39;ac_add_options --enable-application=mail&amp;#39; &amp;gt; .mozconfig
+echo &amp;#39;mk_add_options MOZ_OBJDIR=@TOPSRCDIR@&#x2F;objdir-tb-release&amp;#39; &amp;gt;&amp;gt; .mozconfig
+hg clone -r ead1204d8b81 http:&#x2F;&#x2F;hg.mozilla.org&#x2F;releases&#x2F;mozilla-1.9.1 mozilla
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Install the build dependencies (&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;developer.mozilla.org&#x2F;En&#x2F;Simple_Firefox_build&quot;&gt;https:&#x2F;&#x2F;developer.mozilla.org&#x2F;En&#x2F;Simple_Firefox_build&lt;&#x2F;a&gt;).&lt;&#x2F;p&gt;
+&lt;p&gt;Now we can start the build&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;make -f client.mk
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Debian Vserver cheat sheet</title>
+        <published>2010-03-09T17:55:05+00:00</published>
+        <updated>2010-03-09T17:55:05+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2010/03/debian-vserver-cheat-sheet/"/>
+        <id>https://goneri.lebouder.net/posts/2010/03/debian-vserver-cheat-sheet/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2010/03/debian-vserver-cheat-sheet/">&lt;p&gt;This is just to keep track for myself on how to create a Vserver with Internet connectivity.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Create the network interface&lt;&#x2F;strong&gt; Edit &lt;code&gt;&#x2F;etc&#x2F;network&#x2F;interfaces&lt;&#x2F;code&gt; and add:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;auto dummy0
+iface dummy0 inet static address 192.168.50.1 netmask 255.255.255.0
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;strong&gt;Restart the network&lt;&#x2F;strong&gt; &lt;code&gt;&#x2F;etc&#x2F;init.d&#x2F;networking restart&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Turn the NAT on&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;echo 1 &amp;gt; &#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Replace eth0 with the network interface you use for your network access.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Create the VM&lt;&#x2F;strong&gt; &lt;code&gt;sudo vserver build build -n cyrus2.3 -m debootstrap --netdev dummy0 --interface 192.168.50.2&#x2F;24 -- -d lenny&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Enter the VM&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo vserver cyrus2.3 start
+sudo vserver cyrus2.3 enter
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>How to query Windows Vista registry with Samba4 regshell</title>
+        <published>2009-10-12T15:15:50+00:00</published>
+        <updated>2009-10-12T15:15:50+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2009/10/how-to-query-windows-vista-registry-with-samba4-regshell/"/>
+        <id>https://goneri.lebouder.net/posts/2009/10/how-to-query-windows-vista-registry-with-samba4-regshell/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2009/10/how-to-query-windows-vista-registry-with-samba4-regshell/">&lt;p&gt;In this example, I list the installed software on the Vista machine from a Debian Sid system using &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.samba.org&quot;&gt;Samba&lt;&#x2F;a&gt; 4 packages.&lt;&#x2F;p&gt;
+&lt;p&gt;I had to enable (with lusrmgr.msc) and use the Administrator account.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;% regshell --remote=192.168.50.10 -U Administrateur%castorLapon
+HKEY_CLASSES_ROOT&amp;gt; predef HKEY_LOCAL_MACHINE
+HKEY_LOCAL_MACHINE&amp;gt; cd SOFTWARE
+New path is: HKEY_LOCAL_MACHINE\SOFTWARE
+HKEY_LOCAL_MACHINE\SOFTWARE&amp;gt; cd Microsoft
+New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft&amp;gt; cd Windows
+New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows&amp;gt; cd CurrentVersion
+New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion&amp;gt; cd Uninstall
+New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall&amp;gt; list
+K 7-Zip
+K AddressBook
+K Adobe Flash Player ActiveX
+K Bazaar_is1
+K Connection Manager
+K DirectDrawEx
+K DXM_Runtime
+K Fontcore
+K IE40
+K IE4Data
+K IE5BAKEX
+K IEData
+K Microsoft .NET Framework 3.5 Language Pack SP1 - fra
+K Microsoft .NET Framework 3.5 SP1
+K MobileOptionPack
+K Mozilla Firefox (3.5.3)
+K MPlayer2
+K OCS Inventory Agent
+K PuTTY_is1
+K SchedulingAgent
+K Vim 7.2
+K WIC
+K {205C6BDD-7B73-42DE-8505-9A093F35A238}
+K {26A24AE4-039D-4CA4-87B4-2F83216016FF}
+K {3E31821C-7917-367E-938E-E65FC413EA31}
+K {89F4137D-6C26-4A84-BDB8-2E5A4BB71E00}
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB350003
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB953595
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB958484
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB960043
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB963707
+K {DCE8CD14-FBF5-4464-B9A4-E18E473546C7}
+K {F0E12BBA-AD66-4022-A453-A1C8A0C4D570}
+K {F18B31E4-E2E3-4F4F-A2C9-BA579D6AF400}
+K {FC857AFE-FC36-3C91-BC17-F8E233C21B4B}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>thunderbird 2.0.0.23 built by Mozilla and Debian Squeeze</title>
+        <published>2009-09-03T16:40:04+00:00</published>
+        <updated>2009-09-03T16:40:04+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2009/09/thunderbird-2-0-0-23-built-by-mozilla-and-debian-squeeze/"/>
+        <id>https://goneri.lebouder.net/posts/2009/09/thunderbird-2-0-0-23-built-by-mozilla-and-debian-squeeze/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2009/09/thunderbird-2-0-0-23-built-by-mozilla-and-debian-squeeze/">&lt;p&gt;Mozilla still builds against libstdc++5...&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;&#x2F;opt&#x2F;thunderbird-2.0.0.23$ .&#x2F;thunderbird
+.&#x2F;thunderbird-bin: error while loading shared libraries: libstdc++.so.5: cannot open shared object file: No such file or directory
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The solution is very simple. Just use libstdc++5 from Lenny:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;wget http:&#x2F;&#x2F;ftp.fi.debian.org&#x2F;debian&#x2F;pool&#x2F;main&#x2F;g&#x2F;gcc-3.3&#x2F;libstdc++5_3.3.6-18_i386.deb
+sudo dpkg -i libstdc++5_3.3.6-18_i386.deb
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>S270 Wifi au boot sur Debian Sid</title>
+        <published>2006-01-07T03:11:00+00:00</published>
+        <updated>2006-01-07T03:11:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/"/>
+        <id>https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/">&lt;p&gt;Ce soir, j&#x27;ai découvert que pour que les parametres wireless_* du &#x2F;etc&#x2F;network&#x2F;interfaces l&#x27;interface doit déjà être &quot;up&quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;Voila ce que ça donne :&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;iface eth1 inet dhcp
+# j&amp;#39;up l&amp;#39;interface avant tout
+pre-up ifconfig eth1 up
+wireless_mode managed
+wireless_channel 6
+wireless_nick clara
+wireless_key off
+# sinon j&amp;#39;ai des problemes de stablitié du signal
+wireles_rate 11M
+# essid en dernier !
+wireless_essid BZH
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;J&#x27;ai ce problème avec le chipset rt2500, ça mérite surement un rapport de bug :). A étudier…&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

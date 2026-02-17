@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Gonéri&#x27;s blog - performance</title>
+    <link rel="self" type="application/atom+xml" href="https://goneri.lebouder.net/tags/performance/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://goneri.lebouder.net"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2021-06-23T18:28:19+00:00</updated>
+    <id>https://goneri.lebouder.net/tags/performance/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Performance: expanduser with pathlib or os.path</title>
+        <published>2021-06-23T18:28:19+00:00</published>
+        <updated>2021-06-23T18:28:19+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/06/performance-expanduser-with-pathlib-or-os-path/"/>
+        <id>https://goneri.lebouder.net/posts/2021/06/performance-expanduser-with-pathlib-or-os-path/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/06/performance-expanduser-with-pathlib-or-os-path/">&lt;p&gt;Python 3 provides a new fancy library to manage pretty much all the path-related operations. This is a really welcome improvement since before that we had to use a long list of unrelated modules.&lt;&#x2F;p&gt;
+&lt;p&gt;I recently had to choose between Pathlib and os.path to expand a string in the ~&#x2F;path format to the absolute path. Since performance was important, I took the time to benchmark the two options:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;#!&#x2F;usr&#x2F;bin&#x2F;env python3
+
+import timeit
+
+setup = &amp;#39;&amp;#39;&amp;#39;
+from pathlib import PosixPath
+&amp;#39;&amp;#39;&amp;#39;
+with_pathlib = timeit.timeit(&amp;quot;abs_remote_tmp = str(PosixPath(&amp;#39;~&#x2F;.ansible&#x2F;tmp&amp;#39;).expanduser())&amp;quot;, setup=setup)
+
+setup = &amp;#39;&amp;#39;&amp;#39;
+from os.path import expanduser
+&amp;#39;&amp;#39;&amp;#39;
+
+with_os_path = timeit.timeit(&amp;quot;abs_remote_tmp = expanduser(&amp;#39;~&#x2F;.ansible&#x2F;tmp&amp;#39;)&amp;quot;, setup=setup)
+
+print(f&amp;quot;with pathlib: {with_pathlib}\nwith os.path: {with_os_path}&amp;quot;)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;os.path is about 4 times faster for this very specific case. The fact that we need to instantiate a PosixPath object has an impact. Also, once again we observe a nice performance boost with Python 3.8 onwards.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;06&#x2F;performance-expanduser-with-pathlib-or-os-path&#x2F;performance2.png&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;performance2.png&quot; height=&quot;340&quot; width=&quot;605&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Ansible: Performance Impact of the Python version</title>
+        <published>2020-11-26T20:01:54+00:00</published>
+        <updated>2020-11-26T20:01:54+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/11/ansible-performance-impact-of-the-python-version/"/>
+        <id>https://goneri.lebouder.net/posts/2020/11/ansible-performance-impact-of-the-python-version/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/11/ansible-performance-impact-of-the-python-version/">&lt;p&gt;Until recently, I was not really paying attention to the version of Python I was using with Ansible, as long as it was Python 3. The default version was always good enough for Ansible.&lt;&#x2F;p&gt;
+&lt;p&gt;During the last few weeks, I spent the majority of my time working on the performance of the community.kubernetes collection. The modules of this collection depend on a large library (OpenShift SDK) and Python needs to reload it before every task execution. The goal was to benefit from what is already in place with vmware.vmware_rest: &lt;a href=&quot;&#x2F;posts&#x2F;2020&#x2F;10&#x2F;how-to-speed-up-your-api-client-modules&#x2F;&quot;&gt;See: my AnsibleFest presentation&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;While working on this, I realized that my metrics were not consistent; I was not able to reproduce some test cases from 2 months ago. After a quick investigation, the Python version matters much more than expected.&lt;&#x2F;p&gt;
+&lt;p&gt;To compare the different Python versions, I decided to run some tests.&lt;&#x2F;p&gt;
+&lt;p&gt;The target host is a t2.medium instance (2 vCPUs, 4GiB) running on AWS. The operating system is Fedora 33, which is really handy for this because it includes all the Python versions from 3.6 to 3.10!&lt;&#x2F;p&gt;
+&lt;p&gt;I use the latest stable version of Ansible (2.10.3) that I install with &lt;code&gt;pip&lt;&#x2F;code&gt; in a Python virtual environment. &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;721160564904c5c0f35a1b47736ada58&quot;&gt;Here is the list of dependencies present in the virtualenvs.&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Finally, I deploy Kubernetes on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;podman.io&#x2F;&quot;&gt;Podman&lt;&#x2F;a&gt; with &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;kind.sigs.k8s.io&#x2F;&quot;&gt;Kubernetes Kind&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;For the first test, I use a Python one-liner to evaluate the time Python takes to load the OpenShift SDK. This is one of the operations I want to optimize for my work, so it matters a lot to me.&lt;&#x2F;p&gt;
+&lt;p&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;c4f8ec63d0c51f7e6236173b2c60db66&lt;&#x2F;p&gt;
+&lt;p&gt;Here, the loading is done 100 times in a row.&lt;&#x2F;p&gt;
+&lt;p&gt;The result shows a steady improvement of the performance since Python 3.6.&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;Python3.6&lt;&#x2F;th&gt;&lt;th&gt;Python3.7&lt;&#x2F;th&gt;&lt;th&gt;Python3.8&lt;&#x2F;th&gt;&lt;th&gt;Python3.9&lt;&#x2F;th&gt;&lt;th&gt;Python3.10&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;time (sec)&lt;&#x2F;td&gt;&lt;td&gt;48.401&lt;&#x2F;td&gt;&lt;td&gt;45.088&lt;&#x2F;td&gt;&lt;td&gt;41.751&lt;&#x2F;td&gt;&lt;td&gt;40.924&lt;&#x2F;td&gt;&lt;td&gt;40.385&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;With this test, the loading of the SDK is &lt;strong&gt;16.5% faster&lt;&#x2F;strong&gt; with Python 3.10.&lt;&#x2F;p&gt;
+&lt;p&gt;The next test does the same thing, but this time through Ansible. My test uses the following playbook:&lt;&#x2F;p&gt;
+&lt;p&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;ad252e30d48cfea99aaeb2e18736303e&lt;&#x2F;p&gt;
+&lt;p&gt;It runs the &lt;code&gt;k8s_info&lt;&#x2F;code&gt; module 100 times in a row. In addition, I use an &lt;code&gt;ansible.cfg&lt;&#x2F;code&gt; with the following content. This way, ansible-playbook returns a nice output of the task execution duration:&lt;&#x2F;p&gt;
+&lt;p&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;e364c17d6344fd4cd11c1ed2e0ba12ce&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;Python3.6&lt;&#x2F;th&gt;&lt;th&gt;Python3.7&lt;&#x2F;th&gt;&lt;th&gt;Python3.8&lt;&#x2F;th&gt;&lt;th&gt;Python3.9&lt;&#x2F;th&gt;&lt;th&gt;Python3.10&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;time (sec)&lt;&#x2F;td&gt;&lt;td&gt;85.5&lt;&#x2F;td&gt;&lt;td&gt;80.5&lt;&#x2F;td&gt;&lt;td&gt;75.35&lt;&#x2F;td&gt;&lt;td&gt;75.05&lt;&#x2F;td&gt;&lt;td&gt;71.19&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;It&#x27;s a &lt;strong&gt;16.76%&lt;&#x2F;strong&gt; boost between Python 3.6 and Python 3.10. I was not expecting such tight correlation between the two tests.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;11&#x2F;ansible-performance-impact-of-the-python-version&#x2F;image.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;11&#x2F;ansible-performance-impact-of-the-python-version&#x2F;image.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;While Python is obviously not the fastest technology out there, it&#x27;s great to see how its performance improves with each release. Python 3.10 is not even released yet and looks promising.&lt;&#x2F;p&gt;
+&lt;p&gt;If your playbooks use some modules with dependencies on large Python libraries, it may be interesting to try the latest Python versions.&lt;&#x2F;p&gt;
+&lt;p&gt;And for those who are still running Python 2.7, I get a &lt;strong&gt;49.2%&lt;&#x2F;strong&gt; performance boost between 2.7 and 3.10.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>How to speed up your (API client) modules</title>
+        <published>2020-10-13T18:54:03+00:00</published>
+        <updated>2020-10-13T18:54:03+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/10/how-to-speed-up-your-api-client-modules/"/>
+        <id>https://goneri.lebouder.net/posts/2020/10/how-to-speed-up-your-api-client-modules/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/10/how-to-speed-up-your-api-client-modules/">&lt;p&gt;https:&#x2F;&#x2F;www.slideshare.net&#x2F;goneri&#x2F;how-to-speed-up-your-api-client-modules&lt;&#x2F;p&gt;
+&lt;p&gt;The slide deck of my presentation for AnsibleFest 2020. It focuses on the modules designed to interact with a remote service (REST, SOAP, etc). In general these modules just wrap an SDK library; the presentation explains how to improve the performance. I actually use this strategy ( &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible-collections&#x2F;cloud.common&#x2F;blob&#x2F;main&#x2F;README_ansible_turbo.module.rst&quot;&gt;ansible_turbo.module&lt;&#x2F;a&gt; ) with the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible-collections&#x2F;vmware.vmware_rest&quot;&gt;vmware.vmware_rest collection&lt;&#x2F;a&gt; to speed up the modules.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;10&#x2F;how-to-speed-up-your-api-client-modules&#x2F;how-to-speed-up-your-api-client-modules.pdf&quot;&gt;how-to-speed-up-your-api-client-modules (PDF)&lt;&#x2F;a&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;10&#x2F;how-to-speed-up-your-api-client-modules&#x2F;how-to-speed-up-your-api-client-modules.pdf&quot;&gt;Download&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Cloud images, which one is the fastest?</title>
+        <published>2020-08-13T23:13:09+00:00</published>
+        <updated>2020-08-13T23:13:09+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/08/cloud-images-which-one-is-the-faster/"/>
+        <id>https://goneri.lebouder.net/posts/2020/08/cloud-images-which-one-is-the-faster/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/08/cloud-images-which-one-is-the-faster/">&lt;p&gt;Introduction&lt;&#x2F;p&gt;
+&lt;p&gt;This post compares the start-up duration of the most popular cloud images. By start-up, I mean the time until we&#x27;ve got an operational SSH server.&lt;&#x2F;p&gt;
+&lt;p&gt;For this test, I use a pet project called Virt-Lightning ( &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&quot;&gt;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&lt;&#x2F;a&gt; ). This tool allows any Linux user to start standard cloud images locally. It will prepare the meta-data and start a VM in your local libvirt. It&#x27;s very handy for people like me, who work on Linux and spend the day starting new VMs. The images are in the QCow2 format, and it uses the OpenStack meta-data format. Technically speaking, the performance should match what you get with OpenStack.&lt;&#x2F;p&gt;
+&lt;p&gt;Actually, OpenStack is often slightly slower because it does some extra operations. It may need to create a volume on Ceph, or prepare extra network configuration.&lt;&#x2F;p&gt;
+&lt;p&gt;The 2.0.0 release of Virt-Lightning exposes a public API. My &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;virt-lightning&#x2F;blob&#x2F;master&#x2F;virt-lightning.org&#x2F;bench_images_startup.py&quot;&gt;test scenario&lt;&#x2F;a&gt; is built on top of that. It uses Python to pull the different images, and create a VM from it 10 times in a row.&lt;&#x2F;p&gt;
+&lt;p&gt;All the images are public; Virt-Lightning can fetch them with the &lt;code&gt;vl pull foo&lt;&#x2F;code&gt; command:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;vl pull centos-6
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;During the boot process, the VM will set up a static network configuration, resize the filesystem, create a user, and inject an SSH key.&lt;&#x2F;p&gt;
+&lt;p&gt;By default, Virt-Lightning uses a static network configuration because it&#x27;s faster, and it gives better performance when we start a large number of VMs at the same time. I chose to stick with this.&lt;&#x2F;p&gt;
+&lt;p&gt;I did my tests on my Lenovo T580, which comes with a NVMe storage, and 32GB of memory. I would be curious to see the results with the same scenario, but on a regular spinning disk.&lt;&#x2F;p&gt;
+&lt;p&gt;The target images&lt;&#x2F;p&gt;
+&lt;p&gt;For this test, I compare the following Linux distributions: CentOS, Debian, Fedora, Ubuntu, and OpenSUSE. As far as I know, there is no public cloud image available for the other common distributions. If you think I&#x27;m wrong, please post a comment below.&lt;&#x2F;p&gt;
+&lt;p&gt;I also included the latest FreeBSD, NetBSD, and OpenBSD releases. They don&#x27;t provide official cloud images. This is the reason why I reuse the unofficial ones from &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The lack of a pre-existing Windows image is the reason why this OS is not included.&lt;&#x2F;p&gt;
+&lt;p&gt;Results&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-7.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Debian 10 is by far the fastest image with an impressive 15s on average. Basically, 5s less than any other cloud image.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-4.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Regarding the BSDs, FreeBSD is the only system able to resize the root filesystem without a reboot. Consequently, OpenBSD and NetBSD need to start twice in a row. This explains the big difference. The NetBSD kernel hardware probe is rather slow, for instance it takes 5s to initialize the ATA bus of the CD-ROM. This is the reason why the results look rather bad.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-5.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;About Ubuntu, I was surprised by the boot duration of Ubuntu 18.04. It is about two times longer than for 16.04. 20.04 is a bit better but still, we are far from the 15s of 14.04. I would be curious to know the origin of this. Maybe AppArmor?&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-6.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 6 results are not really consistent. They vary between 17.9s and 25.21s. This is the largest delta if you compare with the other distribution. This being said, CentOS 6 is rather old, and won&#x27;t be &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;wiki.centos.org&#x2F;About&#x2F;Product&quot;&gt;supported anymore&lt;&#x2F;a&gt; at the end of the year.&lt;&#x2F;p&gt;
+&lt;p&gt;Conclusions&lt;&#x2F;p&gt;
+&lt;p&gt;All the recent Linux images are based on systemd. It would be great to extract the metrics from &lt;code&gt;systemd-analyze&lt;&#x2F;code&gt; to understand what impacts the performance the most.&lt;&#x2F;p&gt;
+&lt;p&gt;Most of the time, when I deploy a test VM, the very first thing I do is the installation of some important packages. This scenario may be covered later in another blog post.&lt;&#x2F;p&gt;
+&lt;p&gt;Raw results for each image&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 6&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;6&#x2F;images&#x2F;CentOS-6-x86_64-GenericCloud.qcow2&quot;&gt;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;6&#x2F;images&#x2F;CentOS-6-x86_64-GenericCloud.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Thu, 08 Aug 2019 13:28:32 GMT&lt;br &#x2F;&gt;
+Size: 806748160&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=centos-6, elapsed_time=023.20
+distro=centos-6, elapsed_time=021.41
+distro=centos-6, elapsed_time=024.97
+distro=centos-6, elapsed_time=025.21
+distro=centos-6, elapsed_time=020.29
+distro=centos-6, elapsed_time=020.67
+distro=centos-6, elapsed_time=020.13
+distro=centos-6, elapsed_time=019.83
+distro=centos-6, elapsed_time=020.09
+distro=centos-6, elapsed_time=017.92
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The average is 21.3s.&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 7&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;7&#x2F;images&#x2F;CentOS-7-x86_64-GenericCloud.qcow2&quot;&gt;http:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;7&#x2F;images&#x2F;CentOS-7-x86_64-GenericCloud.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 22 Apr 2020 12:24:07 GMT&lt;br &#x2F;&gt;
+Size: 858783744&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=centos-7, elapsed_time=020.88
+distro=centos-7, elapsed_time=020.51
+distro=centos-7, elapsed_time=020.42
+distro=centos-7, elapsed_time=020.58
+distro=centos-7, elapsed_time=020.18
+distro=centos-7, elapsed_time=021.14
+distro=centos-7, elapsed_time=020.74
+distro=centos-7, elapsed_time=020.80
+distro=centos-7, elapsed_time=020.48
+distro=centos-7, elapsed_time=020.15
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 20.5s&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 8&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;8&#x2F;x86_64&#x2F;images&#x2F;CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;8&#x2F;x86_64&#x2F;images&#x2F;CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Mon, 13 Jan 2020 21:57:45 GMT&lt;br &#x2F;&gt;
+Size: 716176896&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=centos-8, elapsed_time=023.55
+distro=centos-8, elapsed_time=023.27
+distro=centos-8, elapsed_time=024.39
+distro=centos-8, elapsed_time=023.61
+distro=centos-8, elapsed_time=023.52
+distro=centos-8, elapsed_time=023.49
+distro=centos-8, elapsed_time=023.53
+distro=centos-8, elapsed_time=023.30
+distro=centos-8, elapsed_time=023.34
+distro=centos-8, elapsed_time=023.67
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 23.5s&lt;&#x2F;p&gt;
+&lt;p&gt;Debian 9&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-9&#x2F;debian-9-openstack-amd64.qcow2&quot;&gt;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-9&#x2F;debian-9-openstack-amd64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 29 Jul 2020 09:59:59 GMT&lt;br &#x2F;&gt;
+Size: 594190848&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=debian-9, elapsed_time=020.69
+distro=debian-9, elapsed_time=020.59
+distro=debian-9, elapsed_time=020.16
+distro=debian-9, elapsed_time=020.30
+distro=debian-9, elapsed_time=020.02
+distro=debian-9, elapsed_time=020.01
+distro=debian-9, elapsed_time=020.71
+distro=debian-9, elapsed_time=020.48
+distro=debian-9, elapsed_time=020.65
+distro=debian-9, elapsed_time=020.57
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average is 20.4s.&lt;&#x2F;p&gt;
+&lt;p&gt;Debian 10&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-10&#x2F;debian-10-openstack-amd64.qcow2&quot;&gt;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-10&#x2F;debian-10-openstack-amd64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Sat, 01 Aug 2020 20:10:01 GMT&lt;br &#x2F;&gt;
+Size: 530629120&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=debian-10, elapsed_time=015.25
+distro=debian-10, elapsed_time=015.28
+distro=debian-10, elapsed_time=014.88
+distro=debian-10, elapsed_time=015.07
+distro=debian-10, elapsed_time=015.39
+distro=debian-10, elapsed_time=015.35
+distro=debian-10, elapsed_time=015.47
+distro=debian-10, elapsed_time=014.94
+distro=debian-10, elapsed_time=015.57
+distro=debian-10, elapsed_time=015.57
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average is 15.2s&lt;&#x2F;p&gt;
+&lt;p&gt;Debian testing&lt;&#x2F;p&gt;
+&lt;p&gt;Debian testing is a rolling release, so I won&#x27;t include it in the charts, but I found interesting to include it in the results.&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;testing&#x2F;debian-testing-openstack-amd64.qcow2&quot;&gt;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;testing&#x2F;debian-testing-openstack-amd64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Mon, 01 Jul 2019 08:39:27 GMT&lt;br &#x2F;&gt;
+Size: 536621056&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=debian-testing, elapsed_time=015.07
+distro=debian-testing, elapsed_time=015.03
+distro=debian-testing, elapsed_time=014.93
+distro=debian-testing, elapsed_time=015.33
+distro=debian-testing, elapsed_time=014.85
+distro=debian-testing, elapsed_time=015.53
+distro=debian-testing, elapsed_time=014.94
+distro=debian-testing, elapsed_time=015.22
+distro=debian-testing, elapsed_time=015.19
+distro=debian-testing, elapsed_time=014.86
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 15s&lt;&#x2F;p&gt;
+&lt;p&gt;Fedora 31&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;31&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-31-1.9.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;31&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-31-1.9.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 23 Oct 2019 23:06:38 GMT&lt;br &#x2F;&gt;
+Size: 355350528&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=fedora-31, elapsed_time=020.48
+distro=fedora-31, elapsed_time=020.39
+distro=fedora-31, elapsed_time=020.37
+distro=fedora-31, elapsed_time=020.30
+distro=fedora-31, elapsed_time=020.29
+distro=fedora-31, elapsed_time=020.31
+distro=fedora-31, elapsed_time=020.50
+distro=fedora-31, elapsed_time=020.51
+distro=fedora-31, elapsed_time=020.27
+distro=fedora-31, elapsed_time=020.91
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 20.4s&lt;&#x2F;p&gt;
+&lt;p&gt;Fedora 32&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;32&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-32-1.6.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;32&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-32-1.6.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 22 Apr 2020 22:36:57 GMT&lt;br &#x2F;&gt;
+Size: 302841856&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=fedora-32, elapsed_time=021.68
+distro=fedora-32, elapsed_time=022.43
+distro=fedora-32, elapsed_time=022.17
+distro=fedora-32, elapsed_time=023.06
+distro=fedora-32, elapsed_time=022.23
+distro=fedora-32, elapsed_time=022.83
+distro=fedora-32, elapsed_time=022.54
+distro=fedora-32, elapsed_time=021.46
+distro=fedora-32, elapsed_time=022.37
+distro=fedora-32, elapsed_time=023.14
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 22.4s&lt;&#x2F;p&gt;
+&lt;p&gt;FreeBSD 11.4&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;11.4&#x2F;freebsd-11.4.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;11.4&#x2F;freebsd-11.4.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 01:24:32 GMT&lt;br &#x2F;&gt;
+Size: 412895744&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=freebsd-11.4, elapsed_time=030.68
+distro=freebsd-11.4, elapsed_time=030.64
+distro=freebsd-11.4, elapsed_time=030.29
+distro=freebsd-11.4, elapsed_time=030.29
+distro=freebsd-11.4, elapsed_time=029.86
+distro=freebsd-11.4, elapsed_time=029.74
+distro=freebsd-11.4, elapsed_time=029.90
+distro=freebsd-11.4, elapsed_time=029.77
+distro=freebsd-11.4, elapsed_time=030.04
+distro=freebsd-11.4, elapsed_time=029.70
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 30s&lt;&#x2F;p&gt;
+&lt;p&gt;FreeBSD 12.1&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;12.1&#x2F;freebsd-12.1.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;12.1&#x2F;freebsd-12.1.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 01:46:11 GMT&lt;br &#x2F;&gt;
+Size: 479029760&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=freebsd-12.1, elapsed_time=029.78
+distro=freebsd-12.1, elapsed_time=030.32
+distro=freebsd-12.1, elapsed_time=029.56
+distro=freebsd-12.1, elapsed_time=029.60
+distro=freebsd-12.1, elapsed_time=029.76
+distro=freebsd-12.1, elapsed_time=029.89
+distro=freebsd-12.1, elapsed_time=029.55
+distro=freebsd-12.1, elapsed_time=029.66
+distro=freebsd-12.1, elapsed_time=029.31
+distro=freebsd-12.1, elapsed_time=029.77
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 29.7&lt;&#x2F;p&gt;
+&lt;p&gt;NetBSD 8.2&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;8.2&#x2F;netbsd-8.2.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;8.2&#x2F;netbsd-8.2.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 02:06:57 GMT&lt;br &#x2F;&gt;
+Size: 155385856&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=netbsd-8.2, elapsed_time=066.71
+distro=netbsd-8.2, elapsed_time=067.80
+distro=netbsd-8.2, elapsed_time=067.15
+distro=netbsd-8.2, elapsed_time=066.97
+distro=netbsd-8.2, elapsed_time=066.84
+distro=netbsd-8.2, elapsed_time=067.01
+distro=netbsd-8.2, elapsed_time=066.98
+distro=netbsd-8.2, elapsed_time=067.73
+distro=netbsd-8.2, elapsed_time=067.34
+distro=netbsd-8.2, elapsed_time=066.90
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 67.1&lt;&#x2F;p&gt;
+&lt;p&gt;NetBSD 9.0&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;9.0&#x2F;netbsd-9.0.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;9.0&#x2F;netbsd-9.0.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 02:25:11 GMT&lt;br &#x2F;&gt;
+Size: 149291008&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=netbsd-9.0, elapsed_time=067.04
+distro=netbsd-9.0, elapsed_time=066.92
+distro=netbsd-9.0, elapsed_time=066.89
+distro=netbsd-9.0, elapsed_time=067.24
+distro=netbsd-9.0, elapsed_time=067.41
+distro=netbsd-9.0, elapsed_time=067.13
+distro=netbsd-9.0, elapsed_time=066.14
+distro=netbsd-9.0, elapsed_time=066.75
+distro=netbsd-9.0, elapsed_time=067.25
+distro=netbsd-9.0, elapsed_time=066.60
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 66.9s&lt;&#x2F;p&gt;
+&lt;p&gt;OpenBSD 6.6&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 04:09:44 GMT&lt;br &#x2F;&gt;
+Size: 520704512&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=openbsd-6.6, elapsed_time=048.80
+distro=openbsd-6.6, elapsed_time=049.72
+distro=openbsd-6.6, elapsed_time=049.07
+distro=openbsd-6.6, elapsed_time=048.36
+distro=openbsd-6.6, elapsed_time=049.28
+distro=openbsd-6.6, elapsed_time=049.12
+distro=openbsd-6.6, elapsed_time=049.36
+distro=openbsd-6.6, elapsed_time=049.80
+distro=openbsd-6.6, elapsed_time=048.05
+distro=openbsd-6.6, elapsed_time=049.71
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 49.1s&lt;&#x2F;p&gt;
+&lt;p&gt;OpenBSD 6.7&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 04:09:44 GMT&lt;br &#x2F;&gt;
+Size: 520704512&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=openbsd-6.7, elapsed_time=048.81
+distro=openbsd-6.7, elapsed_time=048.96
+distro=openbsd-6.7, elapsed_time=049.86
+distro=openbsd-6.7, elapsed_time=049.12
+distro=openbsd-6.7, elapsed_time=049.75
+distro=openbsd-6.7, elapsed_time=050.63
+distro=openbsd-6.7, elapsed_time=050.85
+distro=openbsd-6.7, elapsed_time=049.92
+distro=openbsd-6.7, elapsed_time=048.98
+distro=openbsd-6.7, elapsed_time=050.83
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 49.7s&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 14.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;trusty&#x2F;current&#x2F;trusty-server-cloudimg-amd64-disk1.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;trusty&#x2F;current&#x2F;trusty-server-cloudimg-amd64-disk1.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Thu, 07 Nov 2019 15:38:05 GMT&lt;br &#x2F;&gt;
+Size: 264897024&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-14.04, elapsed_time=014.40
+distro=ubuntu-14.04, elapsed_time=014.42
+distro=ubuntu-14.04, elapsed_time=014.94
+distro=ubuntu-14.04, elapsed_time=015.44
+distro=ubuntu-14.04, elapsed_time=015.64
+distro=ubuntu-14.04, elapsed_time=014.59
+distro=ubuntu-14.04, elapsed_time=015.02
+distro=ubuntu-14.04, elapsed_time=015.22
+distro=ubuntu-14.04, elapsed_time=015.44
+distro=ubuntu-14.04, elapsed_time=015.44
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 15s&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 16.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;xenial&#x2F;current&#x2F;xenial-server-cloudimg-amd64-disk1.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;xenial&#x2F;current&#x2F;xenial-server-cloudimg-amd64-disk1.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Thu, 13 Aug 2020 08:36:38 GMT&lt;br &#x2F;&gt;
+Size: 309657600&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-16.04, elapsed_time=015.13
+distro=ubuntu-16.04, elapsed_time=015.39
+distro=ubuntu-16.04, elapsed_time=015.42
+distro=ubuntu-16.04, elapsed_time=015.62
+distro=ubuntu-16.04, elapsed_time=015.29
+distro=ubuntu-16.04, elapsed_time=015.60
+distro=ubuntu-16.04, elapsed_time=015.62
+distro=ubuntu-16.04, elapsed_time=015.21
+distro=ubuntu-16.04, elapsed_time=015.62
+distro=ubuntu-16.04, elapsed_time=015.67
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 15.4&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 18.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;bionic&#x2F;current&#x2F;bionic-server-cloudimg-amd64.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;bionic&#x2F;current&#x2F;bionic-server-cloudimg-amd64.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 12 Aug 2020 16:58:30 GMT&lt;br &#x2F;&gt;
+Size: 357302272&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-18.04, elapsed_time=028.58
+distro=ubuntu-18.04, elapsed_time=028.25
+distro=ubuntu-18.04, elapsed_time=028.36
+distro=ubuntu-18.04, elapsed_time=028.45
+distro=ubuntu-18.04, elapsed_time=028.79
+distro=ubuntu-18.04, elapsed_time=028.28
+distro=ubuntu-18.04, elapsed_time=028.11
+distro=ubuntu-18.04, elapsed_time=028.07
+distro=ubuntu-18.04, elapsed_time=027.75
+distro=ubuntu-18.04, elapsed_time=028.25
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 28.3s&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 20.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;focal&#x2F;current&#x2F;focal-server-cloudimg-amd64.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;focal&#x2F;current&#x2F;focal-server-cloudimg-amd64.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Mon, 10 Aug 2020 22:19:47 GMT&lt;br &#x2F;&gt;
+Size: 545587200&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-20.04, elapsed_time=023.23
+distro=ubuntu-20.04, elapsed_time=022.74
+distro=ubuntu-20.04, elapsed_time=023.20
+distro=ubuntu-20.04, elapsed_time=022.96
+distro=ubuntu-20.04, elapsed_time=024.04
+distro=ubuntu-20.04, elapsed_time=024.06
+distro=ubuntu-20.04, elapsed_time=023.60
+distro=ubuntu-20.04, elapsed_time=023.88
+distro=ubuntu-20.04, elapsed_time=023.24
+distro=ubuntu-20.04, elapsed_time=024.27
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 23.5s&lt;&#x2F;p&gt;
+&lt;p&gt;OpenSUSE Leap 15.2&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;download.opensuse.org&#x2F;repositories&#x2F;Cloud:&#x2F;Images:&#x2F;Leap_15.2&#x2F;images&#x2F;openSUSE-Leap-15.2-OpenStack.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;download.opensuse.org&#x2F;repositories&#x2F;Cloud:&#x2F;Images:&#x2F;Leap_15.2&#x2F;images&#x2F;openSUSE-Leap-15.2-OpenStack.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Sun, 07 Jun 2020 11:42:01 GMT&lt;br &#x2F;&gt;
+Size: 566047744&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=opensuse-leap-15.2, elapsed_time=027.10
+distro=opensuse-leap-15.2, elapsed_time=027.61
+distro=opensuse-leap-15.2, elapsed_time=027.07
+distro=opensuse-leap-15.2, elapsed_time=027.12
+distro=opensuse-leap-15.2, elapsed_time=027.57
+distro=opensuse-leap-15.2, elapsed_time=026.86
+distro=opensuse-leap-15.2, elapsed_time=027.25
+distro=opensuse-leap-15.2, elapsed_time=027.10
+distro=opensuse-leap-15.2, elapsed_time=027.69
+distro=opensuse-leap-15.2, elapsed_time=027.39
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 27.3s&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>ext4 with barrier=1 and performance</title>
+        <published>2013-02-04T09:41:35+00:00</published>
+        <updated>2013-02-04T09:41:35+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2013/02/ext4-with-barrier1-and-performance/"/>
+        <id>https://goneri.lebouder.net/posts/2013/02/ext4-with-barrier1-and-performance/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2013/02/ext4-with-barrier1-and-performance/">&lt;p&gt;The use of nobarrier provides a great performance gain on my laptop. I think I will continue with this approach even if my hard drive has no battery unit.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;with-ext4-rw-noatime-errors-remount-ro-data-ordered&quot;&gt;With ext4 (rw,noatime,errors=remount-ro,data=ordered)&lt;&#x2F;h2&gt;
+&lt;pre&gt;&lt;code&gt;#fs_mark -t 4 -s 10240 -n 1000 -d &#x2F;home&#x2F;goneri&#x2F;tmp&#x2F;test # Version 3.3, 4 thread(s) starting at Mon Feb 4 10:35:47 2013
+# Sync method: INBAND FSYNC: fsync() per file in write loop.
+# Directories: no subdirectories used
+# File names: 40 bytes long, (16 initial bytes of time stamp with 24 random bytes at end of name)
+# Files info: size 10240 bytes, written with an IO size of 16384 bytes per write
+# App overhead is time in microseconds spent in the test not doing file writing related system calls. FSUse% Count Size Files&#x2F;sec App Overhead
+o 84 4000 10240 35.2 113031
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;ext4-rw-noatime-nobarrier-errors-remount-ro-commit-15-data-ordered&quot;&gt;ext4 (rw,noatime,nobarrier,errors=remount-ro,commit=15,data=ordered)&lt;&#x2F;h2&gt;
+&lt;pre&gt;&lt;code&gt;tosh-r630:&#x2F;tmp$ fs_mark -t 4 -s 10240 -n 1000 -d ~&#x2F;tmp&#x2F;test # fs_mark -t 4 -s 10240 -n 1000 -d &#x2F;home&#x2F;goneri&#x2F;tmp&#x2F;test # Version 3.3, 4 thread(s) starting at Mon Feb 4 10:40:06 2013
+# Sync method: INBAND FSYNC: fsync() per file in write loop.
+# Directories: no subdirectories used
+# File names: 40 bytes long, (16 initial bytes of time stamp with 24 random bytes at end of name)
+# Files info: size 10240 bytes, written with an IO size of 16384 bytes per write
+# App overhead is time in microseconds spent in the test not doing file writing related system calls. FSUse% Count Size Files&#x2F;sec App Overhead 84 4000 10240 839.9 99672
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+</feed>

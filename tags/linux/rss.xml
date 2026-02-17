@@ -1,0 +1,975 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Gonéri&#x27;s blog - linux</title>
+      <link>https://goneri.lebouder.net</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://goneri.lebouder.net/tags/linux/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Sat, 10 Jan 2026 14:59:09 +0000</lastBuildDate>
+      <item>
+          <title>Virt-Lightning 2.5.0</title>
+          <pubDate>Sat, 10 Jan 2026 14:59:09 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2026/01/virt-lightning-250/</link>
+          <guid>https://goneri.lebouder.net/posts/2026/01/virt-lightning-250/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2026/01/virt-lightning-250/">&lt;p&gt;I just published &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&quot;&gt;Virt-Lightning 2.5.0&lt;&#x2F;a&gt;. The tool aims to give
+Linux users a way to quickly spawn cloud images locally. The user interface is a CLI
+and its philosophy is inspired by similar tools like the OpenStack CLI, ec2 command, Podman
+or Docker.&lt;&#x2F;p&gt;
+&lt;p&gt;For instance, if you want to run the latest snapshot of Fedora 43, you can just install &lt;code&gt;uv&lt;&#x2F;code&gt; and run:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;uvx virt-lightning start fedora-43 --memory 2048
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2026&#x2F;01&#x2F;virt-lightning-250&#x2F;screenshot.png&quot; alt=&quot;CLI screenshot&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-s-new-in-2-5-0&quot;&gt;What&#x27;s new in 2.5.0&lt;&#x2F;h2&gt;
+&lt;p&gt;This release brings several improvements to image management:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Renamed commands&lt;&#x2F;strong&gt;: &lt;code&gt;fetch&lt;&#x2F;code&gt; is now &lt;code&gt;pull&lt;&#x2F;code&gt;, &lt;code&gt;distro_list&lt;&#x2F;code&gt; is now &lt;code&gt;images&lt;&#x2F;code&gt;, and &lt;code&gt;remote_images&lt;&#x2F;code&gt; list all the images ready to be downloaded. Overall, this gives a more intuitive CLI experience.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Pull images from any URL&lt;&#x2F;strong&gt;: You can now create new local image (distro) directly from an image URL.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Cloud-init user data&lt;&#x2F;strong&gt;: Exposed the &lt;code&gt;packages&lt;&#x2F;code&gt; and &lt;code&gt;write_files&lt;&#x2F;code&gt; configuration options for more flexible VM customization.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Here are some examples:&lt;&#x2F;p&gt;
+&lt;p&gt;List available images:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;uvx virt-lightning images
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Pull an image from a custom URL:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;uvx virt-lightning pull --url https:&#x2F;&#x2F;example.com&#x2F;my-image.qcow2 my-custom-image
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Start a VM with additional packages:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;uvx virt-lightning start fedora-43 --packages vim,htop
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Thanks to &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;jimccann-rh&quot;&gt;Jim McCann&lt;&#x2F;a&gt; for his code contribution.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Run Virt-Lightning on CoreOS</title>
+          <pubDate>Fri, 09 Jan 2026 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2026/01/run-virt-lightning-on-coreos/</link>
+          <guid>https://goneri.lebouder.net/posts/2026/01/run-virt-lightning-on-coreos/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2026/01/run-virt-lightning-on-coreos/">&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&quot;&gt;Virt-Lightning&lt;&#x2F;a&gt; is my pet-project to quickly start Cloud VMs
+on a Libvirt Hypervisor and these are some notes I took to run it on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;fedoraproject.org&#x2F;coreos&#x2F;&quot;&gt;Fedora CoreOS&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;First, you need to install &lt;code&gt;libvirt&lt;&#x2F;code&gt; and &lt;code&gt;uv&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;sudo bootc usr-overlay
+sudo dnf install -y uv libvirt-devel gcc python3-devel qemu-kvm qemu-img libvirt mkisofs
+sudo systemctl restart polkit.service
+sudo systemctl enable --now libvirtd
+sudo usermod --append --groups libvirt core
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;By default, CoreOS is an immutable Operating System. &lt;code&gt;bootc usr-overlay&lt;&#x2F;code&gt; enables write operations,
+but they will be lost after the next reboot.&lt;&#x2F;p&gt;
+&lt;p&gt;Then, create the image directory:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;sudo mkdir -p &#x2F;var&#x2F;lib&#x2F;virt-lightning&#x2F;pool&#x2F;upstream
+sudo chown -R qemu:qemu &#x2F;var&#x2F;lib&#x2F;virt-lightning&#x2F;pool
+sudo chown -R core &#x2F;var&#x2F;lib&#x2F;virt-lightning&#x2F;pool&#x2F;upstream
+sudo chmod 775 &#x2F;var&#x2F;lib&#x2F;virt-lightning
+sudo chmod 775 &#x2F;var&#x2F;lib&#x2F;virt-lightning&#x2F;pool &#x2F;var&#x2F;lib&#x2F;virt-lightning&#x2F;pool&#x2F;upstream
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And you&#x27;re good to go, you can deploy a VM with just one command:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;uvx virt-lightning start fedora-43 --memory 2048
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Or if you&#x27;re adventurous, you can try the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;virt-lightning&quot;&gt;Git version&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;uvx --from git+https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;virt-lightning vl start fedora-43 --memory 2048
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Installing CRC on CoreOS</title>
+          <pubDate>Thu, 18 Dec 2025 20:06:41 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2025/12/installing-crc-on-coreos/</link>
+          <guid>https://goneri.lebouder.net/posts/2025/12/installing-crc-on-coreos/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2025/12/installing-crc-on-coreos/">&lt;p&gt;My local home server runs on CoreOS and today I went through the installation of Red Hat Code Ready Container, aka CRC.&lt;&#x2F;p&gt;
+&lt;p&gt;Download&lt;&#x2F;p&gt;
+&lt;p&gt;Go on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;console.redhat.com&#x2F;openshift&#x2F;create&#x2F;local&quot;&gt;https:&#x2F;&#x2F;console.redhat.com&#x2F;openshift&#x2F;create&#x2F;local&lt;&#x2F;a&gt; and download both:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;the crc binary, which they call OpenShift Local&lt;&#x2F;li&gt;
+&lt;li&gt;and the Pull secret&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Preparation&lt;&#x2F;p&gt;
+&lt;p&gt;The first thing to do is to allow the installation of local packages&lt;&#x2F;p&gt;
+&lt;p&gt;and install libvirt:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo bootc usr-overlay
+sudo dnf install -y libvirtd
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Add yourself in the libvirt group:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo usermod -a -G libvirt core
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Restart the polkit.service and libvirtd to run the new policies:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo systemctl restart polkit.service
+sudo systemctl restart libvirtd
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Set-up the local CRC installation, first extract the crc archive and copy the crc binary in &lt;code&gt;&#x2F;usr&#x2F;local&#x2F;bin&lt;&#x2F;code&gt;. You can now start the installation:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;crc config set preset openshift
+# optional, turn it &amp;quot;true&amp;quot;, to be able to access the host from the VM
+crc config set host-network-access true
+crc setup
+
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And finally, deploy the cluster:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;crc start --cpus=12 --memory=40000 -d 100
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;At the end of the installation, crc add an extra line to your &lt;code&gt;&#x2F;etc&#x2F;hosts&lt;&#x2F;code&gt;, you probably want to copy it to your local desktop machine in order to access the cluster through your web browser, and set-up a port redirection like this. I use sudo to be able to bind on my local port &lt;code&gt;443&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo ssh -L 443:127.0.0.1:443 -L 6443:127.0.0.1:6443 -i ~&#x2F;.ssh&#x2F;id_ed25519 core@your-coreos-box
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Btrfs disk upgrade done wrong</title>
+          <pubDate>Wed, 10 Dec 2025 20:31:57 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2025/12/replacing-a-disk-for-a-btrfs-filesystem/</link>
+          <guid>https://goneri.lebouder.net/posts/2025/12/replacing-a-disk-for-a-btrfs-filesystem/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2025/12/replacing-a-disk-for-a-btrfs-filesystem/">&lt;p&gt;I&#x27;m in the process to upgrade an existing Btrfs multi-disk filesystem (&lt;code&gt;&#x2F;var&#x2F;mnt&#x2F;datapool&lt;&#x2F;code&gt;) and I made a mistake...&lt;&#x2F;p&gt;</description>
+      </item>
+      <item>
+          <title>numpy: AssertionError: CUDA_HOME is not set</title>
+          <pubDate>Fri, 07 Nov 2025 23:11:40 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2025/11/numpy-assertionerror-cuda-home-is-not-set/</link>
+          <guid>https://goneri.lebouder.net/posts/2025/11/numpy-assertionerror-cuda-home-is-not-set/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2025/11/numpy-assertionerror-cuda-home-is-not-set/">&lt;p&gt;To get Numpy to build on RHEL9, you need to install nvcc and export CUDA_HOME, e.g:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo dnf install -y rpm -ql cuda-nvcc-13-0
+$ sudo ln -s &#x2F;usr&#x2F;local&#x2F;cuda-13.0 &#x2F;usr&#x2F;local&#x2F;cuda
+$ pip install numpy
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>VSCode container and OAuth2 Web callback</title>
+          <pubDate>Mon, 03 Feb 2025 16:59:14 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2025/02/vscode-container-and-oauth2-webcallback/</link>
+          <guid>https://goneri.lebouder.net/posts/2025/02/vscode-container-and-oauth2-webcallback/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2025/02/vscode-container-and-oauth2-webcallback/">&lt;p&gt;I use Fedora Silverblue and my VSCode runs inside a container. I manage the container with the &quot;toolbox&quot; CLI tool. I also, to get the last version of Firefox, I use it&#x27;s upstream Flatpak To be able to get VSCode&#x27;s OAuth2 callback to work properly, I had to do a bit of extra configuration.&lt;&#x2F;p&gt;
+&lt;p&gt;You need a .desktop file to overload VSCode&#x27;s default way to open web URL. We don&#x27;t want to rely on the default xdg-open configuration (e.g: xdg-open http:&#x2F;&#x2F;www.google.com) which would otherwise try to open up a a new web browser INSIDE the container.&lt;&#x2F;p&gt;
+&lt;p&gt;Prepare the code-url-handler.desktop file, you need to adjust the Exec to prefix the command with the toolbox run call:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;ini&quot;&gt;[Desktop Entry]
+Name=Visual Studio Code - URL Handler
+Comment=Code Editing. Redefined.
+GenericName=Text Editor
+Exec=toolbox run --container vscode &#x2F;usr&#x2F;share&#x2F;code&#x2F;code --open-url %U
+Icon=vscode
+Type=Application
+NoDisplay=true
+StartupNotify=true
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=x-scheme-handler&#x2F;vscode;
+Keywords=vscode;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The goal here is to be sure we send back the vscode:&#x2F;&#x2F; link to the correct instance of VSCode (within the container!).&lt;&#x2F;p&gt;
+&lt;p&gt;To install the .desktop, run these commands in your system (not in a container).&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;desktop-file-install --dir=$HOME&#x2F;.local&#x2F;share&#x2F;applications code-url-handler.desktop
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And refresh the local cache:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;update-desktop-database ~&#x2F;.local&#x2F;share&#x2F;applications
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Inside the container we need to also install flatpak-xdg-utils and use it instead of the default &#x2F;usr&#x2F;bin&#x2F;xdg-open. This way your containerize VSCode will be able to open the web page inisde yet another container (the Flatpak app). This is a snippet of my Containerfile of my VSCode container:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;RUN dnf install -y flatpak-xdg-utils
+RUN ln -sf &#x2F;usr&#x2F;bin&#x2F;flatpak-xdg-open &#x2F;usr&#x2F;bin&#x2F;xdg-open
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;See: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;vscode-pull-request-github&#x2F;issues&#x2F;3472#issuecomment-1825008268&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;vscode-pull-request-github&#x2F;issues&#x2F;3472#issuecomment-1825008268&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>firewalld: add a new service</title>
+          <pubDate>Thu, 16 May 2024 18:40:35 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2024/05/firewalld-add-a-new-service/</link>
+          <guid>https://goneri.lebouder.net/posts/2024/05/firewalld-add-a-new-service/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2024/05/firewalld-add-a-new-service/">&lt;p&gt;Create a new service entry:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --permanent --new-service=ollama
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Associate the right port with new service:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --permanent --service=ollama --add-port=11434&#x2F;tcp
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Restart the firewalld, so it&#x27;s aware of the new service:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --reload
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Finally, associate the service with the Zone. I don&#x27;t use &lt;code&gt;--permanent&lt;&#x2F;code&gt; here on purpose. This way the association will be lost when I will reboot the machine:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --add-service=ollama --zone=nm-shared
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Sharing Internet connection on Fedora 40</title>
+          <pubDate>Thu, 16 May 2024 00:30:02 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2024/05/sharing-internet-connection-on-fedora-40/</link>
+          <guid>https://goneri.lebouder.net/posts/2024/05/sharing-internet-connection-on-fedora-40/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2024/05/sharing-internet-connection-on-fedora-40/">&lt;p&gt;It&#x27;s surprisingly easy to build a router from a Fedora 40 box. Here eno1 is connected to my cable modem and enp8s0 is connected to my local network.&lt;&#x2F;p&gt;
+&lt;p&gt;To NAT the Internet connection:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;nmcli c add type ethernet con-name internet ifname eno1 connection.zone external ipv4.method auto
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And set up the DHCP on the local network, the machine will use the IP 10.42.0.1 IP by default:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;nmcli c add type ethernet con-name lebouder.net ifname enp8s0 connection.zone nm-shared ipv4.method=shared
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>My GNOME configuration and its extensions</title>
+          <pubDate>Sat, 12 Nov 2022 02:40:48 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2022/11/my-gnome-configuration-and-its-extensions/</link>
+          <guid>https://goneri.lebouder.net/posts/2022/11/my-gnome-configuration-and-its-extensions/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2022/11/my-gnome-configuration-and-its-extensions/">&lt;p&gt;I&#x27;ve been using a slightly tweaked GNOME 3 for a while now. Before that, I was using the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;awesomewm.org&#x2F;&quot;&gt;Awesome Window Manager&lt;&#x2F;a&gt; and I was quite fond of the key bindings. In order to facilitate the transition, I tried to recreate them. The result is pretty good. I can navigate between my 9 different virtual desktops using the Windows (a.k.a. SUPER) key + a number. Windows + F also works; it will turn on fullscreen mode for a given window. Years after the migration to GNOME, I still use the bindings extensively. The following script configures GNOME with my configuration: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;b57a96915ea4a98f81df3bb57a41913e&quot;&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;b57a96915ea4a98f81df3bb57a41913e&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;It creates 9 virtual desktops on one single monitor that I can reach using the Super + $number key binding, e.g.: Windows + 6. In addition, it turns off the animations and the annoying alert sound.&lt;&#x2F;p&gt;
+&lt;p&gt;I also use a couple of extensions:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Application volume mixer&lt;&#x2F;strong&gt; to be able to adjust my mic volume level during meetings &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;extensions.gnome.org&#x2F;extension&#x2F;3499&#x2F;application-volume-mixer&#x2F;&quot;&gt;link&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Network stats&lt;&#x2F;strong&gt; to get some visibility on the network traffic &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;extensions.gnome.org&#x2F;extension&#x2F;4308&#x2F;network-stats&#x2F;&quot;&gt;link&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Sound Output Device Chooser&lt;&#x2F;strong&gt; to be able to switch the sound output between my Bluetooth speaker and my headset. I use it several times every day; it&#x27;s super handy. &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;extensions.gnome.org&#x2F;extension&#x2F;906&#x2F;sound-output-device-chooser&#x2F;&quot;&gt;link&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2022&#x2F;11&#x2F;my-gnome-configuration-and-its-extensions&#x2F;image.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2022&#x2F;11&#x2F;my-gnome-configuration-and-its-extensions&#x2F;image.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Virt-Lightning 2.2.0</title>
+          <pubDate>Tue, 23 Aug 2022 22:59:36 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2022/08/virt-lightning-2-2-0/</link>
+          <guid>https://goneri.lebouder.net/posts/2022/08/virt-lightning-2-2-0/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2022/08/virt-lightning-2-2-0/">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2022&#x2F;08&#x2F;virt-lightning-2-2-0&#x2F;logo_no_text.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2022&#x2F;08&#x2F;virt-lightning-2-2-0&#x2F;logo_no_text.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Release 2.2.0 of &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;pypi.org&#x2F;project&#x2F;virt-lightning&#x2F;2.2.0&#x2F;&quot;&gt;Virt-Lightning&lt;&#x2F;a&gt;, a lightweight CLI for libvirt which can serve as an alternative to Vagrant. It&#x27;s also a stable API that you can use in Python to quickly spawn new VM, like you would do with a Cloud provider.&lt;&#x2F;p&gt;
+&lt;p&gt;Most of the new features come from contributors and I&#x27;m pretty happy with this.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Changelog&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cosmetic documentation changes&lt;&#x2F;li&gt;
+&lt;li&gt;Don&#x27;t try to fetch an image that already exists&lt;&#x2F;li&gt;
+&lt;li&gt;Add ability to boot old system with no virtio support&lt;&#x2F;li&gt;
+&lt;li&gt;Use Libvirt default settings when possible&lt;&#x2F;li&gt;
+&lt;li&gt;Use the VNC display by default&lt;&#x2F;li&gt;
+&lt;li&gt;Add support for OpenVSwitch (a.k.a OVS )bridge&lt;&#x2F;li&gt;
+&lt;li&gt;vl stop: avoid a Python backtrace if the VM doesn&#x27;t exist&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</description>
+      </item>
+      <item>
+          <title>Aborting, target uses selinux but python bindings (libselinux-python) aren&#x27;t installed!</title>
+          <pubDate>Wed, 22 Sep 2021 15:19:47 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2021/09/aborting-target-uses-selinux-but-python-bindings-libselinux-python-arent-installed/</link>
+          <guid>https://goneri.lebouder.net/posts/2021/09/aborting-target-uses-selinux-but-python-bindings-libselinux-python-arent-installed/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2021/09/aborting-target-uses-selinux-but-python-bindings-libselinux-python-arent-installed/">&lt;pre&gt;&lt;code&gt;TASK [helm : Copy test chart] **************************************************
+fatal: [localhost]: FAILED! =&amp;gt; {&amp;quot;changed&amp;quot;: false, &amp;quot;checksum&amp;quot;: &amp;quot;8b41aa269bd850134cd95bd27343edf6d4ed2e30&amp;quot;, &amp;quot;msg&amp;quot;: &amp;quot;Aborting, target uses selinux but python bindings (libselinux-python) aren&amp;#39;t installed!&amp;quot;}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Ah, this is one of the most irritating message that you can get when you use Ansible in a venv and SELinux. The problem should not happen anymore since this &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible&#x2F;ansible&#x2F;commit&#x2F;4c5ce5a1a9e79a845aff4978cfeb72a0d4ecf7d6&quot;&gt;commit&lt;&#x2F;a&gt; that was first released in Ansible core 2.11.5, thanks David Moreau Simard for the information! If you cannot upgrade, you can continue to read. In this article, we will quickly explain the problem and cover our options.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;code&gt;copy&lt;&#x2F;code&gt; or &lt;code&gt;selinux&lt;&#x2F;code&gt; are two Ansible modules that depend on some system binary libraries. These binary libraries are linked&#x2F;built using the Python of the system, on RHEL8 it&#x27;s Python3.6. So if you use the Python 3.6 of the system, everything should be all right. You may just need to install &lt;code&gt;python3-selinux&lt;&#x2F;code&gt; if it&#x27;s not already installed.&lt;&#x2F;p&gt;
+&lt;p&gt;Things are getting more difficult if you use a virtualenv, and it&#x27;s often a good idea to use a virtualenv. Here are two options:&lt;&#x2F;p&gt;
+&lt;p&gt;If the Python3 version of your virtualenv is close enough with the version of the one of the system, you can use the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;pypi.org&#x2F;project&#x2F;selinux&#x2F;&quot;&gt;selinux&lt;&#x2F;a&gt; package from Pypi. When a module will try to interact with the &lt;code&gt;selinux&lt;&#x2F;code&gt; module, this module will pretend to be the right person and will actually redirect the request the Python module from the system. It works well most of the time and pretty much the single way to do SElinux operation from a venv.&lt;&#x2F;p&gt;
+&lt;p&gt;If your Python version is too new compared to the system, PyPI&#x27;s selinux will raise an error like this one:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;ImportError: cannot import name &amp;#39;_selinux&amp;#39;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And in this case, you&#x27;ve got this second option. Here we assume that you don&#x27;t really care about SElinux. For instance you use Ansible&#x27;s copy module just to duplicate a file once. In this case, the whole SElinux war machine is not necessary. You can use &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;pypi.org&#x2F;project&#x2F;selinux-please-lie-to-me&#x2F;&quot;&gt;selinux-please-lie-to-me&#x2F;&lt;&#x2F;a&gt;, it&#x27;s another Pypi module and it&#x27;s similar to Pypi&#x27;s SElinux module. The main difference is that this time, it will just tell Ansible that SELinux is off on the system and it can bypass it.&lt;&#x2F;p&gt;
+&lt;p&gt;Oh! There is yet another option, you can overload the &lt;code&gt;ansible_python_interpreter&lt;&#x2F;code&gt; just for problematical task.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;    - copy:
+        src: &#x2F;etc&#x2F;fstab
+        dest: &#x2F;tmp&#x2F;fstab
+      vars:
+        ansible_python_interpreter: &#x2F;usr&#x2F;bin&#x2F;python3
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Which one should I use? The &lt;code&gt;ansible_python_interpreter&lt;&#x2F;code&gt; creates a dependency with the system that is often annoying. I prefer to avoid this strategy. Overall it&#x27;s better to use PyPI&#x27;s SELinux because it will preserve the interaction with SELinux, but sometimes, the delta between the version of Python is too important and the system binary module just cannot be loaded. In this case, use &lt;code&gt;selinux-please-lie-to-me&lt;&#x2F;code&gt; as a fallback option. Just remember that this Python module will silently inhibit all the SElinux operations.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>0ad, Firewall and Fedora33</title>
+          <pubDate>Sun, 21 Feb 2021 02:19:17 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2021/02/0ad-firewall-and-fedora33/</link>
+          <guid>https://goneri.lebouder.net/posts/2021/02/0ad-firewall-and-fedora33/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2021/02/0ad-firewall-and-fedora33/">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;02&#x2F;0ad-firewall-and-fedora33&#x2F;0ad.jpg&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;02&#x2F;0ad-firewall-and-fedora33&#x2F;0ad.jpg&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;By default, the firewall will prevent connection to your &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;play0ad.com&#x2F;&quot;&gt;0ad&lt;&#x2F;a&gt; server. To adjust that, you need to open up the port 20595 (UDP). This three lines create a Firewalld service called 0ad, attach it to the default zone and reload the firewall:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo firewall-cmd --permanent --new-service=0ad --set-description=&amp;quot;0ad, A free, open-source game of ancient warfare&amp;quot; --add-port=20595&#x2F;udp
+$ sudo firewall-cmd --zone=FedoraWorkstation --add-service=0ad --permanent
+$ sudo firewall-cmd --reload
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>eGPU, Wayland, Gnome3 and Fedora</title>
+          <pubDate>Fri, 12 Feb 2021 21:10:19 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2021/02/egpu-wayland-and-fedora-33/</link>
+          <guid>https://goneri.lebouder.net/posts/2021/02/egpu-wayland-and-fedora-33/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2021/02/egpu-wayland-and-fedora-33/">&lt;p&gt;I&#x27;ve just got a Razer Core X that I use with a Radeon graphics card. By default Wayland, well Mutter actually, continues to use the Intel card of my T580.&lt;&#x2F;p&gt;
+&lt;p&gt;To force it to use the second card, I had to add a udev rule and reboot. And that&#x27;s all!&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ cat &#x2F;etc&#x2F;udev&#x2F;rules.d&#x2F;61-mutter-primary-gpu.rules
+ENV{DEVNAME}==&amp;quot;&#x2F;dev&#x2F;dri&#x2F;card1&amp;quot;, TAG+=&amp;quot;mutter-device-preferred-primary&amp;quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;note: You need Gnome 3.38.2 for this to work properly. See: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;gitlab.gnome.org&#x2F;GNOME&#x2F;mutter&#x2F;-&#x2F;merge_requests&#x2F;1562&quot;&gt;https:&#x2F;&#x2F;gitlab.gnome.org&#x2F;GNOME&#x2F;mutter&#x2F;-&#x2F;merge_requests&#x2F;1562&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;update: the post was initially written for Fedora 33, but the fix also works great with Fedora 34.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>How to waste a Friday...</title>
+          <pubDate>Sun, 24 Jan 2021 00:14:24 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2021/01/376-2/</link>
+          <guid>https://goneri.lebouder.net/posts/2021/01/376-2/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2021/01/376-2/">&lt;p&gt;Yesterday morning I got frustrated by a really slow download speed of some files. What should have taken seconds with my 400 Mb&#x2F;s connection actually took more than 16 minutes. In addition, I was able to reproduce the problem on my router.&lt;&#x2F;p&gt;
+&lt;p&gt;Here, the curl statistics show a 26:52 minute download at 415kb&#x2F;s:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -o &#x2F;dev&#x2F;null https:&#x2F;&#x2F;s3.us-east-2.amazonaws.com&#x2F;zuul-images&#x2F;fedora-open-vm-tools-livecd.iso% Total % Received % Xferd Average Speed Time Time Time Current Dload Upload Total Spent Left Speed 0 627M 0 2684k 0 0 398k 0 0:26:52 0:00:06 0:26:46 415k^C
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Just to be sure, I retried with a lower MTU. The issue remained. Two friends in Montréal also confirmed everything worked well for them.&lt;&#x2F;p&gt;
+&lt;p&gt;My laptop uses a wired connection that I&#x27;ve been using for years now. A large part of the population works from home and the Internet is under constant pressure. So I suspected an ISP bandwidth limitation to preserve the Quality of Service. I contacted them and ... complained... a lot.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;01&#x2F;376-2&#x2F;teksavvy1.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;01&#x2F;376-2&#x2F;teksavvy1.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;At some point, the technician managed to get my attention and asked me to connect the modem directly to my laptop.&lt;&#x2F;p&gt;
+&lt;p&gt;This is an obviously pointless request since the downloads are also slow from the router. But well, if I want them to act, I also need to be cooperative. I gave it a try and... I immediately felt embarrassed. It was damn fast! The download speed was actually even above the 400 Mb&#x2F;s ceiling. WTF.&lt;&#x2F;p&gt;
+&lt;p&gt;So I started to reconsider my whole life in a deep introspection. How can this be real? My router runs OpenBSD 6.7 with an absolutely basic pf configuration. Its hardware is decent (Intel(R) Core(TM) i3-2120 CPU @ 3.30GHz). The router is connected to the modem with a very common Realtek RTL8125 and the LAN is connected to an Intel I350. I can download large files between my laptop and the router at full speed.&lt;&#x2F;p&gt;
+&lt;p&gt;All this ruled out my laptop, the ethernet cable, and the router&#x27;s I350. The last potential culprit was the Realtek NIC. I replaced it with another Intel I350 and retried. Same problem. The downloads were still slow on my laptop and the router. The Realtek NIC was innocent.&lt;&#x2F;p&gt;
+&lt;p&gt;So I started thinking. Why is the rest of the family not really affected by the poor performance of the Internet connection? And so, I tried to download the same file from another computer. And it was fast... Damn, what&#x27;s going on? I switched some ports of the switch just to be sure. The problem was now between my laptop and the ethernet cable.&lt;&#x2F;p&gt;
+&lt;p&gt;My laptop uses a bonding of the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;fedoramagazine.org&#x2F;bond-wifi-and-ethernet-for-easier-networking-mobility&#x2F;&quot;&gt;WiFi and the wired connection&lt;&#x2F;a&gt;. This gives me the ability to move around with the laptop without losing all my open connections. For instance, I can remove my ethernet cable in the middle of a meeting and the laptop will use the WiFi seamlessly. But well, I digress. I removed this special configuration. And... the problem remained.&lt;&#x2F;p&gt;
+&lt;p&gt;But during this last check, I also saw a large number of RX errors associated with the laptop NIC. Interesting; let me try another NIC. I plugged in a USB 3.0 Realtek RTL8156 NIC and this time... it worked.&lt;&#x2F;p&gt;
+&lt;p&gt;The ethernet cable is a CAT6 cable and is not that long (20m), but it seemed like the NIC (Intel I219-LM) of my T580 was a bit picky with the quality of the signal. It could also be a problem with the e1000e driver of the new 5.10 kernel. The cable was good, I had just tested it. Anyway, I put a switch just before my laptop NIC and everything works great now.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m still not sure why my downloads are still slow on OpenBSD. But this is an adventure for another day. The slow downloads were all with HTTPS sites (S3 and a Caddy website), the DF flag was on (TCP Don&#x27;t Fragment) which exacerbated the impact of the transmission errors.&lt;&#x2F;p&gt;
+&lt;p&gt;I found the whole situation to be interesting. It&#x27;s a series of wrong assumptions and the solution is really far from what I would have imagined.&lt;&#x2F;p&gt;
+&lt;p&gt;Also, thank you Teksavvy for your great support.&lt;&#x2F;p&gt;
+&lt;p&gt;Update: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.snellman.net&#x2F;blog&#x2F;archive&#x2F;2017-07-20-s3-mystery&#x2F;&quot;&gt;this&lt;&#x2F;a&gt; partially explains the OpenBSD S3 download problem.&lt;&#x2F;p&gt;
+&lt;p&gt;Update 2: I&#x27;m now running Linux 5.10.11 and... I don&#x27;t see any RX errors anymore! The S3 download is just as fast as it should be. So this was indeed a problem with the e1000e driver.&lt;&#x2F;p&gt;
+&lt;p&gt;Update 3: The problem is back, I&#x27;m not sure if it&#x27;s a hardware limitation of the NIC itself. I now use the Realtek NIC all the time.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>How to start minishift on Fedora-33</title>
+          <pubDate>Thu, 05 Nov 2020 19:43:51 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2020/11/how-to-start-minishift-on-fedora-33/</link>
+          <guid>https://goneri.lebouder.net/posts/2020/11/how-to-start-minishift-on-fedora-33/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2020/11/how-to-start-minishift-on-fedora-33/">&lt;p&gt;&lt;strong&gt;update: minishift is basically dead and won&#x27;t support OpenShift 4. You probably want to use &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;developers.redhat.com&#x2F;blog&#x2F;2019&#x2F;09&#x2F;05&#x2F;red-hat-openshift-4-on-your-laptop-introducing-red-hat-codeready-containers&#x2F;&quot;&gt;crc&lt;&#x2F;a&gt; instead.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I just spent too much time trying to start &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;minishift&#x2F;minishift&quot;&gt;minishift&lt;&#x2F;a&gt; with my user account. After 3 hours fighting with permission issues between libvirt and the &lt;code&gt;~&#x2F;.minishift&lt;&#x2F;code&gt; directory, I&#x27;ve finally decided to stay sane and use &lt;code&gt;sudo&lt;&#x2F;code&gt;... This is how I start minishift on my Fedora 33.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;install-and-start-libvirt&quot;&gt;Install and start libvirt&lt;&#x2F;h3&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf install -y libvirt qemu-kvm
+sudo systemctl start libvirtd
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;fetch-and-install-minishift-and-the-kvm-driver&quot;&gt;Fetch and install minishift and the kvm driver&lt;&#x2F;h3&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf install -y origin-clients
+curl -L https:&#x2F;&#x2F;github.com&#x2F;minishift&#x2F;minishift&#x2F;releases&#x2F;download&#x2F;v1.34.3&#x2F;minishift-1.34.3-linux-amd64.tgz|sudo tar -C &#x2F;usr&#x2F;local&#x2F;bin -xvz minishift-1.34.3-linux-amd64&#x2F;minishift  --strip-components=1
+sudo curl -L https:&#x2F;&#x2F;github.com&#x2F;dhiltgen&#x2F;docker-machine-kvm&#x2F;releases&#x2F;download&#x2F;v0.10.0&#x2F;docker-machine-driver-kvm-centos7 -o &#x2F;usr&#x2F;local&#x2F;bin&#x2F;docker-machine-driver-kvm
+sudo chmod +x &#x2F;usr&#x2F;local&#x2F;bin&#x2F;docker-machine-driver-kvm
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;start-minishift-with-sudo&quot;&gt;Start minishift (with sudo...)&lt;&#x2F;h3&gt;
+&lt;p&gt;sudo minishift&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;and-configure-the-local-user&quot;&gt;And configure the local user&lt;&#x2F;h3&gt;
+&lt;pre&gt;&lt;code&gt;sudo cp -r &#x2F;root&#x2F;.kube &#x2F;home&#x2F;goneri
+sudo chown -R goneri:goneri &#x2F;home&#x2F;goneri&#x2F;.kube
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Cloud images, which one is the fastest?</title>
+          <pubDate>Thu, 13 Aug 2020 23:13:09 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2020/08/cloud-images-which-one-is-the-faster/</link>
+          <guid>https://goneri.lebouder.net/posts/2020/08/cloud-images-which-one-is-the-faster/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2020/08/cloud-images-which-one-is-the-faster/">&lt;p&gt;Introduction&lt;&#x2F;p&gt;
+&lt;p&gt;This post compares the start-up duration of the most popular cloud images. By start-up, I mean the time until we&#x27;ve got an operational SSH server.&lt;&#x2F;p&gt;
+&lt;p&gt;For this test, I use a pet project called Virt-Lightning ( &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&quot;&gt;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&lt;&#x2F;a&gt; ). This tool allows any Linux user to start standard cloud images locally. It will prepare the meta-data and start a VM in your local libvirt. It&#x27;s very handy for people like me, who work on Linux and spend the day starting new VMs. The images are in the QCow2 format, and it uses the OpenStack meta-data format. Technically speaking, the performance should match what you get with OpenStack.&lt;&#x2F;p&gt;
+&lt;p&gt;Actually, OpenStack is often slightly slower because it does some extra operations. It may need to create a volume on Ceph, or prepare extra network configuration.&lt;&#x2F;p&gt;
+&lt;p&gt;The 2.0.0 release of Virt-Lightning exposes a public API. My &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;virt-lightning&#x2F;blob&#x2F;master&#x2F;virt-lightning.org&#x2F;bench_images_startup.py&quot;&gt;test scenario&lt;&#x2F;a&gt; is built on top of that. It uses Python to pull the different images, and create a VM from it 10 times in a row.&lt;&#x2F;p&gt;
+&lt;p&gt;All the images are public; Virt-Lightning can fetch them with the &lt;code&gt;vl pull foo&lt;&#x2F;code&gt; command:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;vl pull centos-6
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;During the boot process, the VM will set up a static network configuration, resize the filesystem, create a user, and inject an SSH key.&lt;&#x2F;p&gt;
+&lt;p&gt;By default, Virt-Lightning uses a static network configuration because it&#x27;s faster, and it gives better performance when we start a large number of VMs at the same time. I chose to stick with this.&lt;&#x2F;p&gt;
+&lt;p&gt;I did my tests on my Lenovo T580, which comes with a NVMe storage, and 32GB of memory. I would be curious to see the results with the same scenario, but on a regular spinning disk.&lt;&#x2F;p&gt;
+&lt;p&gt;The target images&lt;&#x2F;p&gt;
+&lt;p&gt;For this test, I compare the following Linux distributions: CentOS, Debian, Fedora, Ubuntu, and OpenSUSE. As far as I know, there is no public cloud image available for the other common distributions. If you think I&#x27;m wrong, please post a comment below.&lt;&#x2F;p&gt;
+&lt;p&gt;I also included the latest FreeBSD, NetBSD, and OpenBSD releases. They don&#x27;t provide official cloud images. This is the reason why I reuse the unofficial ones from &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The lack of a pre-existing Windows image is the reason why this OS is not included.&lt;&#x2F;p&gt;
+&lt;p&gt;Results&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-7.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Debian 10 is by far the fastest image with an impressive 15s on average. Basically, 5s less than any other cloud image.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-4.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Regarding the BSDs, FreeBSD is the only system able to resize the root filesystem without a reboot. Consequently, OpenBSD and NetBSD need to start twice in a row. This explains the big difference. The NetBSD kernel hardware probe is rather slow, for instance it takes 5s to initialize the ATA bus of the CD-ROM. This is the reason why the results look rather bad.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-5.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;About Ubuntu, I was surprised by the boot duration of Ubuntu 18.04. It is about two times longer than for 16.04. 20.04 is a bit better but still, we are far from the 15s of 14.04. I would be curious to know the origin of this. Maybe AppArmor?&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-6.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 6 results are not really consistent. They vary between 17.9s and 25.21s. This is the largest delta if you compare with the other distribution. This being said, CentOS 6 is rather old, and won&#x27;t be &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;wiki.centos.org&#x2F;About&#x2F;Product&quot;&gt;supported anymore&lt;&#x2F;a&gt; at the end of the year.&lt;&#x2F;p&gt;
+&lt;p&gt;Conclusions&lt;&#x2F;p&gt;
+&lt;p&gt;All the recent Linux images are based on systemd. It would be great to extract the metrics from &lt;code&gt;systemd-analyze&lt;&#x2F;code&gt; to understand what impacts the performance the most.&lt;&#x2F;p&gt;
+&lt;p&gt;Most of the time, when I deploy a test VM, the very first thing I do is the installation of some important packages. This scenario may be covered later in another blog post.&lt;&#x2F;p&gt;
+&lt;p&gt;Raw results for each image&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 6&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;6&#x2F;images&#x2F;CentOS-6-x86_64-GenericCloud.qcow2&quot;&gt;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;6&#x2F;images&#x2F;CentOS-6-x86_64-GenericCloud.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Thu, 08 Aug 2019 13:28:32 GMT&lt;br &#x2F;&gt;
+Size: 806748160&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=centos-6, elapsed_time=023.20
+distro=centos-6, elapsed_time=021.41
+distro=centos-6, elapsed_time=024.97
+distro=centos-6, elapsed_time=025.21
+distro=centos-6, elapsed_time=020.29
+distro=centos-6, elapsed_time=020.67
+distro=centos-6, elapsed_time=020.13
+distro=centos-6, elapsed_time=019.83
+distro=centos-6, elapsed_time=020.09
+distro=centos-6, elapsed_time=017.92
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The average is 21.3s.&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 7&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;7&#x2F;images&#x2F;CentOS-7-x86_64-GenericCloud.qcow2&quot;&gt;http:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;7&#x2F;images&#x2F;CentOS-7-x86_64-GenericCloud.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 22 Apr 2020 12:24:07 GMT&lt;br &#x2F;&gt;
+Size: 858783744&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=centos-7, elapsed_time=020.88
+distro=centos-7, elapsed_time=020.51
+distro=centos-7, elapsed_time=020.42
+distro=centos-7, elapsed_time=020.58
+distro=centos-7, elapsed_time=020.18
+distro=centos-7, elapsed_time=021.14
+distro=centos-7, elapsed_time=020.74
+distro=centos-7, elapsed_time=020.80
+distro=centos-7, elapsed_time=020.48
+distro=centos-7, elapsed_time=020.15
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 20.5s&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 8&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;8&#x2F;x86_64&#x2F;images&#x2F;CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;8&#x2F;x86_64&#x2F;images&#x2F;CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Mon, 13 Jan 2020 21:57:45 GMT&lt;br &#x2F;&gt;
+Size: 716176896&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=centos-8, elapsed_time=023.55
+distro=centos-8, elapsed_time=023.27
+distro=centos-8, elapsed_time=024.39
+distro=centos-8, elapsed_time=023.61
+distro=centos-8, elapsed_time=023.52
+distro=centos-8, elapsed_time=023.49
+distro=centos-8, elapsed_time=023.53
+distro=centos-8, elapsed_time=023.30
+distro=centos-8, elapsed_time=023.34
+distro=centos-8, elapsed_time=023.67
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 23.5s&lt;&#x2F;p&gt;
+&lt;p&gt;Debian 9&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-9&#x2F;debian-9-openstack-amd64.qcow2&quot;&gt;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-9&#x2F;debian-9-openstack-amd64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 29 Jul 2020 09:59:59 GMT&lt;br &#x2F;&gt;
+Size: 594190848&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=debian-9, elapsed_time=020.69
+distro=debian-9, elapsed_time=020.59
+distro=debian-9, elapsed_time=020.16
+distro=debian-9, elapsed_time=020.30
+distro=debian-9, elapsed_time=020.02
+distro=debian-9, elapsed_time=020.01
+distro=debian-9, elapsed_time=020.71
+distro=debian-9, elapsed_time=020.48
+distro=debian-9, elapsed_time=020.65
+distro=debian-9, elapsed_time=020.57
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average is 20.4s.&lt;&#x2F;p&gt;
+&lt;p&gt;Debian 10&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-10&#x2F;debian-10-openstack-amd64.qcow2&quot;&gt;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-10&#x2F;debian-10-openstack-amd64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Sat, 01 Aug 2020 20:10:01 GMT&lt;br &#x2F;&gt;
+Size: 530629120&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=debian-10, elapsed_time=015.25
+distro=debian-10, elapsed_time=015.28
+distro=debian-10, elapsed_time=014.88
+distro=debian-10, elapsed_time=015.07
+distro=debian-10, elapsed_time=015.39
+distro=debian-10, elapsed_time=015.35
+distro=debian-10, elapsed_time=015.47
+distro=debian-10, elapsed_time=014.94
+distro=debian-10, elapsed_time=015.57
+distro=debian-10, elapsed_time=015.57
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average is 15.2s&lt;&#x2F;p&gt;
+&lt;p&gt;Debian testing&lt;&#x2F;p&gt;
+&lt;p&gt;Debian testing is a rolling release, so I won&#x27;t include it in the charts, but I found interesting to include it in the results.&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;testing&#x2F;debian-testing-openstack-amd64.qcow2&quot;&gt;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;testing&#x2F;debian-testing-openstack-amd64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Mon, 01 Jul 2019 08:39:27 GMT&lt;br &#x2F;&gt;
+Size: 536621056&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=debian-testing, elapsed_time=015.07
+distro=debian-testing, elapsed_time=015.03
+distro=debian-testing, elapsed_time=014.93
+distro=debian-testing, elapsed_time=015.33
+distro=debian-testing, elapsed_time=014.85
+distro=debian-testing, elapsed_time=015.53
+distro=debian-testing, elapsed_time=014.94
+distro=debian-testing, elapsed_time=015.22
+distro=debian-testing, elapsed_time=015.19
+distro=debian-testing, elapsed_time=014.86
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 15s&lt;&#x2F;p&gt;
+&lt;p&gt;Fedora 31&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;31&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-31-1.9.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;31&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-31-1.9.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 23 Oct 2019 23:06:38 GMT&lt;br &#x2F;&gt;
+Size: 355350528&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=fedora-31, elapsed_time=020.48
+distro=fedora-31, elapsed_time=020.39
+distro=fedora-31, elapsed_time=020.37
+distro=fedora-31, elapsed_time=020.30
+distro=fedora-31, elapsed_time=020.29
+distro=fedora-31, elapsed_time=020.31
+distro=fedora-31, elapsed_time=020.50
+distro=fedora-31, elapsed_time=020.51
+distro=fedora-31, elapsed_time=020.27
+distro=fedora-31, elapsed_time=020.91
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 20.4s&lt;&#x2F;p&gt;
+&lt;p&gt;Fedora 32&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;32&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-32-1.6.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;32&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-32-1.6.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 22 Apr 2020 22:36:57 GMT&lt;br &#x2F;&gt;
+Size: 302841856&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=fedora-32, elapsed_time=021.68
+distro=fedora-32, elapsed_time=022.43
+distro=fedora-32, elapsed_time=022.17
+distro=fedora-32, elapsed_time=023.06
+distro=fedora-32, elapsed_time=022.23
+distro=fedora-32, elapsed_time=022.83
+distro=fedora-32, elapsed_time=022.54
+distro=fedora-32, elapsed_time=021.46
+distro=fedora-32, elapsed_time=022.37
+distro=fedora-32, elapsed_time=023.14
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 22.4s&lt;&#x2F;p&gt;
+&lt;p&gt;FreeBSD 11.4&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;11.4&#x2F;freebsd-11.4.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;11.4&#x2F;freebsd-11.4.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 01:24:32 GMT&lt;br &#x2F;&gt;
+Size: 412895744&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=freebsd-11.4, elapsed_time=030.68
+distro=freebsd-11.4, elapsed_time=030.64
+distro=freebsd-11.4, elapsed_time=030.29
+distro=freebsd-11.4, elapsed_time=030.29
+distro=freebsd-11.4, elapsed_time=029.86
+distro=freebsd-11.4, elapsed_time=029.74
+distro=freebsd-11.4, elapsed_time=029.90
+distro=freebsd-11.4, elapsed_time=029.77
+distro=freebsd-11.4, elapsed_time=030.04
+distro=freebsd-11.4, elapsed_time=029.70
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 30s&lt;&#x2F;p&gt;
+&lt;p&gt;FreeBSD 12.1&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;12.1&#x2F;freebsd-12.1.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;12.1&#x2F;freebsd-12.1.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 01:46:11 GMT&lt;br &#x2F;&gt;
+Size: 479029760&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=freebsd-12.1, elapsed_time=029.78
+distro=freebsd-12.1, elapsed_time=030.32
+distro=freebsd-12.1, elapsed_time=029.56
+distro=freebsd-12.1, elapsed_time=029.60
+distro=freebsd-12.1, elapsed_time=029.76
+distro=freebsd-12.1, elapsed_time=029.89
+distro=freebsd-12.1, elapsed_time=029.55
+distro=freebsd-12.1, elapsed_time=029.66
+distro=freebsd-12.1, elapsed_time=029.31
+distro=freebsd-12.1, elapsed_time=029.77
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 29.7&lt;&#x2F;p&gt;
+&lt;p&gt;NetBSD 8.2&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;8.2&#x2F;netbsd-8.2.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;8.2&#x2F;netbsd-8.2.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 02:06:57 GMT&lt;br &#x2F;&gt;
+Size: 155385856&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=netbsd-8.2, elapsed_time=066.71
+distro=netbsd-8.2, elapsed_time=067.80
+distro=netbsd-8.2, elapsed_time=067.15
+distro=netbsd-8.2, elapsed_time=066.97
+distro=netbsd-8.2, elapsed_time=066.84
+distro=netbsd-8.2, elapsed_time=067.01
+distro=netbsd-8.2, elapsed_time=066.98
+distro=netbsd-8.2, elapsed_time=067.73
+distro=netbsd-8.2, elapsed_time=067.34
+distro=netbsd-8.2, elapsed_time=066.90
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 67.1&lt;&#x2F;p&gt;
+&lt;p&gt;NetBSD 9.0&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;9.0&#x2F;netbsd-9.0.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;9.0&#x2F;netbsd-9.0.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 02:25:11 GMT&lt;br &#x2F;&gt;
+Size: 149291008&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=netbsd-9.0, elapsed_time=067.04
+distro=netbsd-9.0, elapsed_time=066.92
+distro=netbsd-9.0, elapsed_time=066.89
+distro=netbsd-9.0, elapsed_time=067.24
+distro=netbsd-9.0, elapsed_time=067.41
+distro=netbsd-9.0, elapsed_time=067.13
+distro=netbsd-9.0, elapsed_time=066.14
+distro=netbsd-9.0, elapsed_time=066.75
+distro=netbsd-9.0, elapsed_time=067.25
+distro=netbsd-9.0, elapsed_time=066.60
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 66.9s&lt;&#x2F;p&gt;
+&lt;p&gt;OpenBSD 6.6&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 04:09:44 GMT&lt;br &#x2F;&gt;
+Size: 520704512&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=openbsd-6.6, elapsed_time=048.80
+distro=openbsd-6.6, elapsed_time=049.72
+distro=openbsd-6.6, elapsed_time=049.07
+distro=openbsd-6.6, elapsed_time=048.36
+distro=openbsd-6.6, elapsed_time=049.28
+distro=openbsd-6.6, elapsed_time=049.12
+distro=openbsd-6.6, elapsed_time=049.36
+distro=openbsd-6.6, elapsed_time=049.80
+distro=openbsd-6.6, elapsed_time=048.05
+distro=openbsd-6.6, elapsed_time=049.71
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 49.1s&lt;&#x2F;p&gt;
+&lt;p&gt;OpenBSD 6.7&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 04:09:44 GMT&lt;br &#x2F;&gt;
+Size: 520704512&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=openbsd-6.7, elapsed_time=048.81
+distro=openbsd-6.7, elapsed_time=048.96
+distro=openbsd-6.7, elapsed_time=049.86
+distro=openbsd-6.7, elapsed_time=049.12
+distro=openbsd-6.7, elapsed_time=049.75
+distro=openbsd-6.7, elapsed_time=050.63
+distro=openbsd-6.7, elapsed_time=050.85
+distro=openbsd-6.7, elapsed_time=049.92
+distro=openbsd-6.7, elapsed_time=048.98
+distro=openbsd-6.7, elapsed_time=050.83
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 49.7s&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 14.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;trusty&#x2F;current&#x2F;trusty-server-cloudimg-amd64-disk1.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;trusty&#x2F;current&#x2F;trusty-server-cloudimg-amd64-disk1.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Thu, 07 Nov 2019 15:38:05 GMT&lt;br &#x2F;&gt;
+Size: 264897024&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-14.04, elapsed_time=014.40
+distro=ubuntu-14.04, elapsed_time=014.42
+distro=ubuntu-14.04, elapsed_time=014.94
+distro=ubuntu-14.04, elapsed_time=015.44
+distro=ubuntu-14.04, elapsed_time=015.64
+distro=ubuntu-14.04, elapsed_time=014.59
+distro=ubuntu-14.04, elapsed_time=015.02
+distro=ubuntu-14.04, elapsed_time=015.22
+distro=ubuntu-14.04, elapsed_time=015.44
+distro=ubuntu-14.04, elapsed_time=015.44
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 15s&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 16.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;xenial&#x2F;current&#x2F;xenial-server-cloudimg-amd64-disk1.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;xenial&#x2F;current&#x2F;xenial-server-cloudimg-amd64-disk1.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Thu, 13 Aug 2020 08:36:38 GMT&lt;br &#x2F;&gt;
+Size: 309657600&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-16.04, elapsed_time=015.13
+distro=ubuntu-16.04, elapsed_time=015.39
+distro=ubuntu-16.04, elapsed_time=015.42
+distro=ubuntu-16.04, elapsed_time=015.62
+distro=ubuntu-16.04, elapsed_time=015.29
+distro=ubuntu-16.04, elapsed_time=015.60
+distro=ubuntu-16.04, elapsed_time=015.62
+distro=ubuntu-16.04, elapsed_time=015.21
+distro=ubuntu-16.04, elapsed_time=015.62
+distro=ubuntu-16.04, elapsed_time=015.67
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 15.4&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 18.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;bionic&#x2F;current&#x2F;bionic-server-cloudimg-amd64.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;bionic&#x2F;current&#x2F;bionic-server-cloudimg-amd64.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 12 Aug 2020 16:58:30 GMT&lt;br &#x2F;&gt;
+Size: 357302272&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-18.04, elapsed_time=028.58
+distro=ubuntu-18.04, elapsed_time=028.25
+distro=ubuntu-18.04, elapsed_time=028.36
+distro=ubuntu-18.04, elapsed_time=028.45
+distro=ubuntu-18.04, elapsed_time=028.79
+distro=ubuntu-18.04, elapsed_time=028.28
+distro=ubuntu-18.04, elapsed_time=028.11
+distro=ubuntu-18.04, elapsed_time=028.07
+distro=ubuntu-18.04, elapsed_time=027.75
+distro=ubuntu-18.04, elapsed_time=028.25
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 28.3s&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 20.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;focal&#x2F;current&#x2F;focal-server-cloudimg-amd64.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;focal&#x2F;current&#x2F;focal-server-cloudimg-amd64.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Mon, 10 Aug 2020 22:19:47 GMT&lt;br &#x2F;&gt;
+Size: 545587200&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-20.04, elapsed_time=023.23
+distro=ubuntu-20.04, elapsed_time=022.74
+distro=ubuntu-20.04, elapsed_time=023.20
+distro=ubuntu-20.04, elapsed_time=022.96
+distro=ubuntu-20.04, elapsed_time=024.04
+distro=ubuntu-20.04, elapsed_time=024.06
+distro=ubuntu-20.04, elapsed_time=023.60
+distro=ubuntu-20.04, elapsed_time=023.88
+distro=ubuntu-20.04, elapsed_time=023.24
+distro=ubuntu-20.04, elapsed_time=024.27
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 23.5s&lt;&#x2F;p&gt;
+&lt;p&gt;OpenSUSE Leap 15.2&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;download.opensuse.org&#x2F;repositories&#x2F;Cloud:&#x2F;Images:&#x2F;Leap_15.2&#x2F;images&#x2F;openSUSE-Leap-15.2-OpenStack.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;download.opensuse.org&#x2F;repositories&#x2F;Cloud:&#x2F;Images:&#x2F;Leap_15.2&#x2F;images&#x2F;openSUSE-Leap-15.2-OpenStack.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Sun, 07 Jun 2020 11:42:01 GMT&lt;br &#x2F;&gt;
+Size: 566047744&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=opensuse-leap-15.2, elapsed_time=027.10
+distro=opensuse-leap-15.2, elapsed_time=027.61
+distro=opensuse-leap-15.2, elapsed_time=027.07
+distro=opensuse-leap-15.2, elapsed_time=027.12
+distro=opensuse-leap-15.2, elapsed_time=027.57
+distro=opensuse-leap-15.2, elapsed_time=026.86
+distro=opensuse-leap-15.2, elapsed_time=027.25
+distro=opensuse-leap-15.2, elapsed_time=027.10
+distro=opensuse-leap-15.2, elapsed_time=027.69
+distro=opensuse-leap-15.2, elapsed_time=027.39
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 27.3s&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>How to clean Docker up when used on Btrfs</title>
+          <pubDate>Thu, 08 Jan 2015 13:05:16 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2015/01/how-to-clean-docker-up-when-used-on-btrfs/</link>
+          <guid>https://goneri.lebouder.net/posts/2015/01/how-to-clean-docker-up-when-used-on-btrfs/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2015/01/how-to-clean-docker-up-when-used-on-btrfs/">&lt;p&gt;Docker often leaves behind files when I remove images with &lt;code&gt;rmi&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;systemctl stop docker.service
+systemctl stop docker.socket
+rm -rf &#x2F;var&#x2F;lib&#x2F;docker&#x2F;
+btrfs subvolume list &#x2F;var&#x2F;lib&#x2F;docker|awk &amp;#39;&#x2F;ID&#x2F; {print &amp;quot;&#x2F;&amp;quot;$9}&amp;#39;|xargs btrfs sub delete
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Duide Antidote8 sur Debian Sid</title>
+          <pubDate>Fri, 09 Aug 2013 13:44:07 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2013/08/duide-antidote8-sur-debian-sid/</link>
+          <guid>https://goneri.lebouder.net/posts/2013/08/duide-antidote8-sur-debian-sid/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2013/08/duide-antidote8-sur-debian-sid/">&lt;p&gt;J’ai acheté le correcteur orthographique &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.druide.com&#x2F;antidote.html&quot;&gt;Antidote 8&lt;&#x2F;a&gt; que j’ai installé hier. L’outil est vraiment impressionnant et agréable à utiliser.&lt;&#x2F;p&gt;
+&lt;p&gt;L’installation sur Debian Sid n’est pas supportée, cependant son utilisation est possible. Je dois encore voir si je peux l’intégrer avec Firefox (Iceweasel) et Thunderbird (Icedove).&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;installation&quot;&gt;Installation&lt;&#x2F;h1&gt;
+&lt;pre&gt;&lt;code&gt;# apt-get install libx11-6 libxslt1.1 libvorbis0a libxrender1 libgstreamer-plugins-base0.10-0 libpulse0 libpulse0 libpulse-mainloop-glib0 libfreetype6libpulse-mainloop-glib0 libfontconfig1 libxext6 libicu48``# wget http:&#x2F;&#x2F;ftp.fr.debian.org&#x2F;debian&#x2F;pool&#x2F;main&#x2F;o&#x2F;openssl&#x2F;libssl0.9.8_0.9.8o-4squeeze14_amd64.deb
+# dpkg -i libssl0.9.8_0.9.8o-4squeeze14_amd64.deb
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre&gt;&lt;code&gt;# wget http:&#x2F;&#x2F;ftp.fr.debian.org&#x2F;debian&#x2F;pool&#x2F;main&#x2F;i&#x2F;icu&#x2F;libicu44_4.4.1-8_amd64.deb
+# dpkg -i libicu44_4.4.1-8_amd64.deb
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Pour éviter un problème avec les kernel &amp;gt;= 3 il faut faire une petite manip présentée ici : http:&#x2F;&#x2F;www.debian-fr.org&#x2F;certains-logiciels-dysfonctionnent-en-changeant-de-noyau-t42688.html&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;# wget https:&#x2F;&#x2F;mail.gnome.org&#x2F;archives&#x2F;evolution-list&#x2F;2003-December&#x2F;txtBEWSVk2eft.txt -O &#x2F;tmp&#x2F;uname.c
+$ (echo #define _GNU_SOURCE; cat &#x2F;tmp&#x2F;uname.c) &amp;gt; &#x2F;tmp&#x2F;uname.c
+$ gcc -shared -fPIC -ldl uname.c -o &#x2F;opt&#x2F;Druide&#x2F;Antidote8&#x2F;Programmes64&#x2F;fake-uname.so`
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Il ne reste plus qu&#x27;a ajouter les deux lignes suivantes au début du script &#x2F;opt&#x2F;Druide&#x2F;Antidote8&#x2F;Programmes64&#x2F;Antidote8.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;export LD_PRELOAD=&#x2F;opt&#x2F;Druide&#x2F;Antidote8&#x2F;Programmes64&#x2F;fake-uname.so
+export RELEASE=$(uname -r | sed &amp;#39;s&#x2F;^\(...\)&#x2F;\1.0-antidote-fix&#x2F;g&amp;#39;)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>ext4 with barrier=1 and performance</title>
+          <pubDate>Mon, 04 Feb 2013 09:41:35 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2013/02/ext4-with-barrier1-and-performance/</link>
+          <guid>https://goneri.lebouder.net/posts/2013/02/ext4-with-barrier1-and-performance/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2013/02/ext4-with-barrier1-and-performance/">&lt;p&gt;The use of nobarrier provides a great performance gain on my laptop. I think I will continue with this approach even if my hard drive has no battery unit.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;with-ext4-rw-noatime-errors-remount-ro-data-ordered&quot;&gt;With ext4 (rw,noatime,errors=remount-ro,data=ordered)&lt;&#x2F;h2&gt;
+&lt;pre&gt;&lt;code&gt;#fs_mark -t 4 -s 10240 -n 1000 -d &#x2F;home&#x2F;goneri&#x2F;tmp&#x2F;test # Version 3.3, 4 thread(s) starting at Mon Feb 4 10:35:47 2013
+# Sync method: INBAND FSYNC: fsync() per file in write loop.
+# Directories: no subdirectories used
+# File names: 40 bytes long, (16 initial bytes of time stamp with 24 random bytes at end of name)
+# Files info: size 10240 bytes, written with an IO size of 16384 bytes per write
+# App overhead is time in microseconds spent in the test not doing file writing related system calls. FSUse% Count Size Files&#x2F;sec App Overhead
+o 84 4000 10240 35.2 113031
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;ext4-rw-noatime-nobarrier-errors-remount-ro-commit-15-data-ordered&quot;&gt;ext4 (rw,noatime,nobarrier,errors=remount-ro,commit=15,data=ordered)&lt;&#x2F;h2&gt;
+&lt;pre&gt;&lt;code&gt;tosh-r630:&#x2F;tmp$ fs_mark -t 4 -s 10240 -n 1000 -d ~&#x2F;tmp&#x2F;test # fs_mark -t 4 -s 10240 -n 1000 -d &#x2F;home&#x2F;goneri&#x2F;tmp&#x2F;test # Version 3.3, 4 thread(s) starting at Mon Feb 4 10:40:06 2013
+# Sync method: INBAND FSYNC: fsync() per file in write loop.
+# Directories: no subdirectories used
+# File names: 40 bytes long, (16 initial bytes of time stamp with 24 random bytes at end of name)
+# Files info: size 10240 bytes, written with an IO size of 16384 bytes per write
+# App overhead is time in microseconds spent in the test not doing file writing related system calls. FSUse% Count Size Files&#x2F;sec App Overhead 84 4000 10240 839.9 99672
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Debian Wheezy and cfengine</title>
+          <pubDate>Sat, 17 Nov 2012 20:10:24 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2012/11/debian-wheezy-and-cfengine/</link>
+          <guid>https://goneri.lebouder.net/posts/2012/11/debian-wheezy-and-cfengine/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2012/11/debian-wheezy-and-cfengine/">&lt;p&gt;How to bootstrap a cfengine node with Debian Wheezy Cfengine:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;# cp &#x2F;usr&#x2F;share&#x2F;doc&#x2F;cfengine3&#x2F;example_config&#x2F;* &#x2F;etc&#x2F;cfengine3&#x2F;
+# sed -i &amp;#39;s,&amp;quot;&#x2F;var&#x2F;lib&#x2F;cfengine3&#x2F;inputs&amp;quot;,&amp;quot;&#x2F;etc&#x2F;cfengine3&amp;quot;,&amp;#39; &#x2F;etc&#x2F;cfengine3&#x2F;update.cf
+# sed -i &amp;#39;s,RUN_CFEXECD=0,RUN_CFEXECD=1,&amp;#39; &#x2F;etc&#x2F;default&#x2F;cfengine3
+# &#x2F;etc&#x2F;init.d&#x2F;cfengine3 restart
+# cf-agent --bootstrap --policy-server 2a01:e35:242d:e930:250:XXXX:XXXX:XXXXX
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Backup LVM LV with bup</title>
+          <pubDate>Sat, 31 Dec 2011 00:11:50 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2011/12/backup-lvm-lv-with-bup/</link>
+          <guid>https://goneri.lebouder.net/posts/2011/12/backup-lvm-lv-with-bup/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2011/12/backup-lvm-lv-with-bup/">&lt;p&gt;Bup is a backup software that uses git for storage. Bup imports chunks of files to deduplicate large files.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;$ cat &#x2F;dev&#x2F;mapper&#x2F;virtualmachines-sarge | bup split -n virtualmachines-sarges
+bloom: adding 1 file (10967 objects).
+$ bup join virtualmachines-sarges &amp;gt; &#x2F;tmp&#x2F;sarges.img
+$ file &#x2F;tmp&#x2F;sarges.img &#x2F;tmp&#x2F;sarges.img: x86 boot sector; GRand Unified Bootloader, stage1 version 0x3, stage2 address 0x2000, stage2 segment 0x200, GRUB version 0.94; partition 1: ID=0x83, active, starthead 1, startsector 63, 9976302 sectors; partition 2: ID=0x5, starthead 0, startsector 9976365, 498015 sectors, code offset 0x48
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Debian Vserver cheat sheet</title>
+          <pubDate>Tue, 09 Mar 2010 17:55:05 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2010/03/debian-vserver-cheat-sheet/</link>
+          <guid>https://goneri.lebouder.net/posts/2010/03/debian-vserver-cheat-sheet/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2010/03/debian-vserver-cheat-sheet/">&lt;p&gt;This is just to keep track for myself on how to create a Vserver with Internet connectivity.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Create the network interface&lt;&#x2F;strong&gt; Edit &lt;code&gt;&#x2F;etc&#x2F;network&#x2F;interfaces&lt;&#x2F;code&gt; and add:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;auto dummy0
+iface dummy0 inet static address 192.168.50.1 netmask 255.255.255.0
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;strong&gt;Restart the network&lt;&#x2F;strong&gt; &lt;code&gt;&#x2F;etc&#x2F;init.d&#x2F;networking restart&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Turn the NAT on&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;echo 1 &amp;gt; &#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Replace eth0 with the network interface you use for your network access.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Create the VM&lt;&#x2F;strong&gt; &lt;code&gt;sudo vserver build build -n cyrus2.3 -m debootstrap --netdev dummy0 --interface 192.168.50.2&#x2F;24 -- -d lenny&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Enter the VM&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo vserver cyrus2.3 start
+sudo vserver cyrus2.3 enter
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>SheevaPlug</title>
+          <pubDate>Wed, 30 Dec 2009 21:54:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2009/12/sheevaplug/</link>
+          <guid>https://goneri.lebouder.net/posts/2009/12/sheevaplug/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2009/12/sheevaplug/">&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;fr.wikipedia.org&#x2F;wiki&#x2F;SheevaPlug&quot;&gt;SheevaPlug&lt;&#x2F;a&gt; + Debian = ♥♥♥♥&lt;&#x2F;p&gt;
+&lt;p&gt;Thank you Martin Michlmayr!&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>How to query Windows Vista registry with Samba4 regshell</title>
+          <pubDate>Mon, 12 Oct 2009 15:15:50 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2009/10/how-to-query-windows-vista-registry-with-samba4-regshell/</link>
+          <guid>https://goneri.lebouder.net/posts/2009/10/how-to-query-windows-vista-registry-with-samba4-regshell/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2009/10/how-to-query-windows-vista-registry-with-samba4-regshell/">&lt;p&gt;In this example, I list the installed software on the Vista machine from a Debian Sid system using &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.samba.org&quot;&gt;Samba&lt;&#x2F;a&gt; 4 packages.&lt;&#x2F;p&gt;
+&lt;p&gt;I had to enable (with lusrmgr.msc) and use the Administrator account.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;% regshell --remote=192.168.50.10 -U Administrateur%castorLapon
+HKEY_CLASSES_ROOT&amp;gt; predef HKEY_LOCAL_MACHINE
+HKEY_LOCAL_MACHINE&amp;gt; cd SOFTWARE
+New path is: HKEY_LOCAL_MACHINE\SOFTWARE
+HKEY_LOCAL_MACHINE\SOFTWARE&amp;gt; cd Microsoft
+New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft&amp;gt; cd Windows
+New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows&amp;gt; cd CurrentVersion
+New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion&amp;gt; cd Uninstall
+New path is: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall&amp;gt; list
+K 7-Zip
+K AddressBook
+K Adobe Flash Player ActiveX
+K Bazaar_is1
+K Connection Manager
+K DirectDrawEx
+K DXM_Runtime
+K Fontcore
+K IE40
+K IE4Data
+K IE5BAKEX
+K IEData
+K Microsoft .NET Framework 3.5 Language Pack SP1 - fra
+K Microsoft .NET Framework 3.5 SP1
+K MobileOptionPack
+K Mozilla Firefox (3.5.3)
+K MPlayer2
+K OCS Inventory Agent
+K PuTTY_is1
+K SchedulingAgent
+K Vim 7.2
+K WIC
+K {205C6BDD-7B73-42DE-8505-9A093F35A238}
+K {26A24AE4-039D-4CA4-87B4-2F83216016FF}
+K {3E31821C-7917-367E-938E-E65FC413EA31}
+K {89F4137D-6C26-4A84-BDB8-2E5A4BB71E00}
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB350003
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB953595
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB958484
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB960043
+K {CE2CDD62-0124-36CA-84D3-9F4DCF5C5BD9}.KB963707
+K {DCE8CD14-FBF5-4464-B9A4-E18E473546C7}
+K {F0E12BBA-AD66-4022-A453-A1C8A0C4D570}
+K {F18B31E4-E2E3-4F4F-A2C9-BA579D6AF400}
+K {FC857AFE-FC36-3C91-BC17-F8E233C21B4B}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>S270 Wifi au boot sur Debian Sid</title>
+          <pubDate>Sat, 07 Jan 2006 03:11:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/</link>
+          <guid>https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/">&lt;p&gt;Ce soir, j&#x27;ai découvert que pour que les parametres wireless_* du &#x2F;etc&#x2F;network&#x2F;interfaces l&#x27;interface doit déjà être &quot;up&quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;Voila ce que ça donne :&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;iface eth1 inet dhcp
+# j&amp;#39;up l&amp;#39;interface avant tout
+pre-up ifconfig eth1 up
+wireless_mode managed
+wireless_channel 6
+wireless_nick clara
+wireless_key off
+# sinon j&amp;#39;ai des problemes de stablitié du signal
+wireles_rate 11M
+# essid en dernier !
+wireless_essid BZH
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;J&#x27;ai ce problème avec le chipset rt2500, ça mérite surement un rapport de bug :). A étudier…&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>overclocking</title>
+          <pubDate>Sun, 26 Jun 2005 16:56:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/06/overclocking/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/06/overclocking/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/06/overclocking/">&lt;p&gt;Avec mon pc qui me rappelle régulièrement qu&#x27;il a très chaud en plantant joyeusement, j&#x27;ai trouvé &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.estvideo.net&#x2F;dew&#x2F;index&#x2F;2005&#x2F;06&#x2F;26&#x2F;463-alerte-a-la-canicule-passage-en-defcon-3&quot;&gt;l&#x27;illustration de ce poste&lt;&#x2F;a&gt; particulièrement marrante :) (&lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.estvideo.net&#x2F;dew&#x2F;index&#x2F;&quot;&gt;blog de Dew&lt;&#x2F;a&gt;).&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>UML avec rootstrap</title>
+          <pubDate>Sat, 18 Jun 2005 00:16:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/06/uml-avec-rootstrap/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/06/uml-avec-rootstrap/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/06/uml-avec-rootstrap/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;Depuis, quelques temps, je voulais pouvoir m&#x27;installer une &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.ubuntulinux.org&#x2F;&quot;&gt;Ubuntu&lt;&#x2F;a&gt; et une &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;fr.wikipedia.org&#x2F;wiki&#x2F;Debian&quot;&gt;Debian&lt;&#x2F;a&gt; Sarge afin de pouvoir mieux vérifier les paquages de &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;klibido.sourceforge.net&#x2F;&quot;&gt;Klibido&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.sukria.net&#x2F;fr&#x2F;&quot;&gt;Sukria&lt;&#x2F;a&gt; m&#x27;avait expliqué qu&#x27;il utilisait &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;linux-vserver.org&#x2F;&quot;&gt;vserver&lt;&#x2F;a&gt; pour avoir un système virtuel tous en gardant de très bonne performance. Je pensais aussi a Xen Linux qui permet plus ou moins la même chose. Ce qui m&#x27;a découragé, c&#x27;est que dans les deux cas, il faut recompiler la kernellette et j&#x27;ai un chipset IT8212 qui n&#x27;est supporté que dans les branche -ac et -mm du Kernel, or, j&#x27;ai clairement la flemme de me prendre la tête a repasser sur un kernel &quot;officiel&quot; pour ensuite le patcher.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;deploiment&quot;&gt;Déploiment&lt;&#x2F;h2&gt;
+&lt;p&gt;Donc me voila parti sur &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;usermodelinux.org&#x2F;&quot;&gt;UserModeLinux&lt;&#x2F;a&gt; (UML) qui est certe plus lent, mais qui marche très bien sur un kernel classique. Pour l&#x27;installation de la partition, j&#x27;ai utilisé rootstrap.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;apt-get install rootstrap user-mode-linux
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;La configuration est dans &#x2F;etc&#x2F;rootstrap&#x2F;rootstrap.conf&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;[global]
+fstype=ext2
+initialsize=2048
+freespace=0
+modules=network mkfs mount debian uml umount
+PATH=&#x2F;bin:&#x2F;sbin:&#x2F;usr&#x2F;bin:&#x2F;usr&#x2F;sbin
+
+[network]
+hostname=sarge
+interface=eth0
+transport=tuntap
+host=192.168.0.69
+uml=192.168.0.15
+nameserver=213.228.0.95
+gateway=192.168.0.1
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Tunning</title>
+          <pubDate>Sat, 04 Jun 2005 11:35:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/06/tunning/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/06/tunning/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/06/tunning/">&lt;p&gt;Je me suis un peu amusé a bidouillé mon interface.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2005&#x2F;06&#x2F;tunning&#x2F;screenshot_Juin2005.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2005&#x2F;06&#x2F;tunning&#x2F;screenshot_Juin2005_mini.png&quot; alt=&quot;screenshot_Juin2005_mini.png&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Mainactor 5.5</title>
+          <pubDate>Tue, 10 May 2005 01:24:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/05/mainactor-5-5/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/05/mainactor-5-5/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/05/mainactor-5-5/">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2005&#x2F;05&#x2F;mainactor-5-5&#x2F;mainactor.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2005&#x2F;05&#x2F;mainactor-5-5&#x2F;mainactorpiti.png&quot; alt=&quot;screenshot&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;La société allemande &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.mainconcept.com&#x2F;&quot;&gt;Mainconcept&lt;&#x2F;a&gt; a décidé de sortir Mainactor 5.5 pour Linux. Cette sortie a été faite avant celle pour Windows. Surement une façon pour eux de se faire la publicité facilement (la preuve) en faisant parler d&#x27;eux et de tester leur nouveau logiciel de montage vidéo sur une base plus réduite d&#x27;utilisateurs.&lt;&#x2F;p&gt;
+&lt;p&gt;Je viens d&#x27;essayer le logiciel, c&#x27;est la première fos que j&#x27;arrive a monter facilement un petit film sous Linux. Jusque a présent les logiciels que j&#x27;avais essayé m&#x27;imposait soit le DV ou des formats obscures pour moi, pauvre nOob de la vidéo :). Durant mon teste, je n&#x27;ai rencontré qu&#x27;un petit couâk. Un plantage durant un &quot;Undo&quot;. Lorsque j&#x27;ai relancé le logiciel, il a restauré proprement le fichier lui même. Globalement, je reste sur une très bonne impression.&lt;&#x2F;p&gt;
+</description>
+      </item>
+    </channel>
+</rss>

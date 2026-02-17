@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Gonéri&#x27;s blog - zola</title>
+      <link>https://goneri.lebouder.net</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://goneri.lebouder.net/tags/zola/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Wed, 07 Jan 2026 10:07:22 +0000</lastBuildDate>
+      <item>
+          <title>Migration to Zola</title>
+          <pubDate>Wed, 07 Jan 2026 10:07:22 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2026/01/migration-to-zola/</link>
+          <guid>https://goneri.lebouder.net/posts/2026/01/migration-to-zola/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2026/01/migration-to-zola/">&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2026&#x2F;01&#x2F;migration-to-zola&#x2F;zola-logo.svg&quot; alt=&quot;Zola Logo&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;My BlueHost subscription was about to expire, and one of my new year resolutions
+is to reduce the number of subscriptions I&#x27;m paying for.
+So I&#x27;ve decided to move to a static website, and I&#x27;ve picked &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;&quot;&gt;Zola&lt;&#x2F;a&gt; a bit randomly.
+Mainly because it&#x27;s written in Rust and I didn&#x27;t want to bother with Python or Ruby
+for a project like this.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve used Claude Code to quickly clean up the Markdown of my 20 years of posts, and
+after a bit of work, I&#x27;ve got this new website.&lt;&#x2F;p&gt;
+&lt;p&gt;Everything is currently hosted on GitHub Pages, but I&#x27;m also reconsidering reducing my dependency on GitHub.
+This may be a good resolution for 2027 :-).&lt;&#x2F;p&gt;
+&lt;p&gt;I also want to use Mastodon and BlueSky for the comments now. I&#x27;ve manually created a &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsky.app&#x2F;profile&#x2F;did:plc:wc5wdc4thti2wndpu3f2hgsy&#x2F;post&#x2F;3mbtsucmg3c22&quot;&gt;new entry there for BSky&lt;&#x2F;a&gt; and &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;mastodon.social&#x2F;@goneri&#x2F;115854606838048336&quot;&gt;one for Mastodon&lt;&#x2F;a&gt;, I will
+take a look later to see how this can be automated.&lt;&#x2F;p&gt;
+</description>
+      </item>
+    </channel>
+</rss>

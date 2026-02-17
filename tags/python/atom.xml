@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Gonéri&#x27;s blog - python</title>
+    <link rel="self" type="application/atom+xml" href="https://goneri.lebouder.net/tags/python/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://goneri.lebouder.net"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-11-07T23:11:40+00:00</updated>
+    <id>https://goneri.lebouder.net/tags/python/atom.xml</id>
+    <entry xml:lang="en">
+        <title>numpy: AssertionError: CUDA_HOME is not set</title>
+        <published>2025-11-07T23:11:40+00:00</published>
+        <updated>2025-11-07T23:11:40+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/11/numpy-assertionerror-cuda-home-is-not-set/"/>
+        <id>https://goneri.lebouder.net/posts/2025/11/numpy-assertionerror-cuda-home-is-not-set/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/11/numpy-assertionerror-cuda-home-is-not-set/">&lt;p&gt;To get Numpy to build on RHEL9, you need to install nvcc and export CUDA_HOME, e.g:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo dnf install -y rpm -ql cuda-nvcc-13-0
+$ sudo ln -s &#x2F;usr&#x2F;local&#x2F;cuda-13.0 &#x2F;usr&#x2F;local&#x2F;cuda
+$ pip install numpy
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Allow broken certificate for a specific host with Python&#x27;s requests</title>
+        <published>2025-09-17T21:03:40+00:00</published>
+        <updated>2025-09-17T21:03:40+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/09/allow-broken-certificate-for-a-specific-host-with-pythons-requests/"/>
+        <id>https://goneri.lebouder.net/posts/2025/09/allow-broken-certificate-for-a-specific-host-with-pythons-requests/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/09/allow-broken-certificate-for-a-specific-host-with-pythons-requests/">&lt;p&gt;After a bit of trial error, this is how you can allow requests to connect to a specific host, despite a broken certificate:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;python&quot;&gt;import requests
+import requests.adapters
+import ssl
+import urllib3
+from urllib3.util import create_urllib3_context
+
+class AllowBrokenSSLContextHTTPAdapter(requests.adapters.HTTPAdapter):
+    def __init__(self, **kwargs):
+        ssl_context = create_urllib3_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        self.ssl_context = ssl_context
+        super().__init__(**kwargs)
+
+    def init_poolmanager(self, connections, maxsize, block=False):
+        self.poolmanager = urllib3.poolmanager.PoolManager(
+            num_pools=connections,
+            maxsize=maxsize,
+            block=block,
+            ssl_context=self.ssl_context,
+        )
+
+    def send(self, request, **kwargs):
+        kwargs[&amp;quot;verify&amp;quot;] = self.ssl_context.check_hostname
+        return super().send(request, **kwargs)
+
+session = requests.session()
+session.mount(
+    &amp;quot;https:&#x2F;&#x2F;wrong.host.badssl.com&amp;quot;,
+    AllowBrokenSSLContextHTTPAdapter(),
+)
+session.get(&amp;quot;https:&#x2F;&#x2F;google.com&amp;quot;)
+session.get(&amp;quot;https:&#x2F;&#x2F;wrong.host.badssl.com&amp;quot;)
+print(&amp;quot;Can reach https:&#x2F;&#x2F;wrong.host.badssl.com despite the invalid hostname&amp;quot;)
+try:
+    result = session.get(&amp;quot;https:&#x2F;&#x2F;untrusted-root.badssl.com&#x2F;&amp;quot;)
+except requests.exceptions.SSLError:
+    print(&amp;quot;fails has expected&amp;quot;)
+else:
+    print(&amp;quot;Ooops&amp;quot;)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Aborting, target uses selinux but python bindings (libselinux-python) aren&#x27;t installed!</title>
+        <published>2021-09-22T15:19:47+00:00</published>
+        <updated>2021-09-22T15:19:47+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/09/aborting-target-uses-selinux-but-python-bindings-libselinux-python-arent-installed/"/>
+        <id>https://goneri.lebouder.net/posts/2021/09/aborting-target-uses-selinux-but-python-bindings-libselinux-python-arent-installed/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/09/aborting-target-uses-selinux-but-python-bindings-libselinux-python-arent-installed/">&lt;pre&gt;&lt;code&gt;TASK [helm : Copy test chart] **************************************************
+fatal: [localhost]: FAILED! =&amp;gt; {&amp;quot;changed&amp;quot;: false, &amp;quot;checksum&amp;quot;: &amp;quot;8b41aa269bd850134cd95bd27343edf6d4ed2e30&amp;quot;, &amp;quot;msg&amp;quot;: &amp;quot;Aborting, target uses selinux but python bindings (libselinux-python) aren&amp;#39;t installed!&amp;quot;}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Ah, this is one of the most irritating message that you can get when you use Ansible in a venv and SELinux. The problem should not happen anymore since this &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible&#x2F;ansible&#x2F;commit&#x2F;4c5ce5a1a9e79a845aff4978cfeb72a0d4ecf7d6&quot;&gt;commit&lt;&#x2F;a&gt; that was first released in Ansible core 2.11.5, thanks David Moreau Simard for the information! If you cannot upgrade, you can continue to read. In this article, we will quickly explain the problem and cover our options.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;code&gt;copy&lt;&#x2F;code&gt; or &lt;code&gt;selinux&lt;&#x2F;code&gt; are two Ansible modules that depend on some system binary libraries. These binary libraries are linked&#x2F;built using the Python of the system, on RHEL8 it&#x27;s Python3.6. So if you use the Python 3.6 of the system, everything should be all right. You may just need to install &lt;code&gt;python3-selinux&lt;&#x2F;code&gt; if it&#x27;s not already installed.&lt;&#x2F;p&gt;
+&lt;p&gt;Things are getting more difficult if you use a virtualenv, and it&#x27;s often a good idea to use a virtualenv. Here are two options:&lt;&#x2F;p&gt;
+&lt;p&gt;If the Python3 version of your virtualenv is close enough with the version of the one of the system, you can use the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;pypi.org&#x2F;project&#x2F;selinux&#x2F;&quot;&gt;selinux&lt;&#x2F;a&gt; package from Pypi. When a module will try to interact with the &lt;code&gt;selinux&lt;&#x2F;code&gt; module, this module will pretend to be the right person and will actually redirect the request the Python module from the system. It works well most of the time and pretty much the single way to do SElinux operation from a venv.&lt;&#x2F;p&gt;
+&lt;p&gt;If your Python version is too new compared to the system, PyPI&#x27;s selinux will raise an error like this one:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;ImportError: cannot import name &amp;#39;_selinux&amp;#39;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And in this case, you&#x27;ve got this second option. Here we assume that you don&#x27;t really care about SElinux. For instance you use Ansible&#x27;s copy module just to duplicate a file once. In this case, the whole SElinux war machine is not necessary. You can use &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;pypi.org&#x2F;project&#x2F;selinux-please-lie-to-me&#x2F;&quot;&gt;selinux-please-lie-to-me&#x2F;&lt;&#x2F;a&gt;, it&#x27;s another Pypi module and it&#x27;s similar to Pypi&#x27;s SElinux module. The main difference is that this time, it will just tell Ansible that SELinux is off on the system and it can bypass it.&lt;&#x2F;p&gt;
+&lt;p&gt;Oh! There is yet another option, you can overload the &lt;code&gt;ansible_python_interpreter&lt;&#x2F;code&gt; just for problematical task.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;    - copy:
+        src: &#x2F;etc&#x2F;fstab
+        dest: &#x2F;tmp&#x2F;fstab
+      vars:
+        ansible_python_interpreter: &#x2F;usr&#x2F;bin&#x2F;python3
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Which one should I use? The &lt;code&gt;ansible_python_interpreter&lt;&#x2F;code&gt; creates a dependency with the system that is often annoying. I prefer to avoid this strategy. Overall it&#x27;s better to use PyPI&#x27;s SELinux because it will preserve the interaction with SELinux, but sometimes, the delta between the version of Python is too important and the system binary module just cannot be loaded. In this case, use &lt;code&gt;selinux-please-lie-to-me&lt;&#x2F;code&gt; as a fallback option. Just remember that this Python module will silently inhibit all the SElinux operations.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Performance: expanduser with pathlib or os.path</title>
+        <published>2021-06-23T18:28:19+00:00</published>
+        <updated>2021-06-23T18:28:19+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/06/performance-expanduser-with-pathlib-or-os-path/"/>
+        <id>https://goneri.lebouder.net/posts/2021/06/performance-expanduser-with-pathlib-or-os-path/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/06/performance-expanduser-with-pathlib-or-os-path/">&lt;p&gt;Python 3 provides a new fancy library to manage pretty much all the path-related operations. This is a really welcome improvement since before that we had to use a long list of unrelated modules.&lt;&#x2F;p&gt;
+&lt;p&gt;I recently had to choose between Pathlib and os.path to expand a string in the ~&#x2F;path format to the absolute path. Since performance was important, I took the time to benchmark the two options:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;#!&#x2F;usr&#x2F;bin&#x2F;env python3
+
+import timeit
+
+setup = &amp;#39;&amp;#39;&amp;#39;
+from pathlib import PosixPath
+&amp;#39;&amp;#39;&amp;#39;
+with_pathlib = timeit.timeit(&amp;quot;abs_remote_tmp = str(PosixPath(&amp;#39;~&#x2F;.ansible&#x2F;tmp&amp;#39;).expanduser())&amp;quot;, setup=setup)
+
+setup = &amp;#39;&amp;#39;&amp;#39;
+from os.path import expanduser
+&amp;#39;&amp;#39;&amp;#39;
+
+with_os_path = timeit.timeit(&amp;quot;abs_remote_tmp = expanduser(&amp;#39;~&#x2F;.ansible&#x2F;tmp&amp;#39;)&amp;quot;, setup=setup)
+
+print(f&amp;quot;with pathlib: {with_pathlib}\nwith os.path: {with_os_path}&amp;quot;)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;os.path is about 4 times faster for this very specific case. The fact that we need to instantiate a PosixPath object has an impact. Also, once again we observe a nice performance boost with Python 3.8 onwards.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;06&#x2F;performance-expanduser-with-pathlib-or-os-path&#x2F;performance2.png&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;performance2.png&quot; height=&quot;340&quot; width=&quot;605&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Ansible collections and venv</title>
+        <published>2021-06-02T17:46:10+00:00</published>
+        <updated>2021-06-02T17:46:10+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/06/ansible-collections-and-venv/"/>
+        <id>https://goneri.lebouder.net/posts/2021/06/ansible-collections-and-venv/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/06/ansible-collections-and-venv/">&lt;p&gt;I work on a large number of collections and in order to test them properly, I have to switch between the Python versions and the associated PyPI dependencies. Nothing special here, this is pretty much the life of all of us who work on the Ansible collections.&lt;&#x2F;p&gt;
+&lt;p&gt;Initially, I was maintaining a set of clean Python virtual environments. Basically, one per version of Python. And I was juggling between them. Sadly, it&#x27;s easy to lose track of what&#x27;s going on. Every time I was switching to a different collection, I had to pull a new set of dependencies and the order was never the same.&lt;&#x2F;p&gt;
+&lt;p&gt;I ended up frustrated by the wasted time spent looking at the &lt;code&gt;pip freeze&lt;&#x2F;code&gt; output to understand some oddity. It&#x27;s so easy to mess up the whole cathedral. A good example is that I frequently use &lt;code&gt;pip install -e git&#x2F;something&lt;&#x2F;code&gt; to install a local copy of a library. And as a result, any change there can potentially nuke the fragile little creature.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;06&#x2F;ansible-collections-and-venv&#x2F;800px-incendie_de_la_fleche_en_1822.jpg&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;06&#x2F;ansible-collections-and-venv&#x2F;800px-incendie_de_la_fleche_en_1822.jpg&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;So now, I use another approach. I&#x27;ve got a script that spawns a virtual environment on the fly, pulls the right dependencies and initializes the shell. It may sound like a trivial thing, but I actually use it several times every day and I don&#x27;t call &lt;code&gt;pip freeze&lt;&#x2F;code&gt; that much.&lt;&#x2F;p&gt;
+&lt;p&gt;For instance, if I need to work with Ansible 2.10 and Python 3.10, I just need to do:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ cd .ansible&#x2F;collections&#x2F;ansible_collections&#x2F;vmware&#x2F;vmware_rest
+$ source ~&#x2F;bin&#x2F;ansible-venv.fish 3.10 stable-2.10
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;and I&#x27;m ready to run &lt;code&gt;ansible-playbook&lt;&#x2F;code&gt; or &lt;code&gt;ansible-test&lt;&#x2F;code&gt; in my clean environment. And when I want to reinitialize the venv, I just have to remove the venv directory.&lt;&#x2F;p&gt;
+&lt;p&gt;The script is &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;f7f3e371ad020c8651cb7af74d6b6aba&quot;&gt;here&lt;&#x2F;a&gt; and depends on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;fishshell.com&#x2F;&quot;&gt;FishShell&lt;&#x2F;a&gt;, my favorite shell.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Ansible: Performance Impact of the Python version</title>
+        <published>2020-11-26T20:01:54+00:00</published>
+        <updated>2020-11-26T20:01:54+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/11/ansible-performance-impact-of-the-python-version/"/>
+        <id>https://goneri.lebouder.net/posts/2020/11/ansible-performance-impact-of-the-python-version/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/11/ansible-performance-impact-of-the-python-version/">&lt;p&gt;Until recently, I was not really paying attention to the version of Python I was using with Ansible, as long as it was Python 3. The default version was always good enough for Ansible.&lt;&#x2F;p&gt;
+&lt;p&gt;During the last few weeks, I spent the majority of my time working on the performance of the community.kubernetes collection. The modules of this collection depend on a large library (OpenShift SDK) and Python needs to reload it before every task execution. The goal was to benefit from what is already in place with vmware.vmware_rest: &lt;a href=&quot;&#x2F;posts&#x2F;2020&#x2F;10&#x2F;how-to-speed-up-your-api-client-modules&#x2F;&quot;&gt;See: my AnsibleFest presentation&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;While working on this, I realized that my metrics were not consistent; I was not able to reproduce some test cases from 2 months ago. After a quick investigation, the Python version matters much more than expected.&lt;&#x2F;p&gt;
+&lt;p&gt;To compare the different Python versions, I decided to run some tests.&lt;&#x2F;p&gt;
+&lt;p&gt;The target host is a t2.medium instance (2 vCPUs, 4GiB) running on AWS. The operating system is Fedora 33, which is really handy for this because it includes all the Python versions from 3.6 to 3.10!&lt;&#x2F;p&gt;
+&lt;p&gt;I use the latest stable version of Ansible (2.10.3) that I install with &lt;code&gt;pip&lt;&#x2F;code&gt; in a Python virtual environment. &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;721160564904c5c0f35a1b47736ada58&quot;&gt;Here is the list of dependencies present in the virtualenvs.&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Finally, I deploy Kubernetes on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;podman.io&#x2F;&quot;&gt;Podman&lt;&#x2F;a&gt; with &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;kind.sigs.k8s.io&#x2F;&quot;&gt;Kubernetes Kind&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;For the first test, I use a Python one-liner to evaluate the time Python takes to load the OpenShift SDK. This is one of the operations I want to optimize for my work, so it matters a lot to me.&lt;&#x2F;p&gt;
+&lt;p&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;c4f8ec63d0c51f7e6236173b2c60db66&lt;&#x2F;p&gt;
+&lt;p&gt;Here, the loading is done 100 times in a row.&lt;&#x2F;p&gt;
+&lt;p&gt;The result shows a steady improvement of the performance since Python 3.6.&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;Python3.6&lt;&#x2F;th&gt;&lt;th&gt;Python3.7&lt;&#x2F;th&gt;&lt;th&gt;Python3.8&lt;&#x2F;th&gt;&lt;th&gt;Python3.9&lt;&#x2F;th&gt;&lt;th&gt;Python3.10&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;time (sec)&lt;&#x2F;td&gt;&lt;td&gt;48.401&lt;&#x2F;td&gt;&lt;td&gt;45.088&lt;&#x2F;td&gt;&lt;td&gt;41.751&lt;&#x2F;td&gt;&lt;td&gt;40.924&lt;&#x2F;td&gt;&lt;td&gt;40.385&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;With this test, the loading of the SDK is &lt;strong&gt;16.5% faster&lt;&#x2F;strong&gt; with Python 3.10.&lt;&#x2F;p&gt;
+&lt;p&gt;The next test does the same thing, but this time through Ansible. My test uses the following playbook:&lt;&#x2F;p&gt;
+&lt;p&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;ad252e30d48cfea99aaeb2e18736303e&lt;&#x2F;p&gt;
+&lt;p&gt;It runs the &lt;code&gt;k8s_info&lt;&#x2F;code&gt; module 100 times in a row. In addition, I use an &lt;code&gt;ansible.cfg&lt;&#x2F;code&gt; with the following content. This way, ansible-playbook returns a nice output of the task execution duration:&lt;&#x2F;p&gt;
+&lt;p&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;e364c17d6344fd4cd11c1ed2e0ba12ce&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;Python3.6&lt;&#x2F;th&gt;&lt;th&gt;Python3.7&lt;&#x2F;th&gt;&lt;th&gt;Python3.8&lt;&#x2F;th&gt;&lt;th&gt;Python3.9&lt;&#x2F;th&gt;&lt;th&gt;Python3.10&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;time (sec)&lt;&#x2F;td&gt;&lt;td&gt;85.5&lt;&#x2F;td&gt;&lt;td&gt;80.5&lt;&#x2F;td&gt;&lt;td&gt;75.35&lt;&#x2F;td&gt;&lt;td&gt;75.05&lt;&#x2F;td&gt;&lt;td&gt;71.19&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;It&#x27;s a &lt;strong&gt;16.76%&lt;&#x2F;strong&gt; boost between Python 3.6 and Python 3.10. I was not expecting such tight correlation between the two tests.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;11&#x2F;ansible-performance-impact-of-the-python-version&#x2F;image.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;11&#x2F;ansible-performance-impact-of-the-python-version&#x2F;image.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;While Python is obviously not the fastest technology out there, it&#x27;s great to see how its performance improves with each release. Python 3.10 is not even released yet and looks promising.&lt;&#x2F;p&gt;
+&lt;p&gt;If your playbooks use some modules with dependencies on large Python libraries, it may be interesting to try the latest Python versions.&lt;&#x2F;p&gt;
+&lt;p&gt;And for those who are still running Python 2.7, I get a &lt;strong&gt;49.2%&lt;&#x2F;strong&gt; performance boost between 2.7 and 3.10.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Create thumbnail images of a set of pictures</title>
+        <published>2015-01-03T14:10:32+00:00</published>
+        <updated>2015-01-03T14:10:32+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2015/01/create-thumbnail-images-of-a-set-of-pictures/"/>
+        <id>https://goneri.lebouder.net/posts/2015/01/create-thumbnail-images-of-a-set-of-pictures/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2015/01/create-thumbnail-images-of-a-set-of-pictures/">&lt;p&gt;Load 4 pictures at a time from the input directory and create thumbnail montage images:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;#!&#x2F;usr&#x2F;bin&#x2F;env python3
+
+import glob
+import subprocess
+
+inputs = glob.glob(&amp;#39;input&#x2F;*.JPG&amp;#39;)
+
+cpt = 0
+while len(inputs) &amp;gt; 0:
+to_process = inputs[:4] + [&amp;#39;logo:&amp;#39;, &amp;#39;logo:&amp;#39;, &amp;#39;logo:&amp;#39;]
+inputs = inputs[4:]
+cpt += 1
+subprocess.call([&amp;quot;montage&amp;quot;] + to_process[:4] + [&amp;quot;-geometry&amp;quot;, &amp;quot;800x600+2+2&amp;quot;, &amp;quot;final&#x2F;final_%02d.jpg&amp;quot; % cpt])
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>addimage.py</title>
+        <published>2005-06-26T05:22:00+00:00</published>
+        <updated>2005-06-26T05:22:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2005/06/addimage-py/"/>
+        <id>https://goneri.lebouder.net/posts/2005/06/addimage-py/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2005/06/addimage-py/">&lt;p&gt;Jusque a présent, pour ajouter des photos sur mon blog, je n&#x27;ai qu&#x27;a appeller le fichier avec un script Perl qui se charge de l&#x27;uploader proprement sur le serveur.&lt;&#x2F;p&gt;
+&lt;p&gt;Suite au prosélitisme de &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;glibersat.linux62.org&#x2F;&quot;&gt;Dukez&lt;&#x2F;a&gt;, j&#x27;ai fini par vouloir tester le language &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.python.org&#x2F;&quot;&gt;Python&lt;&#x2F;a&gt;, c&#x27;est ainsi que j&#x27;ai refais mon script dans ce language. Le script &lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2005&#x2F;06&#x2F;addimage-py&#x2F;addimage.py&quot;&gt;addimage.py&lt;&#x2F;a&gt; est l&#x27;oeuvre d&#x27;un debutant, j&#x27;implore votre indulgence fasse a la qualité du code :|.&lt;&#x2F;p&gt;
+&lt;p&gt;Le script se charge de généré une image miniature si l&#x27;on upload une image et qu&#x27;elle est superieur a une certaine taille. Il place les fichiers dans un dossier qui créé en fonction de la date. Par exemple 19810611 pour le 11 Juin 1981. Enfin, a la fin du processus, il affiche le code html qui ne reste plus qu&#x27;a copier-coller.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

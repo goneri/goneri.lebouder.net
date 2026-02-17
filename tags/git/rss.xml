@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Gonéri&#x27;s blog - git</title>
+      <link>https://goneri.lebouder.net</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://goneri.lebouder.net/tags/git/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Fri, 08 Jan 2021 14:47:12 +0000</lastBuildDate>
+      <item>
+          <title>My Github workflow</title>
+          <pubDate>Fri, 08 Jan 2021 14:47:12 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2021/01/my-github-workflow/</link>
+          <guid>https://goneri.lebouder.net/posts/2021/01/my-github-workflow/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2021/01/my-github-workflow/">&lt;p&gt;The Ansible community uses Github to develop ansible-core and most of the Ansible Collections. The only exception I know is the Openstack&#x27;s ansible-collection-openstack which uses a Gerrit (&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;review.opendev.org&#x2F;#&#x2F;q&#x2F;project:openstack&#x2F;ansible-collections-openstack&quot;&gt;ansible-collections-openstack&lt;&#x2F;a&gt;).&lt;&#x2F;p&gt;
+&lt;p&gt;So, as an Ansible developer, my normal day-to-day activities involve a lot of GitHub interactions. I review Pull Requests (PRs) and prepare new PRs all the time.&lt;&#x2F;p&gt;
+&lt;p&gt;Before joining Ansible, I was working with &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.gerritcodereview.com&#x2F;&quot;&gt;Gerrit&lt;&#x2F;a&gt; which is a nice alternative solution to collaborate on a stream of patches.&lt;&#x2F;p&gt;
+&lt;p&gt;In Gerrit, each patch from a branch is a PR. Every time we update a patch, its sha2 changes, and so Gerrit tracks them with a dedicated ID called &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;gerrit-review.googlesource.com&#x2F;Documentation&#x2F;user-changeid.html&quot;&gt;Change-id&lt;&#x2F;a&gt;. It looks like an extra line in the body of the commit message. e.g:&lt;&#x2F;p&gt;
+&lt;p&gt;Change-Id: Ic8aaa0728a43936cd4c6e1ed590e01ba8f0fbf5b&lt;&#x2F;p&gt;
+&lt;p&gt;Gerrit provides a tool called git-review to pull and push the patches. When a contributor pushes a series of patches, each patch is correctly tracked by Gerrit and updates the right existing PR. This allows the contributor to reorganize the patches, change the order of series or import a patch from another branch.&lt;&#x2F;p&gt;
+&lt;p&gt;With GitHub, a branch is a PR and most of the time, the projects prefer to use the branch to trace the iteration of the PR:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;my fancy feature&lt;&#x2F;li&gt;
+&lt;li&gt;fix: correct the test-suite&lt;&#x2F;li&gt;
+&lt;li&gt;fix: fix the fix&lt;&#x2F;li&gt;
+&lt;li&gt;fix: typo in previous commit&lt;&#x2F;li&gt;
+&lt;li&gt;bla&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;And this is fine, because most of the time, the branch will ultimately be squashed (one branch -&amp;gt; one Git commit) during the final merge.&lt;&#x2F;p&gt;
+&lt;p&gt;GitHub workflow is certainly more friendly for newcomers but it tends to be a source of complexity when you want to work on several PRs at the same time. For instance, I work on a new feature, but I also want to cherry-pick an experimental commit from a contributor. In this case I must remove this commit before I push my branch back on GitHub, or the extra commit will end-up in my feature branch.&lt;&#x2F;p&gt;
+&lt;p&gt;Another example, if I&#x27;m working on a feature branch and find an issue with something unrelated, I need to switch to another branch to commit my fix and push it. This is cumbersome and often people just prefer to merge the fix in their feature branch which leads to confusion and questions during the code review.&lt;&#x2F;p&gt;
+&lt;p&gt;To simplify, Gerrit allows better code modularity but also implies a better understanding of Git which is annoying when we try to attract new contributors. This is the reason why we use the current workflow.&lt;&#x2F;p&gt;
+&lt;p&gt;To address the problem I wrote a script called push-patch (https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;push-patch). I use it to push just my commits. For instance, I work on this branch:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;1: doc: explain how to do something&lt;&#x2F;li&gt;
+&lt;li&gt;2: typo: adjust a few details&lt;&#x2F;li&gt;
+&lt;li&gt;3: a workaround for issue #19 that should not be merged&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The first two commits are not directly related to the feature I&#x27;m implementing. And I would like to submit them immediately.&lt;&#x2F;p&gt;
+&lt;p&gt;push-patch will allow me to only push the change 1 and 2 in two dedicated PR. Both branches will be based on main and can be merged independently.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ push-patch 1
+$ push-patch 2
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now, and that&#x27;s the cool part &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;getemoji.com&#x2F;&quot;&gt;&lt;strong&gt;😋&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;! Let&#x27;s imagine I want to push another revision of my first patch, I can use &quot;git rebase -i&quot; to adjust this commit and use push-patch again to use the updated patch.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ vim foo
+$ git add foo
+$ git rebase --continue
+$ .&#x2F;push-patch 1
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Internally push-patch uses git-notes to trace the remote branch of the patch. The Public-Branch field traces the name of the branch in my remote clone of the project and Pr-Url is the URL of the PR in the upstream project. e.g:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;commit 1198db8807ebf9f4099598bcd41df25d465cbcae (HEAD -&amp;gt; main)Author: Gonéri Le Bouder &amp;lt;goneri@lebouder.net&amp;gt;Date:   Thu Jan 7 11:31:41 2021 -0500   elb_application_lb: enable the functional test       Remove the `unsupported` aliases for the `elb_application_lb` test.       Use HTTP instead of HTTPS to avoid the dependency on   `iam:ListServerCertificates` and the other Certificate related operations.Notes:   Public-Branch: elb_application_lb-enable-the-functional-test_24328       PR-Url: https:&#x2F;&#x2F;github.com&#x2F;ansible-collections&#x2F;community.aws&#x2F;pull&#x2F;348
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This means that even if the patch content evolves, push-patch will still be able to continue to update the right PR.&lt;&#x2F;p&gt;
+&lt;p&gt;In a nutshell, for each patch it will:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;clone the project and switch on the main branch&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;read the patch notes&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;if a branch name already exists it will use it, otherwise it will create a new one&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;switch to the branch&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;cherry-pick the patch&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;push the branch&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;push-patch expects just the sha2 of the commit to push. It also accepts a list of sha2. This is the reason why I often type thing like that:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;push-patch&lt;&#x2F;strong&gt; $(&lt;strong&gt;git&lt;&#x2F;strong&gt; log -2 --pretty=tformat:%H)&lt;&#x2F;p&gt;
+&lt;p&gt;The command passes to push-patch the SHA2 of the two last commits. It will push them in the two associated branches upstream. And at the end, I can use &lt;code&gt;git log&lt;&#x2F;code&gt;, or better &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;jonas&#x2F;tig&quot;&gt;&lt;code&gt;tig&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;, to get the URL of the Github review.&lt;&#x2F;p&gt;
+&lt;p&gt;Right now, the command is a shell script and depends on the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;github&#x2F;hub&quot;&gt;hub&lt;&#x2F;a&gt; command. I would like to rewrite it with a better programming language.&lt;&#x2F;p&gt;
+&lt;p&gt;What about you? Do you also use some special tools to handle your PR?&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Refresh all my git clones</title>
+          <pubDate>Sun, 15 Sep 2013 21:58:22 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2013/09/refresh-all-my-git-clone/</link>
+          <guid>https://goneri.lebouder.net/posts/2013/09/refresh-all-my-git-clone/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2013/09/refresh-all-my-git-clone/">&lt;p&gt;These are the commands I use to refresh all my git clones. For example, when I know I will be offline in the coming hours:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;locate --regex &amp;#39;\.git$&amp;#39;|parallel &amp;#39;cd {} &amp;amp;&amp;amp; cd .. &amp;amp;&amp;amp; echo $PWD &amp;amp;&amp;amp; git fetch --all&amp;#39;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The use of GNU parallel is helpful to reduce the sync duration.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>git gc --prune on a complete directory structure</title>
+          <pubDate>Wed, 13 Jun 2012 10:43:56 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2012/06/git-gc-prune-a-on-complet-directory-structure/</link>
+          <guid>https://goneri.lebouder.net/posts/2012/06/git-gc-prune-a-on-complet-directory-structure/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2012/06/git-gc-prune-a-on-complet-directory-structure/">&lt;p&gt;To run &quot;git gc --prune&quot; on a structure of subdirectories of git repositories, like for example a &#x2F;git directory on a server:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;find &#x2F;git -type d -execdir sh -c &amp;#39;[ -f &amp;quot;description&amp;quot; ] &amp;amp;&amp;amp; sudo git gc --prune&amp;#39; \;`
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>git gc and bup</title>
+          <pubDate>Sat, 31 Dec 2011 00:34:23 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2011/12/git-gc-and-bup/</link>
+          <guid>https://goneri.lebouder.net/posts/2011/12/git-gc-and-bup/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2011/12/git-gc-and-bup/">&lt;p&gt;To avoid the OOM killer after a &lt;code&gt;git gc&lt;&#x2F;code&gt; call on a bup repository:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;$ git config --global pack.windowMemory 512m
+$ git config --global pack.threads 10
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+    </channel>
+</rss>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Gonéri&#x27;s blog - elixir</title>
+      <link>https://goneri.lebouder.net</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://goneri.lebouder.net/tags/elixir/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Sun, 04 Sep 2022 23:51:52 +0000</lastBuildDate>
+      <item>
+          <title>Elixir: xmerl&#x2F;include&#x2F;xmerl.hrl could not be found</title>
+          <pubDate>Sun, 04 Sep 2022 23:51:52 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2022/09/elixir-xmerl-include-xmerl-hrl-could-not-be-found/</link>
+          <guid>https://goneri.lebouder.net/posts/2022/09/elixir-xmerl-include-xmerl-hrl-could-not-be-found/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2022/09/elixir-xmerl-include-xmerl-hrl-could-not-be-found/">&lt;p&gt;I recently faced this error when trying to build an Elixir project.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;== Compilation error in file lib&#x2F;swoosh&#x2F;adapters&#x2F;xml&#x2F;helpers.ex ==  
+** (ArgumentError) lib file xmerl&#x2F;include&#x2F;xmerl.hrl could not be found  
+(elixir 1.13.4) lib&#x2F;record&#x2F;extractor.ex:41: Record.Extractor.from_lib_file&#x2F;1  
+(elixir 1.13.4) lib&#x2F;record&#x2F;extractor.ex:18: Record.Extractor.from_or_from_lib_file&#x2F;1  
+(elixir 1.13.4) lib&#x2F;record&#x2F;extractor.ex:5: Record.Extractor.extract&#x2F;2  
+lib&#x2F;swoosh&#x2F;adapters&#x2F;xml&#x2F;helpers.ex:5: (module)  
+(elixir 1.13.4) lib&#x2F;kernel&#x2F;parallel_compiler.ex:346: anonymous fn&#x2F;5 in Kernel.ParallelCompiler.spawn_workers&#x2F;7  
+could not compile dependency :swoosh, &amp;quot;mix compile&amp;quot; failed. Errors may have been logged above. You can recompile this dependency with &amp;quot;mix deps.compile swoosh&amp;quot;, update it with &amp;quot;mix deps.update swoosh&amp;quot; or clean it with &amp;quot;mix deps.clean swoosh&amp;quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If you can the error above on Fedora, you probably need to install the &lt;code&gt;erlang-xmerl&lt;&#x2F;code&gt; package.&lt;&#x2F;p&gt;
+</description>
+      </item>
+    </channel>
+</rss>

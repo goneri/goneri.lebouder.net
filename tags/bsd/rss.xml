@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Gonéri&#x27;s blog - bsd</title>
+      <link>https://goneri.lebouder.net</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://goneri.lebouder.net/tags/bsd/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Sat, 10 Jan 2026 14:23:51 +0000</lastBuildDate>
+      <item>
+          <title>FreeBSD 15 comes with an official Cloud image</title>
+          <pubDate>Sat, 10 Jan 2026 14:23:51 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2026/01/freebsd-15-comes-with-an-official-cloud-image/</link>
+          <guid>https://goneri.lebouder.net/posts/2026/01/freebsd-15-comes-with-an-official-cloud-image/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2026/01/freebsd-15-comes-with-an-official-cloud-image/">&lt;p&gt;I&#x27;ve been maintaining &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&quot;&gt;bsd-cloud-image.org&lt;&#x2F;a&gt; since 2019. The website
+gives access to cloud images for BSD operating systems. The images are in QCOW2 format and include
+cloud-init. You can for instance use them with OpenStack or &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;virt-lightning.org&quot;&gt;Virt-Lightning&lt;&#x2F;a&gt;,
+my second pet-project.&lt;&#x2F;p&gt;
+&lt;p&gt;I maintain these images because these projects don&#x27;t provide anything like this and I want to provide
+a way to quickly try the BSDs, without the hassle of a manual installation.
+FreeBSD 15.0 was released in December, and I was happy to discover that the project already provides cloud images!&lt;&#x2F;p&gt;
+&lt;p&gt;The FreeBSD images of &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&quot;&gt;bsd-cloud-image.org&lt;&#x2F;a&gt; will no longer be updated. A message
+now redirects users to the official images.&lt;&#x2F;p&gt;
+&lt;p&gt;FreeBSD uses its own cloud-init implementation called &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;man.freebsd.org&#x2F;cgi&#x2F;man.cgi?query=nuageinit&amp;amp;sektion=7&amp;amp;n=1&quot;&gt;NuageInit&lt;&#x2F;a&gt;. It&#x27;s a minimalistic implementation
+in Lua that is pretty elegant and straightforward.&lt;&#x2F;p&gt;
+&lt;p&gt;In order to get the image to work properly with Virt-Lightning, I had to push a couple of commits. Thanks to
+Baptiste Daroussin, they were all quickly accepted. This was my first contribution to FreeBSD and it was a super
+positive experience.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2026&#x2F;01&#x2F;freebsd-15-comes-with-an-official-cloud-image&#x2F;freebsd-screenshot.png&quot; alt=&quot;FreeBSD screenshot&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>bsd-cloud-image.org 2nd^w3rd  rewrite</title>
+          <pubDate>Mon, 04 Nov 2024 15:28:50 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2024/11/bsd-cloud-image-org-2ndw3rd-rewrite/</link>
+          <guid>https://goneri.lebouder.net/posts/2024/11/bsd-cloud-image-org-2ndw3rd-rewrite/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2024/11/bsd-cloud-image-org-2ndw3rd-rewrite/">&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&quot;&gt;bsd-cloud-image.org&lt;&#x2F;a&gt; aims to simplify the use of BSD operating systems in a cloud environment. It provides a series of cloud-ready images that can quickly be deployed and tested. The original target was &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.openstack.org&#x2F;&quot;&gt;OpenStack&lt;&#x2F;a&gt; and &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&quot;&gt;Virt-Lightning&lt;&#x2F;a&gt;. But the images should work with any &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-init.io&#x2F;&quot;&gt;Cloud-Init&lt;&#x2F;a&gt; compatible environment.&lt;&#x2F;p&gt;
+&lt;p&gt;Yesterday I released a new version of the website based on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.typescriptlang.org&#x2F;&quot;&gt;TypeScript&lt;&#x2F;a&gt; + &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;vite.dev&#x2F;&quot;&gt;Vite&lt;&#x2F;a&gt; + &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;vuejs.org&#x2F;&quot;&gt;VueJS&lt;&#x2F;a&gt; and Bootstrap 5. After 5 years, the original static page was due for a rewrite. The definition of the images was lost deep inside a mix of HTML code and Bootstrap class names. It&#x27;s now isolated in a &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;bsd-cloud-image.org&#x2F;blob&#x2F;main&#x2F;src&#x2F;images_data.json&quot;&gt;clear JSON file&lt;&#x2F;a&gt;. This will simplify the maintenance in the long run. It should also be easier to add new features. I&#x27;m dreaming about a way to spawn instances directly from the interface.&lt;&#x2F;p&gt;
+&lt;p&gt;Fun fact: I had a v2 rewrite &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;bci-v2&quot;&gt;mostly done&lt;&#x2F;a&gt; that I never published. It&#x27;s based on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;elixir-lang.org&#x2F;&quot;&gt;Elixir&lt;&#x2F;a&gt;, and it was super fun to do. It&#x27;s not a static website since it runs on top of the Erlang VM, I&#x27;m afraid the maintenance may be a source of extra complexity and I&#x27;m not sure this is the right strategy considering my limited free time.&lt;&#x2F;p&gt;
+&lt;p&gt;I also pushed new FreeBSD and NetBSD images recently. I still need to prepare the NetBSD 10 build.&lt;&#x2F;p&gt;
+&lt;p&gt;Enjoy!&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2024&#x2F;11&#x2F;bsd-cloud-image-org-2ndw3rd-rewrite&#x2F;image.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2024&#x2F;11&#x2F;bsd-cloud-image-org-2ndw3rd-rewrite&#x2F;image.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>BSD-Cloud-Image.org new images</title>
+          <pubDate>Fri, 11 Nov 2022 19:35:58 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2022/11/bsd-cloud-image-org-new-images/</link>
+          <guid>https://goneri.lebouder.net/posts/2022/11/bsd-cloud-image-org-new-images/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2022/11/bsd-cloud-image-org-new-images/">&lt;p&gt;I just pushed 2 new images on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&quot;&gt;BSD-Cloud-Image.org&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;OpenBSD 7.2&lt;&#x2F;li&gt;
+&lt;li&gt;DragonFlyBSD 6.2.2&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</description>
+      </item>
+      <item>
+          <title>Update on BSD Cloud Image</title>
+          <pubDate>Mon, 17 May 2021 01:05:27 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2021/05/update-on-bsd-cloud-image/</link>
+          <guid>https://goneri.lebouder.net/posts/2021/05/update-on-bsd-cloud-image/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2021/05/update-on-bsd-cloud-image/">&lt;p&gt;I&#x27;ve pushed some new images on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;OpenBSD 6.9, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;pcib&#x2F;commit&#x2F;7368ea62c2b117df7ee950d6297ee190b372e9a4&quot;&gt;bsd.rd is now a compressed file&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;FreeBSD 13.0: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;freebsd-cloud-images&#x2F;commit&#x2F;7e811070124295b787cc79b7c7a8283a383ff56f&quot;&gt;boot1.efifat does not exist anymore&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;DragonFly BSD 6.0.0, I&#x27;ve refreshed my &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;canonical&#x2F;cloud-init&#x2F;pull&#x2F;904&quot;&gt;Cloud-Init PR&lt;&#x2F;a&gt;. Hopefully this time I will manage to get it merged.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;These images also include a recent fix &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;canonical&#x2F;cloud-init&#x2F;commit&#x2F;6fe1983777663a1a1136fd73dc50244f2d030be8&quot;&gt;for non-standard MTU values&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Cloud images, which one is the fastest?</title>
+          <pubDate>Thu, 13 Aug 2020 23:13:09 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2020/08/cloud-images-which-one-is-the-faster/</link>
+          <guid>https://goneri.lebouder.net/posts/2020/08/cloud-images-which-one-is-the-faster/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2020/08/cloud-images-which-one-is-the-faster/">&lt;p&gt;Introduction&lt;&#x2F;p&gt;
+&lt;p&gt;This post compares the start-up duration of the most popular cloud images. By start-up, I mean the time until we&#x27;ve got an operational SSH server.&lt;&#x2F;p&gt;
+&lt;p&gt;For this test, I use a pet project called Virt-Lightning ( &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&quot;&gt;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&lt;&#x2F;a&gt; ). This tool allows any Linux user to start standard cloud images locally. It will prepare the meta-data and start a VM in your local libvirt. It&#x27;s very handy for people like me, who work on Linux and spend the day starting new VMs. The images are in the QCow2 format, and it uses the OpenStack meta-data format. Technically speaking, the performance should match what you get with OpenStack.&lt;&#x2F;p&gt;
+&lt;p&gt;Actually, OpenStack is often slightly slower because it does some extra operations. It may need to create a volume on Ceph, or prepare extra network configuration.&lt;&#x2F;p&gt;
+&lt;p&gt;The 2.0.0 release of Virt-Lightning exposes a public API. My &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;virt-lightning&#x2F;blob&#x2F;master&#x2F;virt-lightning.org&#x2F;bench_images_startup.py&quot;&gt;test scenario&lt;&#x2F;a&gt; is built on top of that. It uses Python to pull the different images, and create a VM from it 10 times in a row.&lt;&#x2F;p&gt;
+&lt;p&gt;All the images are public; Virt-Lightning can fetch them with the &lt;code&gt;vl pull foo&lt;&#x2F;code&gt; command:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;vl pull centos-6
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;During the boot process, the VM will set up a static network configuration, resize the filesystem, create a user, and inject an SSH key.&lt;&#x2F;p&gt;
+&lt;p&gt;By default, Virt-Lightning uses a static network configuration because it&#x27;s faster, and it gives better performance when we start a large number of VMs at the same time. I chose to stick with this.&lt;&#x2F;p&gt;
+&lt;p&gt;I did my tests on my Lenovo T580, which comes with a NVMe storage, and 32GB of memory. I would be curious to see the results with the same scenario, but on a regular spinning disk.&lt;&#x2F;p&gt;
+&lt;p&gt;The target images&lt;&#x2F;p&gt;
+&lt;p&gt;For this test, I compare the following Linux distributions: CentOS, Debian, Fedora, Ubuntu, and OpenSUSE. As far as I know, there is no public cloud image available for the other common distributions. If you think I&#x27;m wrong, please post a comment below.&lt;&#x2F;p&gt;
+&lt;p&gt;I also included the latest FreeBSD, NetBSD, and OpenBSD releases. They don&#x27;t provide official cloud images. This is the reason why I reuse the unofficial ones from &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The lack of a pre-existing Windows image is the reason why this OS is not included.&lt;&#x2F;p&gt;
+&lt;p&gt;Results&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-7.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Debian 10 is by far the fastest image with an impressive 15s on average. Basically, 5s less than any other cloud image.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-4.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Regarding the BSDs, FreeBSD is the only system able to resize the root filesystem without a reboot. Consequently, OpenBSD and NetBSD need to start twice in a row. This explains the big difference. The NetBSD kernel hardware probe is rather slow, for instance it takes 5s to initialize the ATA bus of the CD-ROM. This is the reason why the results look rather bad.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-5.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;About Ubuntu, I was surprised by the boot duration of Ubuntu 18.04. It is about two times longer than for 16.04. 20.04 is a bit better but still, we are far from the 15s of 14.04. I would be curious to know the origin of this. Maybe AppArmor?&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;cloud-images-which-one-is-the-faster&#x2F;image-6.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 6 results are not really consistent. They vary between 17.9s and 25.21s. This is the largest delta if you compare with the other distribution. This being said, CentOS 6 is rather old, and won&#x27;t be &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;wiki.centos.org&#x2F;About&#x2F;Product&quot;&gt;supported anymore&lt;&#x2F;a&gt; at the end of the year.&lt;&#x2F;p&gt;
+&lt;p&gt;Conclusions&lt;&#x2F;p&gt;
+&lt;p&gt;All the recent Linux images are based on systemd. It would be great to extract the metrics from &lt;code&gt;systemd-analyze&lt;&#x2F;code&gt; to understand what impacts the performance the most.&lt;&#x2F;p&gt;
+&lt;p&gt;Most of the time, when I deploy a test VM, the very first thing I do is the installation of some important packages. This scenario may be covered later in another blog post.&lt;&#x2F;p&gt;
+&lt;p&gt;Raw results for each image&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 6&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;6&#x2F;images&#x2F;CentOS-6-x86_64-GenericCloud.qcow2&quot;&gt;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;6&#x2F;images&#x2F;CentOS-6-x86_64-GenericCloud.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Thu, 08 Aug 2019 13:28:32 GMT&lt;br &#x2F;&gt;
+Size: 806748160&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=centos-6, elapsed_time=023.20
+distro=centos-6, elapsed_time=021.41
+distro=centos-6, elapsed_time=024.97
+distro=centos-6, elapsed_time=025.21
+distro=centos-6, elapsed_time=020.29
+distro=centos-6, elapsed_time=020.67
+distro=centos-6, elapsed_time=020.13
+distro=centos-6, elapsed_time=019.83
+distro=centos-6, elapsed_time=020.09
+distro=centos-6, elapsed_time=017.92
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The average is 21.3s.&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 7&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;7&#x2F;images&#x2F;CentOS-7-x86_64-GenericCloud.qcow2&quot;&gt;http:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;7&#x2F;images&#x2F;CentOS-7-x86_64-GenericCloud.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 22 Apr 2020 12:24:07 GMT&lt;br &#x2F;&gt;
+Size: 858783744&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=centos-7, elapsed_time=020.88
+distro=centos-7, elapsed_time=020.51
+distro=centos-7, elapsed_time=020.42
+distro=centos-7, elapsed_time=020.58
+distro=centos-7, elapsed_time=020.18
+distro=centos-7, elapsed_time=021.14
+distro=centos-7, elapsed_time=020.74
+distro=centos-7, elapsed_time=020.80
+distro=centos-7, elapsed_time=020.48
+distro=centos-7, elapsed_time=020.15
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 20.5s&lt;&#x2F;p&gt;
+&lt;p&gt;CentOS 8&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;8&#x2F;x86_64&#x2F;images&#x2F;CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;cloud.centos.org&#x2F;centos&#x2F;8&#x2F;x86_64&#x2F;images&#x2F;CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Mon, 13 Jan 2020 21:57:45 GMT&lt;br &#x2F;&gt;
+Size: 716176896&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=centos-8, elapsed_time=023.55
+distro=centos-8, elapsed_time=023.27
+distro=centos-8, elapsed_time=024.39
+distro=centos-8, elapsed_time=023.61
+distro=centos-8, elapsed_time=023.52
+distro=centos-8, elapsed_time=023.49
+distro=centos-8, elapsed_time=023.53
+distro=centos-8, elapsed_time=023.30
+distro=centos-8, elapsed_time=023.34
+distro=centos-8, elapsed_time=023.67
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 23.5s&lt;&#x2F;p&gt;
+&lt;p&gt;Debian 9&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-9&#x2F;debian-9-openstack-amd64.qcow2&quot;&gt;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-9&#x2F;debian-9-openstack-amd64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 29 Jul 2020 09:59:59 GMT&lt;br &#x2F;&gt;
+Size: 594190848&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=debian-9, elapsed_time=020.69
+distro=debian-9, elapsed_time=020.59
+distro=debian-9, elapsed_time=020.16
+distro=debian-9, elapsed_time=020.30
+distro=debian-9, elapsed_time=020.02
+distro=debian-9, elapsed_time=020.01
+distro=debian-9, elapsed_time=020.71
+distro=debian-9, elapsed_time=020.48
+distro=debian-9, elapsed_time=020.65
+distro=debian-9, elapsed_time=020.57
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average is 20.4s.&lt;&#x2F;p&gt;
+&lt;p&gt;Debian 10&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-10&#x2F;debian-10-openstack-amd64.qcow2&quot;&gt;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;current-10&#x2F;debian-10-openstack-amd64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Sat, 01 Aug 2020 20:10:01 GMT&lt;br &#x2F;&gt;
+Size: 530629120&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=debian-10, elapsed_time=015.25
+distro=debian-10, elapsed_time=015.28
+distro=debian-10, elapsed_time=014.88
+distro=debian-10, elapsed_time=015.07
+distro=debian-10, elapsed_time=015.39
+distro=debian-10, elapsed_time=015.35
+distro=debian-10, elapsed_time=015.47
+distro=debian-10, elapsed_time=014.94
+distro=debian-10, elapsed_time=015.57
+distro=debian-10, elapsed_time=015.57
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average is 15.2s&lt;&#x2F;p&gt;
+&lt;p&gt;Debian testing&lt;&#x2F;p&gt;
+&lt;p&gt;Debian testing is a rolling release, so I won&#x27;t include it in the charts, but I found interesting to include it in the results.&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;testing&#x2F;debian-testing-openstack-amd64.qcow2&quot;&gt;https:&#x2F;&#x2F;cdimage.debian.org&#x2F;cdimage&#x2F;openstack&#x2F;testing&#x2F;debian-testing-openstack-amd64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Mon, 01 Jul 2019 08:39:27 GMT&lt;br &#x2F;&gt;
+Size: 536621056&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=debian-testing, elapsed_time=015.07
+distro=debian-testing, elapsed_time=015.03
+distro=debian-testing, elapsed_time=014.93
+distro=debian-testing, elapsed_time=015.33
+distro=debian-testing, elapsed_time=014.85
+distro=debian-testing, elapsed_time=015.53
+distro=debian-testing, elapsed_time=014.94
+distro=debian-testing, elapsed_time=015.22
+distro=debian-testing, elapsed_time=015.19
+distro=debian-testing, elapsed_time=014.86
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 15s&lt;&#x2F;p&gt;
+&lt;p&gt;Fedora 31&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;31&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-31-1.9.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;31&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-31-1.9.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 23 Oct 2019 23:06:38 GMT&lt;br &#x2F;&gt;
+Size: 355350528&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=fedora-31, elapsed_time=020.48
+distro=fedora-31, elapsed_time=020.39
+distro=fedora-31, elapsed_time=020.37
+distro=fedora-31, elapsed_time=020.30
+distro=fedora-31, elapsed_time=020.29
+distro=fedora-31, elapsed_time=020.31
+distro=fedora-31, elapsed_time=020.50
+distro=fedora-31, elapsed_time=020.51
+distro=fedora-31, elapsed_time=020.27
+distro=fedora-31, elapsed_time=020.91
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 20.4s&lt;&#x2F;p&gt;
+&lt;p&gt;Fedora 32&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;32&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-32-1.6.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;download.fedoraproject.org&#x2F;pub&#x2F;fedora&#x2F;linux&#x2F;releases&#x2F;32&#x2F;Cloud&#x2F;x86_64&#x2F;images&#x2F;Fedora-Cloud-Base-32-1.6.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 22 Apr 2020 22:36:57 GMT&lt;br &#x2F;&gt;
+Size: 302841856&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=fedora-32, elapsed_time=021.68
+distro=fedora-32, elapsed_time=022.43
+distro=fedora-32, elapsed_time=022.17
+distro=fedora-32, elapsed_time=023.06
+distro=fedora-32, elapsed_time=022.23
+distro=fedora-32, elapsed_time=022.83
+distro=fedora-32, elapsed_time=022.54
+distro=fedora-32, elapsed_time=021.46
+distro=fedora-32, elapsed_time=022.37
+distro=fedora-32, elapsed_time=023.14
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 22.4s&lt;&#x2F;p&gt;
+&lt;p&gt;FreeBSD 11.4&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;11.4&#x2F;freebsd-11.4.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;11.4&#x2F;freebsd-11.4.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 01:24:32 GMT&lt;br &#x2F;&gt;
+Size: 412895744&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=freebsd-11.4, elapsed_time=030.68
+distro=freebsd-11.4, elapsed_time=030.64
+distro=freebsd-11.4, elapsed_time=030.29
+distro=freebsd-11.4, elapsed_time=030.29
+distro=freebsd-11.4, elapsed_time=029.86
+distro=freebsd-11.4, elapsed_time=029.74
+distro=freebsd-11.4, elapsed_time=029.90
+distro=freebsd-11.4, elapsed_time=029.77
+distro=freebsd-11.4, elapsed_time=030.04
+distro=freebsd-11.4, elapsed_time=029.70
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 30s&lt;&#x2F;p&gt;
+&lt;p&gt;FreeBSD 12.1&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;12.1&#x2F;freebsd-12.1.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;freebsd&#x2F;12.1&#x2F;freebsd-12.1.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 01:46:11 GMT&lt;br &#x2F;&gt;
+Size: 479029760&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=freebsd-12.1, elapsed_time=029.78
+distro=freebsd-12.1, elapsed_time=030.32
+distro=freebsd-12.1, elapsed_time=029.56
+distro=freebsd-12.1, elapsed_time=029.60
+distro=freebsd-12.1, elapsed_time=029.76
+distro=freebsd-12.1, elapsed_time=029.89
+distro=freebsd-12.1, elapsed_time=029.55
+distro=freebsd-12.1, elapsed_time=029.66
+distro=freebsd-12.1, elapsed_time=029.31
+distro=freebsd-12.1, elapsed_time=029.77
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 29.7&lt;&#x2F;p&gt;
+&lt;p&gt;NetBSD 8.2&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;8.2&#x2F;netbsd-8.2.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;8.2&#x2F;netbsd-8.2.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 02:06:57 GMT&lt;br &#x2F;&gt;
+Size: 155385856&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=netbsd-8.2, elapsed_time=066.71
+distro=netbsd-8.2, elapsed_time=067.80
+distro=netbsd-8.2, elapsed_time=067.15
+distro=netbsd-8.2, elapsed_time=066.97
+distro=netbsd-8.2, elapsed_time=066.84
+distro=netbsd-8.2, elapsed_time=067.01
+distro=netbsd-8.2, elapsed_time=066.98
+distro=netbsd-8.2, elapsed_time=067.73
+distro=netbsd-8.2, elapsed_time=067.34
+distro=netbsd-8.2, elapsed_time=066.90
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average 67.1&lt;&#x2F;p&gt;
+&lt;p&gt;NetBSD 9.0&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;9.0&#x2F;netbsd-9.0.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;netbsd&#x2F;9.0&#x2F;netbsd-9.0.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 02:25:11 GMT&lt;br &#x2F;&gt;
+Size: 149291008&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=netbsd-9.0, elapsed_time=067.04
+distro=netbsd-9.0, elapsed_time=066.92
+distro=netbsd-9.0, elapsed_time=066.89
+distro=netbsd-9.0, elapsed_time=067.24
+distro=netbsd-9.0, elapsed_time=067.41
+distro=netbsd-9.0, elapsed_time=067.13
+distro=netbsd-9.0, elapsed_time=066.14
+distro=netbsd-9.0, elapsed_time=066.75
+distro=netbsd-9.0, elapsed_time=067.25
+distro=netbsd-9.0, elapsed_time=066.60
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 66.9s&lt;&#x2F;p&gt;
+&lt;p&gt;OpenBSD 6.6&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 04:09:44 GMT&lt;br &#x2F;&gt;
+Size: 520704512&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=openbsd-6.6, elapsed_time=048.80
+distro=openbsd-6.6, elapsed_time=049.72
+distro=openbsd-6.6, elapsed_time=049.07
+distro=openbsd-6.6, elapsed_time=048.36
+distro=openbsd-6.6, elapsed_time=049.28
+distro=openbsd-6.6, elapsed_time=049.12
+distro=openbsd-6.6, elapsed_time=049.36
+distro=openbsd-6.6, elapsed_time=049.80
+distro=openbsd-6.6, elapsed_time=048.05
+distro=openbsd-6.6, elapsed_time=049.71
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 49.1s&lt;&#x2F;p&gt;
+&lt;p&gt;OpenBSD 6.7&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&quot;&gt;https:&#x2F;&#x2F;bsd-cloud-image.org&#x2F;images&#x2F;openbsd&#x2F;6.7&#x2F;openbsd-6.7.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 05 Aug 2020 04:09:44 GMT&lt;br &#x2F;&gt;
+Size: 520704512&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=openbsd-6.7, elapsed_time=048.81
+distro=openbsd-6.7, elapsed_time=048.96
+distro=openbsd-6.7, elapsed_time=049.86
+distro=openbsd-6.7, elapsed_time=049.12
+distro=openbsd-6.7, elapsed_time=049.75
+distro=openbsd-6.7, elapsed_time=050.63
+distro=openbsd-6.7, elapsed_time=050.85
+distro=openbsd-6.7, elapsed_time=049.92
+distro=openbsd-6.7, elapsed_time=048.98
+distro=openbsd-6.7, elapsed_time=050.83
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 49.7s&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 14.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;trusty&#x2F;current&#x2F;trusty-server-cloudimg-amd64-disk1.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;trusty&#x2F;current&#x2F;trusty-server-cloudimg-amd64-disk1.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Thu, 07 Nov 2019 15:38:05 GMT&lt;br &#x2F;&gt;
+Size: 264897024&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-14.04, elapsed_time=014.40
+distro=ubuntu-14.04, elapsed_time=014.42
+distro=ubuntu-14.04, elapsed_time=014.94
+distro=ubuntu-14.04, elapsed_time=015.44
+distro=ubuntu-14.04, elapsed_time=015.64
+distro=ubuntu-14.04, elapsed_time=014.59
+distro=ubuntu-14.04, elapsed_time=015.02
+distro=ubuntu-14.04, elapsed_time=015.22
+distro=ubuntu-14.04, elapsed_time=015.44
+distro=ubuntu-14.04, elapsed_time=015.44
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 15s&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 16.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;xenial&#x2F;current&#x2F;xenial-server-cloudimg-amd64-disk1.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;xenial&#x2F;current&#x2F;xenial-server-cloudimg-amd64-disk1.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Thu, 13 Aug 2020 08:36:38 GMT&lt;br &#x2F;&gt;
+Size: 309657600&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-16.04, elapsed_time=015.13
+distro=ubuntu-16.04, elapsed_time=015.39
+distro=ubuntu-16.04, elapsed_time=015.42
+distro=ubuntu-16.04, elapsed_time=015.62
+distro=ubuntu-16.04, elapsed_time=015.29
+distro=ubuntu-16.04, elapsed_time=015.60
+distro=ubuntu-16.04, elapsed_time=015.62
+distro=ubuntu-16.04, elapsed_time=015.21
+distro=ubuntu-16.04, elapsed_time=015.62
+distro=ubuntu-16.04, elapsed_time=015.67
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 15.4&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 18.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;bionic&#x2F;current&#x2F;bionic-server-cloudimg-amd64.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;bionic&#x2F;current&#x2F;bionic-server-cloudimg-amd64.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Wed, 12 Aug 2020 16:58:30 GMT&lt;br &#x2F;&gt;
+Size: 357302272&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-18.04, elapsed_time=028.58
+distro=ubuntu-18.04, elapsed_time=028.25
+distro=ubuntu-18.04, elapsed_time=028.36
+distro=ubuntu-18.04, elapsed_time=028.45
+distro=ubuntu-18.04, elapsed_time=028.79
+distro=ubuntu-18.04, elapsed_time=028.28
+distro=ubuntu-18.04, elapsed_time=028.11
+distro=ubuntu-18.04, elapsed_time=028.07
+distro=ubuntu-18.04, elapsed_time=027.75
+distro=ubuntu-18.04, elapsed_time=028.25
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 28.3s&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu 20.04&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;focal&#x2F;current&#x2F;focal-server-cloudimg-amd64.img&quot;&gt;https:&#x2F;&#x2F;cloud-images.ubuntu.com&#x2F;focal&#x2F;current&#x2F;focal-server-cloudimg-amd64.img&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Mon, 10 Aug 2020 22:19:47 GMT&lt;br &#x2F;&gt;
+Size: 545587200&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=ubuntu-20.04, elapsed_time=023.23
+distro=ubuntu-20.04, elapsed_time=022.74
+distro=ubuntu-20.04, elapsed_time=023.20
+distro=ubuntu-20.04, elapsed_time=022.96
+distro=ubuntu-20.04, elapsed_time=024.04
+distro=ubuntu-20.04, elapsed_time=024.06
+distro=ubuntu-20.04, elapsed_time=023.60
+distro=ubuntu-20.04, elapsed_time=023.88
+distro=ubuntu-20.04, elapsed_time=023.24
+distro=ubuntu-20.04, elapsed_time=024.27
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 23.5s&lt;&#x2F;p&gt;
+&lt;p&gt;OpenSUSE Leap 15.2&lt;&#x2F;p&gt;
+&lt;p&gt;image from: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;download.opensuse.org&#x2F;repositories&#x2F;Cloud:&#x2F;Images:&#x2F;Leap_15.2&#x2F;images&#x2F;openSUSE-Leap-15.2-OpenStack.x86_64.qcow2&quot;&gt;https:&#x2F;&#x2F;download.opensuse.org&#x2F;repositories&#x2F;Cloud:&#x2F;Images:&#x2F;Leap_15.2&#x2F;images&#x2F;openSUSE-Leap-15.2-OpenStack.x86_64.qcow2&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+Date: Sun, 07 Jun 2020 11:42:01 GMT&lt;br &#x2F;&gt;
+Size: 566047744&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;distro=opensuse-leap-15.2, elapsed_time=027.10
+distro=opensuse-leap-15.2, elapsed_time=027.61
+distro=opensuse-leap-15.2, elapsed_time=027.07
+distro=opensuse-leap-15.2, elapsed_time=027.12
+distro=opensuse-leap-15.2, elapsed_time=027.57
+distro=opensuse-leap-15.2, elapsed_time=026.86
+distro=opensuse-leap-15.2, elapsed_time=027.25
+distro=opensuse-leap-15.2, elapsed_time=027.10
+distro=opensuse-leap-15.2, elapsed_time=027.69
+distro=opensuse-leap-15.2, elapsed_time=027.39
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Average: 27.3s&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Pbuilder on Debian kFreeBSD Wheezy</title>
+          <pubDate>Mon, 06 Oct 2014 19:57:17 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2014/10/pbuilder-on-debian-kfreebsd-wheezy/</link>
+          <guid>https://goneri.lebouder.net/posts/2014/10/pbuilder-on-debian-kfreebsd-wheezy/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2014/10/pbuilder-on-debian-kfreebsd-wheezy/">&lt;p&gt;There is a little trick if you want to use pbuilder on kFreeBSD. Add these lines in &#x2F;etc&#x2F;pbuilderrc:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;MIRRORSITE=http:&#x2F;&#x2F;cdn.debian.net&#x2F;debian
+USEPROC=yes
+USEDEVFS=yes
+USEDEVPTS=yes
+BINDMOUNTS=&amp;quot;&#x2F;home&#x2F;goneri&amp;quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+    </channel>
+</rss>

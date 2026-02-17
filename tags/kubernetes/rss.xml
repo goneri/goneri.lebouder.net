@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Gonéri&#x27;s blog - kubernetes</title>
+      <link>https://goneri.lebouder.net</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://goneri.lebouder.net/tags/kubernetes/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Wed, 28 Jan 2026 14:13:52 +0000</lastBuildDate>
+      <item>
+          <title>Quickly-validate-a-kubernetes-pull-secret</title>
+          <pubDate>Wed, 28 Jan 2026 14:13:52 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2026/01/quickly-validate-a-kubernetes-pull-secret/</link>
+          <guid>https://goneri.lebouder.net/posts/2026/01/quickly-validate-a-kubernetes-pull-secret/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2026/01/quickly-validate-a-kubernetes-pull-secret/">&lt;p&gt;This two commands are handy to quickly valide that a PullSecret secret is correct:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;kubectl get secret my-secret -o jsonpath=&amp;#39;{.data.\.dockerconfigjson}&amp;#39; | base64 --decode &amp;gt; ~&#x2F;tmp&#x2F;auth.json
+podman pull --authfile ~&#x2F;tmp&#x2F;auth.json quay.io&#x2F;some&#x2F;image
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Installing CRC on CoreOS</title>
+          <pubDate>Thu, 18 Dec 2025 20:06:41 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2025/12/installing-crc-on-coreos/</link>
+          <guid>https://goneri.lebouder.net/posts/2025/12/installing-crc-on-coreos/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2025/12/installing-crc-on-coreos/">&lt;p&gt;My local home server runs on CoreOS and today I went through the installation of Red Hat Code Ready Container, aka CRC.&lt;&#x2F;p&gt;
+&lt;p&gt;Download&lt;&#x2F;p&gt;
+&lt;p&gt;Go on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;console.redhat.com&#x2F;openshift&#x2F;create&#x2F;local&quot;&gt;https:&#x2F;&#x2F;console.redhat.com&#x2F;openshift&#x2F;create&#x2F;local&lt;&#x2F;a&gt; and download both:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;the crc binary, which they call OpenShift Local&lt;&#x2F;li&gt;
+&lt;li&gt;and the Pull secret&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Preparation&lt;&#x2F;p&gt;
+&lt;p&gt;The first thing to do is to allow the installation of local packages&lt;&#x2F;p&gt;
+&lt;p&gt;and install libvirt:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo bootc usr-overlay
+sudo dnf install -y libvirtd
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Add yourself in the libvirt group:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo usermod -a -G libvirt core
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Restart the polkit.service and libvirtd to run the new policies:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo systemctl restart polkit.service
+sudo systemctl restart libvirtd
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Set-up the local CRC installation, first extract the crc archive and copy the crc binary in &lt;code&gt;&#x2F;usr&#x2F;local&#x2F;bin&lt;&#x2F;code&gt;. You can now start the installation:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;crc config set preset openshift
+# optional, turn it &amp;quot;true&amp;quot;, to be able to access the host from the VM
+crc config set host-network-access true
+crc setup
+
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And finally, deploy the cluster:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;crc start --cpus=12 --memory=40000 -d 100
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;At the end of the installation, crc add an extra line to your &lt;code&gt;&#x2F;etc&#x2F;hosts&lt;&#x2F;code&gt;, you probably want to copy it to your local desktop machine in order to access the cluster through your web browser, and set-up a port redirection like this. I use sudo to be able to bind on my local port &lt;code&gt;443&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo ssh -L 443:127.0.0.1:443 -L 6443:127.0.0.1:6443 -i ~&#x2F;.ssh&#x2F;id_ed25519 core@your-coreos-box
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>List all pods by age that are not from OpenShift</title>
+          <pubDate>Wed, 10 Sep 2025 15:08:51 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2025/09/list-all-pods-by-age-that-are-not-from-openshift/</link>
+          <guid>https://goneri.lebouder.net/posts/2025/09/list-all-pods-by-age-that-are-not-from-openshift/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2025/09/list-all-pods-by-age-that-are-not-from-openshift/">&lt;p&gt;Get a flat list of all the pods, except those coming from openshift namespaces&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ oc -o json get pods -A --sort-by=.status.startTime |jq &amp;#39;.items[].metadata|select(.namespace | startswith(&amp;quot;openshift&amp;quot;) | not)|pick(.name, .namespace, .creationTimestamp)&amp;#39;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;and to find the largest pods by memory&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$oc adm top pods -A --sort-by=memory
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Ansible and k8s: How to get the K8S_AUTH_API_KEY value?</title>
+          <pubDate>Mon, 07 Dec 2020 21:37:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2020/12/ansible-and-k8s-how-to-get-the-k8s-auth-api-key-value/</link>
+          <guid>https://goneri.lebouder.net/posts/2020/12/ansible-and-k8s-how-to-get-the-k8s-auth-api-key-value/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2020/12/ansible-and-k8s-how-to-get-the-k8s-auth-api-key-value/">&lt;p&gt;The &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible-collections&#x2F;community.kubernetes&quot;&gt;community.kubernetes &lt;&#x2F;a&gt;collection accepts an &lt;code&gt;api_key&lt;&#x2F;code&gt; parameter that may sounds a bit confusing. It&#x27;s actually the value of the token of a serviceaccount. It&#x27;s actually an OAuth 2.0 (Bearer) token, it&#x27;s associated with a user and a secret key. It&#x27;s rather similar to what we can do with a login and a password.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;12&#x2F;ansible-and-k8s-how-to-get-the-k8s-auth-api-key-value&#x2F;luis.jpg&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;luis.jpg&quot; height=&quot;68&quot; width=&quot;68&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;In this example, we want to run our playbook as the k8sadmin user. We need to find the token associated with the user. The are actually looks for the a secret. You can list them this way:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;[root@kind-vm ~]# kubectl -n kube-system get secret
+NAME                                             TYPE                                  DATA   AGE
+(...)
+foobar                                           Opaque                                0      5h3m
+foobar-token-w8lmt                               kubernetes.io&#x2F;service-account-token   3      5h15m
+foobar2-token-hpd6f                              kubernetes.io&#x2F;service-account-token   3      5h9m
+generic-garbage-collector-token-l7hvk            kubernetes.io&#x2F;service-account-token   3      25h
+horizontal-pod-autoscaler-token-sssg5            kubernetes.io&#x2F;service-account-token   3      25h
+job-controller-token-dnfds                       kubernetes.io&#x2F;service-account-token   3      25h
+k8sadmin-token-bklpd                             kubernetes.io&#x2F;service-account-token   3      5h40m
+(...)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The use the&lt;code&gt; -n&lt;&#x2F;code&gt; parameter to specific the &lt;code&gt;kube-system&lt;&#x2F;code&gt; namespace. Our system account is in the list, it&#x27;s k8sadmin-token-bklpd. We can see the content of the token with this command:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;[root@kind-vm ~]# kubectl -n kube-system describe secret k8sadmin-token-bklpd
+Name:         k8sadmin-token-bklpd
+Namespace:    kube-system
+Labels:       &amp;lt;none&amp;gt;
+Annotations:  kubernetes.io&#x2F;service-account.name: k8sadmin
+             kubernetes.io&#x2F;service-account.uid: 412bf773-ca8e-4afa-a778-dac0f11b7807
+
+Type:  kubernetes.io&#x2F;service-account-token
+
+Data
+====
+namespace:  11 bytes
+token:      eyJhbGciO(...)2A
+ca.crt:     1066 bytes
+
+Here, you&amp;#39;re done. The token is in the command output. You need now to pass its content to Ansible. Just keep in mind the token needs to remain secret. So it&amp;#39;s a good idea to encrypt it with Ansible Vault.
+You can use the K8S_AUTH_API_KEY environment variable to pass the token to the k8s_* modules:
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;$ K8S_AUTH_API_KEY=eyJhbGciO(...)2A ansible-playbook my_playbook.yaml&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Ansible: Performance Impact of the Python version</title>
+          <pubDate>Thu, 26 Nov 2020 20:01:54 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2020/11/ansible-performance-impact-of-the-python-version/</link>
+          <guid>https://goneri.lebouder.net/posts/2020/11/ansible-performance-impact-of-the-python-version/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2020/11/ansible-performance-impact-of-the-python-version/">&lt;p&gt;Until recently, I was not really paying attention to the version of Python I was using with Ansible, as long as it was Python 3. The default version was always good enough for Ansible.&lt;&#x2F;p&gt;
+&lt;p&gt;During the last few weeks, I spent the majority of my time working on the performance of the community.kubernetes collection. The modules of this collection depend on a large library (OpenShift SDK) and Python needs to reload it before every task execution. The goal was to benefit from what is already in place with vmware.vmware_rest: &lt;a href=&quot;&#x2F;posts&#x2F;2020&#x2F;10&#x2F;how-to-speed-up-your-api-client-modules&#x2F;&quot;&gt;See: my AnsibleFest presentation&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;While working on this, I realized that my metrics were not consistent; I was not able to reproduce some test cases from 2 months ago. After a quick investigation, the Python version matters much more than expected.&lt;&#x2F;p&gt;
+&lt;p&gt;To compare the different Python versions, I decided to run some tests.&lt;&#x2F;p&gt;
+&lt;p&gt;The target host is a t2.medium instance (2 vCPUs, 4GiB) running on AWS. The operating system is Fedora 33, which is really handy for this because it includes all the Python versions from 3.6 to 3.10!&lt;&#x2F;p&gt;
+&lt;p&gt;I use the latest stable version of Ansible (2.10.3) that I install with &lt;code&gt;pip&lt;&#x2F;code&gt; in a Python virtual environment. &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;721160564904c5c0f35a1b47736ada58&quot;&gt;Here is the list of dependencies present in the virtualenvs.&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Finally, I deploy Kubernetes on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;podman.io&#x2F;&quot;&gt;Podman&lt;&#x2F;a&gt; with &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;kind.sigs.k8s.io&#x2F;&quot;&gt;Kubernetes Kind&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;For the first test, I use a Python one-liner to evaluate the time Python takes to load the OpenShift SDK. This is one of the operations I want to optimize for my work, so it matters a lot to me.&lt;&#x2F;p&gt;
+&lt;p&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;c4f8ec63d0c51f7e6236173b2c60db66&lt;&#x2F;p&gt;
+&lt;p&gt;Here, the loading is done 100 times in a row.&lt;&#x2F;p&gt;
+&lt;p&gt;The result shows a steady improvement of the performance since Python 3.6.&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;Python3.6&lt;&#x2F;th&gt;&lt;th&gt;Python3.7&lt;&#x2F;th&gt;&lt;th&gt;Python3.8&lt;&#x2F;th&gt;&lt;th&gt;Python3.9&lt;&#x2F;th&gt;&lt;th&gt;Python3.10&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;time (sec)&lt;&#x2F;td&gt;&lt;td&gt;48.401&lt;&#x2F;td&gt;&lt;td&gt;45.088&lt;&#x2F;td&gt;&lt;td&gt;41.751&lt;&#x2F;td&gt;&lt;td&gt;40.924&lt;&#x2F;td&gt;&lt;td&gt;40.385&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;With this test, the loading of the SDK is &lt;strong&gt;16.5% faster&lt;&#x2F;strong&gt; with Python 3.10.&lt;&#x2F;p&gt;
+&lt;p&gt;The next test does the same thing, but this time through Ansible. My test uses the following playbook:&lt;&#x2F;p&gt;
+&lt;p&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;ad252e30d48cfea99aaeb2e18736303e&lt;&#x2F;p&gt;
+&lt;p&gt;It runs the &lt;code&gt;k8s_info&lt;&#x2F;code&gt; module 100 times in a row. In addition, I use an &lt;code&gt;ansible.cfg&lt;&#x2F;code&gt; with the following content. This way, ansible-playbook returns a nice output of the task execution duration:&lt;&#x2F;p&gt;
+&lt;p&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;e364c17d6344fd4cd11c1ed2e0ba12ce&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;Python3.6&lt;&#x2F;th&gt;&lt;th&gt;Python3.7&lt;&#x2F;th&gt;&lt;th&gt;Python3.8&lt;&#x2F;th&gt;&lt;th&gt;Python3.9&lt;&#x2F;th&gt;&lt;th&gt;Python3.10&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;time (sec)&lt;&#x2F;td&gt;&lt;td&gt;85.5&lt;&#x2F;td&gt;&lt;td&gt;80.5&lt;&#x2F;td&gt;&lt;td&gt;75.35&lt;&#x2F;td&gt;&lt;td&gt;75.05&lt;&#x2F;td&gt;&lt;td&gt;71.19&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;It&#x27;s a &lt;strong&gt;16.76%&lt;&#x2F;strong&gt; boost between Python 3.6 and Python 3.10. I was not expecting such tight correlation between the two tests.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;11&#x2F;ansible-performance-impact-of-the-python-version&#x2F;image.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;11&#x2F;ansible-performance-impact-of-the-python-version&#x2F;image.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;While Python is obviously not the fastest technology out there, it&#x27;s great to see how its performance improves with each release. Python 3.10 is not even released yet and looks promising.&lt;&#x2F;p&gt;
+&lt;p&gt;If your playbooks use some modules with dependencies on large Python libraries, it may be interesting to try the latest Python versions.&lt;&#x2F;p&gt;
+&lt;p&gt;And for those who are still running Python 2.7, I get a &lt;strong&gt;49.2%&lt;&#x2F;strong&gt; performance boost between 2.7 and 3.10.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>How to start minishift on Fedora-33</title>
+          <pubDate>Thu, 05 Nov 2020 19:43:51 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2020/11/how-to-start-minishift-on-fedora-33/</link>
+          <guid>https://goneri.lebouder.net/posts/2020/11/how-to-start-minishift-on-fedora-33/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2020/11/how-to-start-minishift-on-fedora-33/">&lt;p&gt;&lt;strong&gt;update: minishift is basically dead and won&#x27;t support OpenShift 4. You probably want to use &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;developers.redhat.com&#x2F;blog&#x2F;2019&#x2F;09&#x2F;05&#x2F;red-hat-openshift-4-on-your-laptop-introducing-red-hat-codeready-containers&#x2F;&quot;&gt;crc&lt;&#x2F;a&gt; instead.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I just spent too much time trying to start &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;minishift&#x2F;minishift&quot;&gt;minishift&lt;&#x2F;a&gt; with my user account. After 3 hours fighting with permission issues between libvirt and the &lt;code&gt;~&#x2F;.minishift&lt;&#x2F;code&gt; directory, I&#x27;ve finally decided to stay sane and use &lt;code&gt;sudo&lt;&#x2F;code&gt;... This is how I start minishift on my Fedora 33.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;install-and-start-libvirt&quot;&gt;Install and start libvirt&lt;&#x2F;h3&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf install -y libvirt qemu-kvm
+sudo systemctl start libvirtd
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;fetch-and-install-minishift-and-the-kvm-driver&quot;&gt;Fetch and install minishift and the kvm driver&lt;&#x2F;h3&gt;
+&lt;pre&gt;&lt;code&gt;sudo dnf install -y origin-clients
+curl -L https:&#x2F;&#x2F;github.com&#x2F;minishift&#x2F;minishift&#x2F;releases&#x2F;download&#x2F;v1.34.3&#x2F;minishift-1.34.3-linux-amd64.tgz|sudo tar -C &#x2F;usr&#x2F;local&#x2F;bin -xvz minishift-1.34.3-linux-amd64&#x2F;minishift  --strip-components=1
+sudo curl -L https:&#x2F;&#x2F;github.com&#x2F;dhiltgen&#x2F;docker-machine-kvm&#x2F;releases&#x2F;download&#x2F;v0.10.0&#x2F;docker-machine-driver-kvm-centos7 -o &#x2F;usr&#x2F;local&#x2F;bin&#x2F;docker-machine-driver-kvm
+sudo chmod +x &#x2F;usr&#x2F;local&#x2F;bin&#x2F;docker-machine-driver-kvm
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;start-minishift-with-sudo&quot;&gt;Start minishift (with sudo...)&lt;&#x2F;h3&gt;
+&lt;p&gt;sudo minishift&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;and-configure-the-local-user&quot;&gt;And configure the local user&lt;&#x2F;h3&gt;
+&lt;pre&gt;&lt;code&gt;sudo cp -r &#x2F;root&#x2F;.kube &#x2F;home&#x2F;goneri
+sudo chown -R goneri:goneri &#x2F;home&#x2F;goneri&#x2F;.kube
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+    </channel>
+</rss>

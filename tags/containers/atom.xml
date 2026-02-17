@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Gonéri&#x27;s blog - containers</title>
+    <link rel="self" type="application/atom+xml" href="https://goneri.lebouder.net/tags/containers/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://goneri.lebouder.net"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-01-28T14:13:52+00:00</updated>
+    <id>https://goneri.lebouder.net/tags/containers/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Quickly-validate-a-kubernetes-pull-secret</title>
+        <published>2026-01-28T14:13:52+00:00</published>
+        <updated>2026-01-28T14:13:52+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2026/01/quickly-validate-a-kubernetes-pull-secret/"/>
+        <id>https://goneri.lebouder.net/posts/2026/01/quickly-validate-a-kubernetes-pull-secret/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2026/01/quickly-validate-a-kubernetes-pull-secret/">&lt;p&gt;This two commands are handy to quickly valide that a PullSecret secret is correct:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;kubectl get secret my-secret -o jsonpath=&amp;#39;{.data.\.dockerconfigjson}&amp;#39; | base64 --decode &amp;gt; ~&#x2F;tmp&#x2F;auth.json
+podman pull --authfile ~&#x2F;tmp&#x2F;auth.json quay.io&#x2F;some&#x2F;image
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Llama.cpp with Vulkan</title>
+        <published>2025-12-06T16:45:56+00:00</published>
+        <updated>2025-12-06T16:45:56+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/12/llama-cpp-with-vulkan/"/>
+        <id>https://goneri.lebouder.net/posts/2025/12/llama-cpp-with-vulkan/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/12/llama-cpp-with-vulkan/">&lt;p&gt;Running Llama.cpp with the Vulkan backends of my AMD and Intel graphic GPUs ends up being straightfoward and surprisingly fast.&lt;&#x2F;p&gt;
+&lt;p&gt;Build you container with:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;podman build -t llama-cpp-vulkan --target server -f .devops&#x2F;vulkan.Dockerfile .
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;and run it with:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;podman run -it --rm --security-opt seccomp=unconfined --device &#x2F;dev&#x2F;dri:&#x2F;dev&#x2F;dri --volume ~&#x2F;.cache:&#x2F;root&#x2F;.cache:z -p 8080:8080 localhost&#x2F;llama-cpp-vulkan -hf Qwen&#x2F;Qwen3-Embedding-8B-GGUF --embeddings
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In the example above, I reuse my ~&#x2F;.cache directory and I use the model to compute embeddings, thus the &lt;code&gt;--embeddings&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Pushing a container image over SSH</title>
+        <published>2025-10-20T18:00:04+00:00</published>
+        <updated>2025-10-20T18:00:04+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/10/pushing-a-container-image-over-ssh/"/>
+        <id>https://goneri.lebouder.net/posts/2025/10/pushing-a-container-image-over-ssh/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/10/pushing-a-container-image-over-ssh/">&lt;p&gt;I recently faced the situation where my registry was down and after a bit of digging, I ended up with this solution. In this example my image is called &lt;code&gt;quay.io&#x2F;goneri&#x2F;my-image:latest&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;podman image scp quay.io&#x2F;goneri&#x2F;my-image:latest ec2-user@your-host::quay.io&#x2F;goneri&#x2F;my-image:latest
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>VSCode container and OAuth2 Web callback</title>
+        <published>2025-02-03T16:59:14+00:00</published>
+        <updated>2025-02-03T16:59:14+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/02/vscode-container-and-oauth2-webcallback/"/>
+        <id>https://goneri.lebouder.net/posts/2025/02/vscode-container-and-oauth2-webcallback/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/02/vscode-container-and-oauth2-webcallback/">&lt;p&gt;I use Fedora Silverblue and my VSCode runs inside a container. I manage the container with the &quot;toolbox&quot; CLI tool. I also, to get the last version of Firefox, I use it&#x27;s upstream Flatpak To be able to get VSCode&#x27;s OAuth2 callback to work properly, I had to do a bit of extra configuration.&lt;&#x2F;p&gt;
+&lt;p&gt;You need a .desktop file to overload VSCode&#x27;s default way to open web URL. We don&#x27;t want to rely on the default xdg-open configuration (e.g: xdg-open http:&#x2F;&#x2F;www.google.com) which would otherwise try to open up a a new web browser INSIDE the container.&lt;&#x2F;p&gt;
+&lt;p&gt;Prepare the code-url-handler.desktop file, you need to adjust the Exec to prefix the command with the toolbox run call:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;ini&quot;&gt;[Desktop Entry]
+Name=Visual Studio Code - URL Handler
+Comment=Code Editing. Redefined.
+GenericName=Text Editor
+Exec=toolbox run --container vscode &#x2F;usr&#x2F;share&#x2F;code&#x2F;code --open-url %U
+Icon=vscode
+Type=Application
+NoDisplay=true
+StartupNotify=true
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=x-scheme-handler&#x2F;vscode;
+Keywords=vscode;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The goal here is to be sure we send back the vscode:&#x2F;&#x2F; link to the correct instance of VSCode (within the container!).&lt;&#x2F;p&gt;
+&lt;p&gt;To install the .desktop, run these commands in your system (not in a container).&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;desktop-file-install --dir=$HOME&#x2F;.local&#x2F;share&#x2F;applications code-url-handler.desktop
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And refresh the local cache:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;update-desktop-database ~&#x2F;.local&#x2F;share&#x2F;applications
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Inside the container we need to also install flatpak-xdg-utils and use it instead of the default &#x2F;usr&#x2F;bin&#x2F;xdg-open. This way your containerize VSCode will be able to open the web page inisde yet another container (the Flatpak app). This is a snippet of my Containerfile of my VSCode container:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;RUN dnf install -y flatpak-xdg-utils
+RUN ln -sf &#x2F;usr&#x2F;bin&#x2F;flatpak-xdg-open &#x2F;usr&#x2F;bin&#x2F;xdg-open
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;See: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;vscode-pull-request-github&#x2F;issues&#x2F;3472#issuecomment-1825008268&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;vscode-pull-request-github&#x2F;issues&#x2F;3472#issuecomment-1825008268&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Ansible&#x27;s vmware.vmware_rest collection, Execution Environment and ansible-navigator</title>
+        <published>2021-10-19T19:27:25+00:00</published>
+        <updated>2021-10-19T19:27:25+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/10/ansibles-vmware-vmware-rest-collection-execution-environment-and-ansible-navigator/"/>
+        <id>https://goneri.lebouder.net/posts/2021/10/ansibles-vmware-vmware-rest-collection-execution-environment-and-ansible-navigator/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/10/ansibles-vmware-vmware-rest-collection-execution-environment-and-ansible-navigator/">&lt;p&gt;Ansible-Navigator is a new terminal base UI for Ansible. It aims to provide an alternative to the different ansible commands that you probably already familiar with. To learn more about Ansible-Navigator, a couple of recent blog posts on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.ansible.com&#x2F;blog&#x2F;topic&#x2F;ansible-navigator&quot;&gt;Ansible Blog&lt;&#x2F;a&gt; cover this new tool. The Execution Environment, or just EE, is also a rather recent concept. With a EE Ansible and all its dependencies are shipped as a single container. You don&#x27;t need anymore to care about the Python version, the virtualenv, the collections and Python dependency.&lt;&#x2F;p&gt;
+&lt;p&gt;Ansible-Navigator provides an interface that is inspired by ansible-playbook. In this example we will see how we can use the CLI to run a playbook. My pass some credentials through environment variables, we will also see how to expose them properly.&lt;&#x2F;p&gt;
+&lt;p&gt;The first thing is to prepare a &lt;code&gt;ansible-navigator.yml&lt;&#x2F;code&gt; file in your project directory.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;yaml&quot;&gt;---
+ansible-navigator:
+   execution-environment:
+     container-engine: podman
+     enabled: True
+     image: myregister&#x2F;ansible-automation-platform-21-ee-supported-rhel8:2.1.0
+     pull-policy: never
+     environment-variables:
+        pass:
+          - VMWARE_VALIDATE_CERTS
+          - VMWARE_HOST
+          - VMWARE_PASSWORD
+          - VMWARE_USER
+          - ESXI1_PASSWORD
+          - ESXI1_HOSTNAME
+          - ESXI1_USERNAME
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The &lt;code&gt;image&lt;&#x2F;code&gt; key point on the container, I use a Fedora and Podman is the default for container. I ensure Navigator use the right engine with the &lt;code&gt;container-engine: podman&lt;&#x2F;code&gt; configuration. I use the &lt;code&gt;environment-variables&lt;&#x2F;code&gt; section to list all the variables that I want to expose in my container. If you want to read about all the other configuration options, just read the documentation at &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;ansible-navigator.readthedocs.io&#x2F;en&#x2F;latest&#x2F;&quot;&gt;https:&#x2F;&#x2F;ansible-navigator.readthedocs.io&#x2F;en&#x2F;latest&#x2F;&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;If your playbook depends on some roles, for instance within a &lt;code&gt;roles&lt;&#x2F;code&gt; directory, it&#x27;s important to call &lt;code&gt;ansible-navigator&lt;&#x2F;code&gt; from the root directory of your project. Otherwise, the roles won&#x27;t be reachable from within the container. If your roles are maintained at a different location, you can still expose their directories with the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;ansible-navigator.readthedocs.io&#x2F;en&#x2F;latest&#x2F;settings&#x2F;?highlight=volume-mounts#the-ansible-navigator-settings-file&quot;&gt;volume-mounts&lt;&#x2F;a&gt; option. This is in my opinion slightly less elegant.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;[goneri@t580 targets]$ ls -lh
+total 416K
+-rw-r--r--. 1 goneri goneri  469 Oct 19 15:09 ansible-navigator.yml
+drwxrwxr-x. 2 goneri goneri    6 Oct 19 15:39 playbooks
+drwxrwxr-x. 2 goneri goneri    6 Oct 19 15:39 roles
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now, I can just run my playbook with: &lt;code&gt;ansible-navigator run --mode stdout playbooks&#x2F;vcenter_vm_scenario1&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>How to clean Docker up when used on Btrfs</title>
+        <published>2015-01-08T13:05:16+00:00</published>
+        <updated>2015-01-08T13:05:16+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2015/01/how-to-clean-docker-up-when-used-on-btrfs/"/>
+        <id>https://goneri.lebouder.net/posts/2015/01/how-to-clean-docker-up-when-used-on-btrfs/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2015/01/how-to-clean-docker-up-when-used-on-btrfs/">&lt;p&gt;Docker often leaves behind files when I remove images with &lt;code&gt;rmi&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;systemctl stop docker.service
+systemctl stop docker.socket
+rm -rf &#x2F;var&#x2F;lib&#x2F;docker&#x2F;
+btrfs subvolume list &#x2F;var&#x2F;lib&#x2F;docker|awk &amp;#39;&#x2F;ID&#x2F; {print &amp;quot;&#x2F;&amp;quot;$9}&amp;#39;|xargs btrfs sub delete
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+</feed>

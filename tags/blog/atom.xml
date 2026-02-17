@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Gonéri&#x27;s blog - blog</title>
+    <link rel="self" type="application/atom+xml" href="https://goneri.lebouder.net/tags/blog/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://goneri.lebouder.net"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2009-08-06T22:21:57+00:00</updated>
+    <id>https://goneri.lebouder.net/tags/blog/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Nouveau blog !</title>
+        <published>2009-08-06T22:21:57+00:00</published>
+        <updated>2009-08-06T22:21:57+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2009/08/nouveau-blog/"/>
+        <id>https://goneri.lebouder.net/posts/2009/08/nouveau-blog/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2009/08/nouveau-blog/">&lt;p&gt;Après plus d&#x27;une année de réflexion, j&#x27;ai laissé tomber l&#x27;administration de mon propre Wordpress et je ne switcherai finalement pas à pyBlosxon que je trouve un peu juste au niveau interactivité.&lt;&#x2F;p&gt;
+&lt;p&gt;Donc finalement me voila chez &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.wordpress.com&quot;&gt;Wordpress.com&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Je vais de nouveau avoir un outil pour raler de façon efficace !&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>DotClear Vs Wordpress</title>
+        <published>2005-05-31T17:45:00+00:00</published>
+        <updated>2005-05-31T17:45:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2005/05/dotclear-vs-wordpress/"/>
+        <id>https://goneri.lebouder.net/posts/2005/05/dotclear-vs-wordpress/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2005/05/dotclear-vs-wordpress/">&lt;p&gt;Finalement, après quelques heures d&#x27;utilisation, j&#x27;ai prit la décision de revenir à Wordpress. Le problème qui m&#x27;a fait changer d&#x27;avis est que les liens qui pointes sur mes pages statiques générées par Wordpress font tomber dans le vide intersidéral du Ouaïb ! Et ça, c&#x27;est inacceptable !&lt;&#x2F;p&gt;
+&lt;p&gt;D&#x27;un autre coté je suis vraiment contant de DotClear et en particulier de la vitesse d&#x27;affichage. Maintenant que je sais que l&#x27;on peut basculer assez facilement, je tâcherais de switcher lorsque j&#x27;aurais trouvé une solution.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>MSN search</title>
+        <published>2005-05-31T17:26:00+00:00</published>
+        <updated>2005-05-31T17:26:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2005/05/msn-search/"/>
+        <id>https://goneri.lebouder.net/posts/2005/05/msn-search/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2005/05/msn-search/">&lt;p&gt;Depuis quelques mois déjà, j&#x27;utilise &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;addons.mozilla.org&#x2F;extensions&#x2F;moreinfo.php?application=firefox&amp;amp;version=1.0&amp;amp;os=Windows&amp;amp;numpg=10&amp;amp;id=189&quot;&gt;une extension pour Firefox&lt;&#x2F;a&gt; qui permet d&#x27;avoir une miniature de chaques pages que listé dans les résultats de Google. C&#x27;est très pratique lorsque on est a la recherche d&#x27;un site que l&#x27;on a fermé trop vite et que l&#x27;on n&#x27;a qu&#x27;un vague souvenir de sa charte graphique...&lt;&#x2F;p&gt;
+&lt;p&gt;MSN sembe s&#x27;y &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;sea.search.fr.msn.ch&#x2F;sphome.aspx&quot;&gt;être mis aussi&lt;&#x2F;a&gt;, il est maintenant possible d&#x27;avoir une miniature du site a coté de la recherche. Pour le moment la feature n&#x27;est pas utilisé sur le site principal. C&#x27;est curieux de voir que lorsque Microsft n&#x27;a pas le monomple, il cherche a inover.&lt;&#x2F;p&gt;
+&lt;p&gt;Il ne reste plus qu&#x27;a espérer que Google intègre directement dans son moteur cette option.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>DotClear</title>
+        <published>2005-05-31T17:24:00+00:00</published>
+        <updated>2005-05-31T17:24:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2005/05/dotclear/"/>
+        <id>https://goneri.lebouder.net/posts/2005/05/dotclear/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2005/05/dotclear/">&lt;p&gt;Ce soir, je voulais mettre à jour mon &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;wordpress.org&#x2F;&quot;&gt;Wordpress&lt;&#x2F;a&gt; pour corriger les derniers problèmes de sécurités. Au final, me voila avec un &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.dotclear.net&#x2F;&quot;&gt;DotClear&lt;&#x2F;a&gt; tous neuf :).&lt;&#x2F;p&gt;
+&lt;p&gt;La migration c&#x27;est bien passé à l&#x27;exeption d&#x27;un probleme d&#x27;id pour la catégorie «Générale».&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

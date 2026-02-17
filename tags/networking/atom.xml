@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Gonéri&#x27;s blog - networking</title>
+    <link rel="self" type="application/atom+xml" href="https://goneri.lebouder.net/tags/networking/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://goneri.lebouder.net"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-05-16T18:40:35+00:00</updated>
+    <id>https://goneri.lebouder.net/tags/networking/atom.xml</id>
+    <entry xml:lang="en">
+        <title>firewalld: add a new service</title>
+        <published>2024-05-16T18:40:35+00:00</published>
+        <updated>2024-05-16T18:40:35+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2024/05/firewalld-add-a-new-service/"/>
+        <id>https://goneri.lebouder.net/posts/2024/05/firewalld-add-a-new-service/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2024/05/firewalld-add-a-new-service/">&lt;p&gt;Create a new service entry:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --permanent --new-service=ollama
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Associate the right port with new service:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --permanent --service=ollama --add-port=11434&#x2F;tcp
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Restart the firewalld, so it&#x27;s aware of the new service:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --reload
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Finally, associate the service with the Zone. I don&#x27;t use &lt;code&gt;--permanent&lt;&#x2F;code&gt; here on purpose. This way the association will be lost when I will reboot the machine:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;firewall-cmd --add-service=ollama --zone=nm-shared
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Sharing Internet connection on Fedora 40</title>
+        <published>2024-05-16T00:30:02+00:00</published>
+        <updated>2024-05-16T00:30:02+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2024/05/sharing-internet-connection-on-fedora-40/"/>
+        <id>https://goneri.lebouder.net/posts/2024/05/sharing-internet-connection-on-fedora-40/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2024/05/sharing-internet-connection-on-fedora-40/">&lt;p&gt;It&#x27;s surprisingly easy to build a router from a Fedora 40 box. Here eno1 is connected to my cable modem and enp8s0 is connected to my local network.&lt;&#x2F;p&gt;
+&lt;p&gt;To NAT the Internet connection:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;nmcli c add type ethernet con-name internet ifname eno1 connection.zone external ipv4.method auto
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And set up the DHCP on the local network, the machine will use the IP 10.42.0.1 IP by default:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;nmcli c add type ethernet con-name lebouder.net ifname enp8s0 connection.zone nm-shared ipv4.method=shared
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Vidéotron Helix Fi 2</title>
+        <published>2023-12-15T03:42:47+00:00</published>
+        <updated>2023-12-15T03:42:47+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2023/12/videotron-helix-fi-2/"/>
+        <id>https://goneri.lebouder.net/posts/2023/12/videotron-helix-fi-2/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2023/12/videotron-helix-fi-2/">&lt;p&gt;Quick rant.&lt;&#x2F;p&gt;
+&lt;p&gt;Vidéotron Helix Fi 2 is the worst modem I have ever seen and the fact the ISP forces customers to use it is embarrassing:&lt;&#x2F;p&gt;
+&lt;p&gt;There is no IPv6 despite the fact that it&#x27;s supposed to sort of work on their website. That was the main reason why I switched to Vidéotron. There is no way to do something as basic as bridge mode. Their definition of a &quot;bridge mode&quot; is actually a bloody ugly double NAT. Also you cannot change the DNS and pretty much all the features that you expect from a modern router are just missing. Finally even the Wifi is pretty bad. My 7-year-old router has pretty much the same coverage. What a sad disappointment for a $288 device.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>0ad, Firewall and Fedora33</title>
+        <published>2021-02-21T02:19:17+00:00</published>
+        <updated>2021-02-21T02:19:17+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/02/0ad-firewall-and-fedora33/"/>
+        <id>https://goneri.lebouder.net/posts/2021/02/0ad-firewall-and-fedora33/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/02/0ad-firewall-and-fedora33/">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;02&#x2F;0ad-firewall-and-fedora33&#x2F;0ad.jpg&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;02&#x2F;0ad-firewall-and-fedora33&#x2F;0ad.jpg&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;By default, the firewall will prevent connection to your &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;play0ad.com&#x2F;&quot;&gt;0ad&lt;&#x2F;a&gt; server. To adjust that, you need to open up the port 20595 (UDP). This three lines create a Firewalld service called 0ad, attach it to the default zone and reload the firewall:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo firewall-cmd --permanent --new-service=0ad --set-description=&amp;quot;0ad, A free, open-source game of ancient warfare&amp;quot; --add-port=20595&#x2F;udp
+$ sudo firewall-cmd --zone=FedoraWorkstation --add-service=0ad --permanent
+$ sudo firewall-cmd --reload
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>How to waste a Friday...</title>
+        <published>2021-01-24T00:14:24+00:00</published>
+        <updated>2021-01-24T00:14:24+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/01/376-2/"/>
+        <id>https://goneri.lebouder.net/posts/2021/01/376-2/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/01/376-2/">&lt;p&gt;Yesterday morning I got frustrated by a really slow download speed of some files. What should have taken seconds with my 400 Mb&#x2F;s connection actually took more than 16 minutes. In addition, I was able to reproduce the problem on my router.&lt;&#x2F;p&gt;
+&lt;p&gt;Here, the curl statistics show a 26:52 minute download at 415kb&#x2F;s:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -o &#x2F;dev&#x2F;null https:&#x2F;&#x2F;s3.us-east-2.amazonaws.com&#x2F;zuul-images&#x2F;fedora-open-vm-tools-livecd.iso% Total % Received % Xferd Average Speed Time Time Time Current Dload Upload Total Spent Left Speed 0 627M 0 2684k 0 0 398k 0 0:26:52 0:00:06 0:26:46 415k^C
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Just to be sure, I retried with a lower MTU. The issue remained. Two friends in Montréal also confirmed everything worked well for them.&lt;&#x2F;p&gt;
+&lt;p&gt;My laptop uses a wired connection that I&#x27;ve been using for years now. A large part of the population works from home and the Internet is under constant pressure. So I suspected an ISP bandwidth limitation to preserve the Quality of Service. I contacted them and ... complained... a lot.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;01&#x2F;376-2&#x2F;teksavvy1.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;01&#x2F;376-2&#x2F;teksavvy1.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;At some point, the technician managed to get my attention and asked me to connect the modem directly to my laptop.&lt;&#x2F;p&gt;
+&lt;p&gt;This is an obviously pointless request since the downloads are also slow from the router. But well, if I want them to act, I also need to be cooperative. I gave it a try and... I immediately felt embarrassed. It was damn fast! The download speed was actually even above the 400 Mb&#x2F;s ceiling. WTF.&lt;&#x2F;p&gt;
+&lt;p&gt;So I started to reconsider my whole life in a deep introspection. How can this be real? My router runs OpenBSD 6.7 with an absolutely basic pf configuration. Its hardware is decent (Intel(R) Core(TM) i3-2120 CPU @ 3.30GHz). The router is connected to the modem with a very common Realtek RTL8125 and the LAN is connected to an Intel I350. I can download large files between my laptop and the router at full speed.&lt;&#x2F;p&gt;
+&lt;p&gt;All this ruled out my laptop, the ethernet cable, and the router&#x27;s I350. The last potential culprit was the Realtek NIC. I replaced it with another Intel I350 and retried. Same problem. The downloads were still slow on my laptop and the router. The Realtek NIC was innocent.&lt;&#x2F;p&gt;
+&lt;p&gt;So I started thinking. Why is the rest of the family not really affected by the poor performance of the Internet connection? And so, I tried to download the same file from another computer. And it was fast... Damn, what&#x27;s going on? I switched some ports of the switch just to be sure. The problem was now between my laptop and the ethernet cable.&lt;&#x2F;p&gt;
+&lt;p&gt;My laptop uses a bonding of the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;fedoramagazine.org&#x2F;bond-wifi-and-ethernet-for-easier-networking-mobility&#x2F;&quot;&gt;WiFi and the wired connection&lt;&#x2F;a&gt;. This gives me the ability to move around with the laptop without losing all my open connections. For instance, I can remove my ethernet cable in the middle of a meeting and the laptop will use the WiFi seamlessly. But well, I digress. I removed this special configuration. And... the problem remained.&lt;&#x2F;p&gt;
+&lt;p&gt;But during this last check, I also saw a large number of RX errors associated with the laptop NIC. Interesting; let me try another NIC. I plugged in a USB 3.0 Realtek RTL8156 NIC and this time... it worked.&lt;&#x2F;p&gt;
+&lt;p&gt;The ethernet cable is a CAT6 cable and is not that long (20m), but it seemed like the NIC (Intel I219-LM) of my T580 was a bit picky with the quality of the signal. It could also be a problem with the e1000e driver of the new 5.10 kernel. The cable was good, I had just tested it. Anyway, I put a switch just before my laptop NIC and everything works great now.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m still not sure why my downloads are still slow on OpenBSD. But this is an adventure for another day. The slow downloads were all with HTTPS sites (S3 and a Caddy website), the DF flag was on (TCP Don&#x27;t Fragment) which exacerbated the impact of the transmission errors.&lt;&#x2F;p&gt;
+&lt;p&gt;I found the whole situation to be interesting. It&#x27;s a series of wrong assumptions and the solution is really far from what I would have imagined.&lt;&#x2F;p&gt;
+&lt;p&gt;Also, thank you Teksavvy for your great support.&lt;&#x2F;p&gt;
+&lt;p&gt;Update: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.snellman.net&#x2F;blog&#x2F;archive&#x2F;2017-07-20-s3-mystery&#x2F;&quot;&gt;this&lt;&#x2F;a&gt; partially explains the OpenBSD S3 download problem.&lt;&#x2F;p&gt;
+&lt;p&gt;Update 2: I&#x27;m now running Linux 5.10.11 and... I don&#x27;t see any RX errors anymore! The S3 download is just as fast as it should be. So this was indeed a problem with the e1000e driver.&lt;&#x2F;p&gt;
+&lt;p&gt;Update 3: The problem is back, I&#x27;m not sure if it&#x27;s a hardware limitation of the NIC itself. I now use the Realtek NIC all the time.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Avahi &#x2F; Bonjour on Windows</title>
+        <published>2013-06-16T12:10:05+00:00</published>
+        <updated>2013-06-16T12:10:05+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2013/06/avahi-bonjour-on-windows/"/>
+        <id>https://goneri.lebouder.net/posts/2013/06/avahi-bonjour-on-windows/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2013/06/avahi-bonjour-on-windows/">&lt;p&gt;How to resolve .local Avahi&#x2F;Bonjour names on Windows: http:&#x2F;&#x2F;support.apple.com&#x2F;kb&#x2F;DL999&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>S270 Wifi au boot sur Debian Sid</title>
+        <published>2006-01-07T03:11:00+00:00</published>
+        <updated>2006-01-07T03:11:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/"/>
+        <id>https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/">&lt;p&gt;Ce soir, j&#x27;ai découvert que pour que les parametres wireless_* du &#x2F;etc&#x2F;network&#x2F;interfaces l&#x27;interface doit déjà être &quot;up&quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;Voila ce que ça donne :&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;iface eth1 inet dhcp
+# j&amp;#39;up l&amp;#39;interface avant tout
+pre-up ifconfig eth1 up
+wireless_mode managed
+wireless_channel 6
+wireless_nick clara
+wireless_key off
+# sinon j&amp;#39;ai des problemes de stablitié du signal
+wireles_rate 11M
+# essid en dernier !
+wireless_essid BZH
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;J&#x27;ai ce problème avec le chipset rt2500, ça mérite surement un rapport de bug :). A étudier…&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

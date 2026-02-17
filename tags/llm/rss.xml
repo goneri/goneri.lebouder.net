@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Gonéri&#x27;s blog - llm</title>
+      <link>https://goneri.lebouder.net</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://goneri.lebouder.net/tags/llm/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Mon, 12 Jan 2026 16:23:59 +0000</lastBuildDate>
+      <item>
+          <title>Claude and Github MCP tools</title>
+          <pubDate>Mon, 12 Jan 2026 16:23:59 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2026/01/claude-and-github-mcp-tools/</link>
+          <guid>https://goneri.lebouder.net/posts/2026/01/claude-and-github-mcp-tools/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2026/01/claude-and-github-mcp-tools/">&lt;p&gt;You already use Github with the &lt;code&gt;gh&lt;&#x2F;code&gt; command and want to enable the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;github&#x2F;github-mcp-server&#x2F;blob&#x2F;main&#x2F;docs&#x2F;installation-guides&#x2F;install-claude.md&quot;&gt;MCP service in Claude Code&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;In this case, you don&#x27;t need to prepare a new Github Personal Access Token, but you can just
+reuse the &lt;code&gt;gh&lt;&#x2F;code&gt;&#x27;s token that &lt;code&gt;gh auth token&lt;&#x2F;code&gt; returns:&lt;&#x2F;p&gt;
+&lt;p&gt;With &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;fishshell.com&#x2F;&quot;&gt;Fishshell&lt;&#x2F;a&gt;, this looks like this:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;claude mcp add-json github -- (printf &amp;#39;{&amp;quot;type&amp;quot;:&amp;quot;http&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;https:&#x2F;&#x2F;api.githubcopilot.com&#x2F;mcp&amp;quot;,&amp;quot;headers&amp;quot;:{&amp;quot;Authorization&amp;quot;:&amp;quot;Bearer %s&amp;quot;}}&amp;#39; (gh auth token))
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;or Bash:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;claude mcp add-json github &amp;quot;$(printf &amp;#39;{&amp;quot;type&amp;quot;:&amp;quot;http&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;https:&#x2F;&#x2F;api.githubcopilot.com&#x2F;mcp&amp;quot;,&amp;quot;headers&amp;quot;:{&amp;quot;Authorization&amp;quot;:&amp;quot;Bearer %s&amp;quot;}}&amp;#39; &amp;quot;$(gh auth token)&amp;quot;)&amp;quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2026&#x2F;01&#x2F;claude-and-github-mcp-tools&#x2F;screenshot.png&quot; alt=&quot;screenshot&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Llama.cpp with Vulkan</title>
+          <pubDate>Sat, 06 Dec 2025 16:45:56 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2025/12/llama-cpp-with-vulkan/</link>
+          <guid>https://goneri.lebouder.net/posts/2025/12/llama-cpp-with-vulkan/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2025/12/llama-cpp-with-vulkan/">&lt;p&gt;Running Llama.cpp with the Vulkan backends of my AMD and Intel graphic GPUs ends up being straightfoward and surprisingly fast.&lt;&#x2F;p&gt;
+&lt;p&gt;Build you container with:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;podman build -t llama-cpp-vulkan --target server -f .devops&#x2F;vulkan.Dockerfile .
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;and run it with:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;podman run -it --rm --security-opt seccomp=unconfined --device &#x2F;dev&#x2F;dri:&#x2F;dev&#x2F;dri --volume ~&#x2F;.cache:&#x2F;root&#x2F;.cache:z -p 8080:8080 localhost&#x2F;llama-cpp-vulkan -hf Qwen&#x2F;Qwen3-Embedding-8B-GGUF --embeddings
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In the example above, I reuse my ~&#x2F;.cache directory and I use the model to compute embeddings, thus the &lt;code&gt;--embeddings&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Ollama: apply a Lora on a model</title>
+          <pubDate>Wed, 30 Apr 2025 18:46:31 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2025/04/ollama-apply-a-lora-on-a-model/</link>
+          <guid>https://goneri.lebouder.net/posts/2025/04/ollama-apply-a-lora-on-a-model/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2025/04/ollama-apply-a-lora-on-a-model/">&lt;p&gt;First, I&#x27;ve prepared a Lora with &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;axolotl-ai-cloud&#x2F;axolotl&quot;&gt;Axolotl&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;axolotl train examples&#x2F;llama-3&#x2F;lora-1b.yml
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;At the end of the process, I&#x27;ve a new directory called &lt;code&gt;outputs&#x2F;lora-out&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;I now need to prepare a new model that will be a mix of an Original Llama3 model and this new file called &lt;code&gt;llama3.1-modelfile&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;FROM llama3.2:1b
+
+ADAPTER &#x2F;home&#x2F;ec2-user&#x2F;axolotl&#x2F;outputs&#x2F;lora-out
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Finally, I can prepare my local model with:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;ollama create llama3_with_lora -f llama3.1-modelfile
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The operation lasts a couple of seconds and I can now start a new Chat:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;ollama run llama3_with_lora
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+    </channel>
+</rss>

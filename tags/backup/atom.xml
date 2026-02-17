@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Gonéri&#x27;s blog - backup</title>
+    <link rel="self" type="application/atom+xml" href="https://goneri.lebouder.net/tags/backup/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://goneri.lebouder.net"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2023-08-12T17:16:55+00:00</updated>
+    <id>https://goneri.lebouder.net/tags/backup/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Nextcloud photo backups</title>
+        <published>2023-08-12T17:16:55+00:00</published>
+        <updated>2023-08-12T17:16:55+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2023/08/nextcloud-photos-backups/"/>
+        <id>https://goneri.lebouder.net/posts/2023/08/nextcloud-photos-backups/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2023/08/nextcloud-photos-backups/">&lt;p&gt;I&#x27;ve been doing backups for my family for years now. In the past, I used several different systems including rsync and &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;burp.grke.org&#x2F;&quot;&gt;burp&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Recently, I decided to stop hosting my own backup server and move to Nextcloud. I use the Nextcloud&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.hetzner.com&#x2F;storage&#x2F;storage-share&quot;&gt; offer from Hetzner&lt;&#x2F;a&gt; and I&#x27;m pretty happy with the result. I appreciate having a solution that just works without having to think about it.&lt;&#x2F;p&gt;
+&lt;p&gt;Regarding the client applications. The Nextcloud application on Android works fine but is also not really pleasant to use. I ended up buying the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;play.google.com&#x2F;store&#x2F;apps&#x2F;details?id=dk.tacit.android.foldersync.full&amp;amp;hl=en&amp;amp;gl=US&quot;&gt;FolderSync Pro&lt;&#x2F;a&gt; application for myself. I strongly recommend it even if I would prefer a better free software solution. I use Webdav on Linux to synchronize my files. Both Nautilus and the davfs driver work as expected. MacOS is also able to mount the Webdav shares, this is a much better solution than the Nextcloud application for Mac. However, Photos stores the pictures in some kind of local binary DB and there is no easy way to export them. Photos comes with an &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;support.apple.com&#x2F;en-ca&#x2F;guide&#x2F;photos&#x2F;pht6e157c5f&#x2F;mac&quot;&gt;&quot;Export&quot; feature&lt;&#x2F;a&gt; that is all manual and pathologically slow. But there is a solution! I recently discovered &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;RhetTbull&#x2F;osxphotos&quot;&gt;osxphotos&lt;&#x2F;a&gt; and it&#x27;s an absolute gem.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Getting BURP to use Puppet CA</title>
+        <published>2013-10-16T13:20:56+00:00</published>
+        <updated>2013-10-16T13:20:56+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/"/>
+        <id>https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/">&lt;p&gt;I&#x27;m a big fan of &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;burp.grke.org&#x2F;&quot;&gt;BURP&lt;&#x2F;a&gt; to maintain my backups. This article explains how to reuse the PuppetMaster CA for authentication. I use Debian burp package on Wheezy.&lt;&#x2F;p&gt;
+&lt;p&gt;First, you need to generate the dhfile.pem on both the server and the agent:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;openssl dhparam -outform PEM -out &#x2F;etc&#x2F;burp&#x2F;dhfile.pem 1024
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-server&quot;&gt;The server&lt;&#x2F;h2&gt;
+&lt;p&gt;The configuration is in &#x2F;etc&#x2F;burp&#x2F;burp-server.conf:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;mode = server
+(...)
+# ca_conf = &#x2F;etc&#x2F;burp&#x2F;CA.cnf
+# ca_name = burpCA
+# ca_server_name = burpserver
+# ca_burp_ca = &#x2F;usr&#x2F;sbin&#x2F;burp_ca
+(...)
+ssl_cert_ca = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;ca.pem
+ssl_cert = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;ca&#x2F;signed&#x2F;newpuppet.lebouder.net.pem
+ssl_key = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;private_keys&#x2F;newpuppet.lebouder.net.pem
+ssl_key_password = password
+ssl_dhfile = &#x2F;etc&#x2F;burp&#x2F;dhfile.pem
+(...)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-agent&quot;&gt;The agent&lt;&#x2F;h2&gt;
+&lt;p&gt;The configuration file is &#x2F;etc&#x2F;burp&#x2F;burp.conf:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;mode = client
+port = 4971
+server = newpuppet.lebouder.net
+ssl_cert_ca = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;ca.pem
+ssl_cert = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;newclient.lebouder.net.pem
+ssl_key = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;private_keys&#x2F;newclient.lebouder.net.pem
+ssl_peer_cn = newpuppet.lebouder.net
+(...)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;newpuppet.lebouder.net is the Puppet server.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>git gc and bup</title>
+        <published>2011-12-31T00:34:23+00:00</published>
+        <updated>2011-12-31T00:34:23+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2011/12/git-gc-and-bup/"/>
+        <id>https://goneri.lebouder.net/posts/2011/12/git-gc-and-bup/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2011/12/git-gc-and-bup/">&lt;p&gt;To avoid the OOM killer after a &lt;code&gt;git gc&lt;&#x2F;code&gt; call on a bup repository:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;$ git config --global pack.windowMemory 512m
+$ git config --global pack.threads 10
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Backup LVM LV with bup</title>
+        <published>2011-12-31T00:11:50+00:00</published>
+        <updated>2011-12-31T00:11:50+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2011/12/backup-lvm-lv-with-bup/"/>
+        <id>https://goneri.lebouder.net/posts/2011/12/backup-lvm-lv-with-bup/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2011/12/backup-lvm-lv-with-bup/">&lt;p&gt;Bup is a backup software that uses git for storage. Bup imports chunks of files to deduplicate large files.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;$ cat &#x2F;dev&#x2F;mapper&#x2F;virtualmachines-sarge | bup split -n virtualmachines-sarges
+bloom: adding 1 file (10967 objects).
+$ bup join virtualmachines-sarges &amp;gt; &#x2F;tmp&#x2F;sarges.img
+$ file &#x2F;tmp&#x2F;sarges.img &#x2F;tmp&#x2F;sarges.img: x86 boot sector; GRand Unified Bootloader, stage1 version 0x3, stage2 address 0x2000, stage2 segment 0x200, GRUB version 0.94; partition 1: ID=0x83, active, starthead 1, startsector 63, 9976302 sectors; partition 2: ID=0x5, starthead 0, startsector 9976365, 498015 sectors, code offset 0x48
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+</feed>

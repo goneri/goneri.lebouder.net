@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Gonéri&#x27;s blog - vmware</title>
+    <link rel="self" type="application/atom+xml" href="https://goneri.lebouder.net/tags/vmware/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://goneri.lebouder.net"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2021-10-19T19:27:25+00:00</updated>
+    <id>https://goneri.lebouder.net/tags/vmware/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Ansible&#x27;s vmware.vmware_rest collection, Execution Environment and ansible-navigator</title>
+        <published>2021-10-19T19:27:25+00:00</published>
+        <updated>2021-10-19T19:27:25+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/10/ansibles-vmware-vmware-rest-collection-execution-environment-and-ansible-navigator/"/>
+        <id>https://goneri.lebouder.net/posts/2021/10/ansibles-vmware-vmware-rest-collection-execution-environment-and-ansible-navigator/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/10/ansibles-vmware-vmware-rest-collection-execution-environment-and-ansible-navigator/">&lt;p&gt;Ansible-Navigator is a new terminal base UI for Ansible. It aims to provide an alternative to the different ansible commands that you probably already familiar with. To learn more about Ansible-Navigator, a couple of recent blog posts on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.ansible.com&#x2F;blog&#x2F;topic&#x2F;ansible-navigator&quot;&gt;Ansible Blog&lt;&#x2F;a&gt; cover this new tool. The Execution Environment, or just EE, is also a rather recent concept. With a EE Ansible and all its dependencies are shipped as a single container. You don&#x27;t need anymore to care about the Python version, the virtualenv, the collections and Python dependency.&lt;&#x2F;p&gt;
+&lt;p&gt;Ansible-Navigator provides an interface that is inspired by ansible-playbook. In this example we will see how we can use the CLI to run a playbook. My pass some credentials through environment variables, we will also see how to expose them properly.&lt;&#x2F;p&gt;
+&lt;p&gt;The first thing is to prepare a &lt;code&gt;ansible-navigator.yml&lt;&#x2F;code&gt; file in your project directory.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;yaml&quot;&gt;---
+ansible-navigator:
+   execution-environment:
+     container-engine: podman
+     enabled: True
+     image: myregister&#x2F;ansible-automation-platform-21-ee-supported-rhel8:2.1.0
+     pull-policy: never
+     environment-variables:
+        pass:
+          - VMWARE_VALIDATE_CERTS
+          - VMWARE_HOST
+          - VMWARE_PASSWORD
+          - VMWARE_USER
+          - ESXI1_PASSWORD
+          - ESXI1_HOSTNAME
+          - ESXI1_USERNAME
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The &lt;code&gt;image&lt;&#x2F;code&gt; key point on the container, I use a Fedora and Podman is the default for container. I ensure Navigator use the right engine with the &lt;code&gt;container-engine: podman&lt;&#x2F;code&gt; configuration. I use the &lt;code&gt;environment-variables&lt;&#x2F;code&gt; section to list all the variables that I want to expose in my container. If you want to read about all the other configuration options, just read the documentation at &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;ansible-navigator.readthedocs.io&#x2F;en&#x2F;latest&#x2F;&quot;&gt;https:&#x2F;&#x2F;ansible-navigator.readthedocs.io&#x2F;en&#x2F;latest&#x2F;&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;If your playbook depends on some roles, for instance within a &lt;code&gt;roles&lt;&#x2F;code&gt; directory, it&#x27;s important to call &lt;code&gt;ansible-navigator&lt;&#x2F;code&gt; from the root directory of your project. Otherwise, the roles won&#x27;t be reachable from within the container. If your roles are maintained at a different location, you can still expose their directories with the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;ansible-navigator.readthedocs.io&#x2F;en&#x2F;latest&#x2F;settings&#x2F;?highlight=volume-mounts#the-ansible-navigator-settings-file&quot;&gt;volume-mounts&lt;&#x2F;a&gt; option. This is in my opinion slightly less elegant.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;[goneri@t580 targets]$ ls -lh
+total 416K
+-rw-r--r--. 1 goneri goneri  469 Oct 19 15:09 ansible-navigator.yml
+drwxrwxr-x. 2 goneri goneri    6 Oct 19 15:39 playbooks
+drwxrwxr-x. 2 goneri goneri    6 Oct 19 15:39 roles
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now, I can just run my playbook with: &lt;code&gt;ansible-navigator run --mode stdout playbooks&#x2F;vcenter_vm_scenario1&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Ansible: How we prepare the vSphere instances of the VMware CI</title>
+        <published>2020-12-14T19:22:08+00:00</published>
+        <updated>2020-12-14T19:22:08+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/12/ansible-how-we-prepare-the-vsphere-instance-for-the-vmware-ci/"/>
+        <id>https://goneri.lebouder.net/posts/2020/12/ansible-how-we-prepare-the-vsphere-instance-for-the-vmware-ci/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/12/ansible-how-we-prepare-the-vsphere-instance-for-the-vmware-ci/">&lt;p&gt;As briefly explained in &lt;a href=&quot;&#x2F;posts&#x2F;2020&#x2F;08&#x2F;vmware-ci-of-ansible-modules-a-retrospective&#x2F;&quot;&gt;CI of the Ansible modules for VMware: a retrospective&lt;&#x2F;a&gt;, the Ansible CI uses OpenStack to spawn ephemeral vSphere labs. Our CI tests are run against them.&lt;&#x2F;p&gt;
+&lt;p&gt;A full vSphere deployment is a long process that requires quite a lot of resources. In addition to that, vSphere is rather picky regarding its execution environment.&lt;&#x2F;p&gt;
+&lt;p&gt;The CI of the VMware modules for Ansible runs on OpenStack. Our OpenStack providers use KVM-based hypervisors. They expect images in the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Qcow&quot;&gt;qcow2 format&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;In this blog post, we will explain how we prepare a cloud image of vSphere (also called a golden image).&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;12&#x2F;ansible-how-we-prepare-the-vsphere-instance-for-the-vmware-ci&#x2F;image.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;12&#x2F;ansible-how-we-prepare-the-vsphere-instance-for-the-vmware-ci&#x2F;image.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;a full lab running on libvirt&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;first-get-a-large-esxi-instance&quot;&gt;First, get a large ESXi instance&lt;&#x2F;h2&gt;
+&lt;p&gt;The vSphere (VCSA) installation process depends on an ESXi. In our case, we use &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;esxi-cloud-images&quot;&gt;a script&lt;&#x2F;a&gt; and &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;virt-lightning.org&#x2F;&quot;&gt;Virt-Lightning&lt;&#x2F;a&gt; to prepare and run an ESXi image on Libvirt. But you can use your own ESXi node as long as it meets the following minimal constraints:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;12GB of memory&lt;&#x2F;li&gt;
+&lt;li&gt;50GB of disk space&lt;&#x2F;li&gt;
+&lt;li&gt;2 vCPUs&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;deploy-the-vsphere-vm-vcsa&quot;&gt;Deploy the vSphere VM (VCSA)&lt;&#x2F;h2&gt;
+&lt;p&gt;For this, I use my own role called &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;ansible-role-vcenter-instance&quot;&gt;goneri.ansible-role-vcenter-instance&lt;&#x2F;a&gt;. It delegates the deployment to the &lt;code&gt;vcsa-deploy&lt;&#x2F;code&gt; command. As a result, you don&#x27;t need any human interaction during the full process. This is handy if you want to deploy your vSphere in a CI environment.&lt;&#x2F;p&gt;
+&lt;p&gt;At the end of the process, you&#x27;ve got a large VM running on your ESXi node.&lt;&#x2F;p&gt;
+&lt;p&gt;In my case, all these steps are handled by the following playbook: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;vcsa_to_qcow2&#x2F;blob&#x2F;master&#x2F;install_vcsa.yml&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;vcsa_to_qcow2&#x2F;blob&#x2F;master&#x2F;install_vcsa.yml&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;tune-up-the-instance&quot;&gt;Tune-up the instance&lt;&#x2F;h2&gt;
+&lt;p&gt;Before you shut down the freshly created VM, you would like to make some adjustments.
+I use the following playbook for this: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;vcsa_to_qcow2&#x2F;blob&#x2F;master&#x2F;prepare_vm.yml&quot;&gt;prepare_vm.yml&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;During this step, I ensure that:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;cloud-init.io&#x2F;&quot;&gt;Cloud-Init&lt;&#x2F;a&gt; is installed,&lt;&#x2F;li&gt;
+&lt;li&gt;the root account is enabled with a real shell,&lt;&#x2F;li&gt;
+&lt;li&gt;the virtio drivers are available&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Cloud-Init is the de-facto tool that handles all the post-configuration tasks that we can expect from a Cloud image: inject the user SSH key, resize the filesystem, create a user account, etc.&lt;&#x2F;p&gt;
+&lt;p&gt;By default, the vSphere VCSA comes with many disks, which is a problem in a cloud environment where an instance is associated with a single disk image.
+So I also move the content of the different partitions to the root filesystem and adjust the &#x2F;etc&#x2F;fstab to remove all the references to the other disks. This way I will be able to maintain only one qcow2 image.&lt;&#x2F;p&gt;
+&lt;p&gt;All these steps are handled by the following playbook: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;vcsa_to_qcow2&#x2F;blob&#x2F;master&#x2F;prepare_vm.yml&quot;&gt;prepare_vm.yml&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;prepare-the-final-qcow2-image&quot;&gt;Prepare the final Qcow2 image&lt;&#x2F;h2&gt;
+&lt;p&gt;At this stage, the VM is still running, so I shut it down.
+Once this is done, I extract the raw image of the disk using the curl command:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;curl -v -k --user &amp;#39;root:!234AaAa56&amp;#39; -o vCenterServerAppliance.raw &amp;#39;https:&#x2F;&#x2F;192.168.123.5&#x2F;folder&#x2F;vCenter-Server-Appliance&#x2F;vCenter-Server-Appliance-flat.vmdk?dcPath=ha%252ddatacenter&amp;amp;dsName=l
+ocal&amp;#39;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;root:!234AaAa56&lt;&#x2F;code&gt; is my login and password&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;vCenterServerAppliance.raw&lt;&#x2F;code&gt; is the name of the local file&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;192.168.123.5&lt;&#x2F;code&gt; is the IP address of my ESXi&lt;&#x2F;li&gt;
+&lt;li&gt;vCenter-Server-Appliance is the name of the vSphere instance. &lt;code&gt;vCenter-Server-Appliance-flat.vmdk&lt;&#x2F;code&gt; is the associated raw disk&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The local .raw file is large (50GB), so ensure you&#x27;ve got enough free space.&lt;&#x2F;p&gt;
+&lt;p&gt;You can finally convert the raw file to a qcow2 file. You can use Qemu&#x27;s &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.qemu.org&#x2F;docs&#x2F;master&#x2F;interop&#x2F;qemu-img.html&quot;&gt;qemu-img&lt;&#x2F;a&gt; for that, it will work fine but the image will be monstrously large. I instead use &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;libguestfs.org&#x2F;virt-sparsify.1.html&quot;&gt;virt-sparsify&lt;&#x2F;a&gt; from the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;libguestfs.org&quot;&gt;libGuestFS&lt;&#x2F;a&gt; project. This command will reduce the size of the image to the bare minimum.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;virt-sparsify --tmp tmp --compress --convert qcow2 vCenterServerAppliance.raw vSphere.qcow2
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;You can upload the image in your OpenStack project with the following command:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;openstack image create --disk-format qcow2 --file vSphere.qcow2 --property hw_qemu_guest_agent=no vSphere
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If your OpenStack provider uses Ceph, you will probably want to reconvert the image to a flat raw file before the upload. With vSphere 6.7U3 and before, you need to force the use of a e1000 NIC. For that, add &lt;code&gt;--property hw_vif_model=e1000&lt;&#x2F;code&gt; to the command above.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve just done the whole process with vSphere 7.0.0U1 in 1h30 (Lenovo T580 laptop). I use the &lt;code&gt;.&#x2F;run.sh&lt;&#x2F;code&gt; script from &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;vcsa_to_qcow2&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;vcsa_to_qcow2&lt;&#x2F;a&gt;, which automates everything.&lt;&#x2F;p&gt;
+&lt;p&gt;The final result is certainly not supported by VMware, but we&#x27;ve already run hundreds of successful CI jobs with this kind of vSphere instances. The CI prepares a fresh CI lab in around 10 minutes.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>How to speed up your (API client) modules</title>
+        <published>2020-10-13T18:54:03+00:00</published>
+        <updated>2020-10-13T18:54:03+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/10/how-to-speed-up-your-api-client-modules/"/>
+        <id>https://goneri.lebouder.net/posts/2020/10/how-to-speed-up-your-api-client-modules/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/10/how-to-speed-up-your-api-client-modules/">&lt;p&gt;https:&#x2F;&#x2F;www.slideshare.net&#x2F;goneri&#x2F;how-to-speed-up-your-api-client-modules&lt;&#x2F;p&gt;
+&lt;p&gt;The slide deck of my presentation for AnsibleFest 2020. It focuses on the modules designed to interact with a remote service (REST, SOAP, etc). In general these modules just wrap an SDK library; the presentation explains how to improve the performance. I actually use this strategy ( &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible-collections&#x2F;cloud.common&#x2F;blob&#x2F;main&#x2F;README_ansible_turbo.module.rst&quot;&gt;ansible_turbo.module&lt;&#x2F;a&gt; ) with the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible-collections&#x2F;vmware.vmware_rest&quot;&gt;vmware.vmware_rest collection&lt;&#x2F;a&gt; to speed up the modules.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;10&#x2F;how-to-speed-up-your-api-client-modules&#x2F;how-to-speed-up-your-api-client-modules.pdf&quot;&gt;how-to-speed-up-your-api-client-modules (PDF)&lt;&#x2F;a&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;10&#x2F;how-to-speed-up-your-api-client-modules&#x2F;how-to-speed-up-your-api-client-modules.pdf&quot;&gt;Download&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>How we use auto-generated content in the documentation of our Ansible collection</title>
+        <published>2020-10-07T21:11:54+00:00</published>
+        <updated>2020-10-07T21:11:54+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/10/how-we-use-auto-generate-content-in-the-documentation-of-our-ansible-collection/"/>
+        <id>https://goneri.lebouder.net/posts/2020/10/how-we-use-auto-generate-content-in-the-documentation-of-our-ansible-collection/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/10/how-we-use-auto-generate-content-in-the-documentation-of-our-ansible-collection/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;Most of the content of the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;galaxy.ansible.com&#x2F;vmware&#x2F;vmware_rest&quot;&gt;vmware.vmware_rest&lt;&#x2F;a&gt; collection is auto-generated. This article focuses on the documentation and explains how we build it.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;auto-generated-example-blocks&quot;&gt;Auto-generated example blocks&lt;&#x2F;h2&gt;
+&lt;p&gt;This collection comes with an exhaustive series of functional tests. Technically speaking, these tests are simply Ansible playbooks that we run with ansible-playbook. They should run all the modules and ideally in all the potential scenarios (e.g.: create, modify, delete). If the playbook execution is successful, the test passes and we assume the modules are in a consistent state.&lt;&#x2F;p&gt;
+&lt;p&gt;We cannot easily generate all documentation content manually, but these playbooks are an interesting source of inspiration since they actually cover and go beyond all the use cases that we want to document.&lt;&#x2F;p&gt;
+&lt;p&gt;Our strategy is to record all the tasks and their results in a directory. Our documentation will just point to this content. This provides two interesting benefits:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;We know our examples work fine because it&#x27;s actually the output of the CI.&lt;&#x2F;li&gt;
+&lt;li&gt;When the format of a result changes, our documentation will take it into account automatically.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;We import these files into our git repository, git diff shows us the difference between the previous version. It&#x27;s an opportunity to spot a regression.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;10&#x2F;how-we-use-auto-generate-content-in-the-documentation-of-our-ansible-collection&#x2F;cooking.png&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;cooking.png&quot; height=&quot;396&quot; width=&quot;242&quot; &#x2F;&gt;&lt;&#x2F;a&gt; Cooking the collection&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-do-we-collect-the-tasks-and-the-results&quot;&gt;How do we collect the tasks and the results?&lt;&#x2F;h2&gt;
+&lt;p&gt;For this, we use a callback plugin ( &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;ansible-collection-goneri.utils&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;ansible-collection-goneri.utils&lt;&#x2F;a&gt; ). The configuration is done using three environment variables:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ANSIBLE_CALLBACK_WHITELIST=goneri.utils.collect_task_outputs&lt;&#x2F;code&gt;: Ask Ansible to load the callback plugin.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;COLLECT_TASK_OUTPUTS_COLLECTION=vmware.vmware_rest&lt;&#x2F;code&gt;: Specify the name of the collection.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;COLLECT_TASK_OUTPUTS_TARGET_DIR=&#x2F;somewhere&lt;&#x2F;code&gt;: Target directory where to write the results.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;When we finally call the &lt;code&gt;ansible-playbook&lt;&#x2F;code&gt; command, the callback plugin will be loaded, record all the interactions of the vmware.vmware_rest modules, and store the results in the target directory.&lt;&#x2F;p&gt;
+&lt;p&gt;The final script looks like this:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;#!&#x2F;usr&#x2F;bin&#x2F;env bash
+set -eux
+
+export ANSIBLE_CALLBACK_WHITELIST=goneri.utils.collect_task_outputs
+export COLLECT_TASK_OUTPUTS_COLLECTION=vmware.vmware_rest
+export COLLECT_TASK_OUTPUTS_TARGET_DIR=$(realpath ..&#x2F;..&#x2F;..&#x2F;..&#x2F;docs&#x2F;source&#x2F;vmware_rest_scenarios&#x2F;task_outputs&#x2F;)
+export INVENTORY_PATH=&#x2F;tmp&#x2F;inventory-vmware_rest
+source ..&#x2F;init.sh
+exec ansible-playbook -i ${INVENTORY_PATH} playbook.yaml
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-documentation&quot;&gt;The documentation&lt;&#x2F;h2&gt;
+&lt;p&gt;Like many Python projects, Ansible uses &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;ReStructuredText&quot;&gt;ReStructuredText&lt;&#x2F;a&gt; for its documentation. To include our samples we use the &lt;code&gt;literalinclude&lt;&#x2F;code&gt; directive. The result looks like that, the includes are done on lines 3 and 8:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;Here we use ``vcenter_datastore_info`` to get a list of all the datastores:
+
+.. literalinclude:: task_outputs&#x2F;Retrieve_a_list_of_all_the_datastores.task.yaml
+
+Result
+------
+
+.. literalinclude:: task_outputs&#x2F;Retrieve_a_list_of_all_the_datastores.result.json
+
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is how the final result looks like:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;10&#x2F;how-we-use-auto-generate-content-in-the-documentation-of-our-ansible-collection&#x2F;restructuredtext_output.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;and-the-return-blocks&quot;&gt;And the RETURN blocks?&lt;&#x2F;h2&gt;
+&lt;p&gt;Each Ansible module is supposed to come with a RETURN block ( &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;docs.ansible.com&#x2F;ansible&#x2F;latest&#x2F;dev_guide&#x2F;developing_modules_documenting.html#documentation-block&quot;&gt;https:&#x2F;&#x2F;docs.ansible.com&#x2F;ansible&#x2F;latest&#x2F;dev_guide&#x2F;developing_modules_documenting.html#documentation-block&lt;&#x2F;a&gt; ) that describe the output of the module. Each key of the module output is documented in this JSON structure.&lt;br &#x2F;&gt;
+The RETURN section and the task result above should be consistent. We can actually reformat the result and generate a JSON structure that matches the RETURN block expectation.&lt;br &#x2F;&gt;
+Once this is done, we just need to inject the content in the module file.&lt;&#x2F;p&gt;
+&lt;p&gt;We reuse the task results in our modules with the following command:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;.&#x2F;scripts&#x2F;inject_RETURN.py ~&#x2F;.ansible&#x2F;collections&#x2F;ansible_collections&#x2F;vmware&#x2F;vmware_rest&#x2F;docs&#x2F;source&#x2F;vmware_rest_scenarios&#x2F;task_outputs&#x2F; ~&#x2F;git_repos&#x2F;ansible-collections&#x2F;vmware_rest&#x2F; --config-file config&#x2F;inject_RETURN.yaml
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>vmware_rest: why a new Ansible Collection?</title>
+        <published>2020-09-29T17:03:03+00:00</published>
+        <updated>2020-09-29T17:03:03+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/09/vmware-rest-why-a-new-collection/"/>
+        <id>https://goneri.lebouder.net/posts/2020/09/vmware-rest-why-a-new-collection/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/09/vmware-rest-why-a-new-collection/">&lt;p&gt;&lt;strong&gt;vmware.vmware_rest&lt;&#x2F;strong&gt; (&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;galaxy.ansible.com&#x2F;vmware&#x2F;vmware_rest&quot;&gt;https:&#x2F;&#x2F;galaxy.ansible.com&#x2F;vmware&#x2F;vmware_rest&lt;&#x2F;a&gt;) is a new Ansible Collection for VMware. You can use it to manage the guests of your vCenter. If you&#x27;re familiar with Ansible and VMware, you will notice this collection overlaps with some features of community.vmware. You may think the two collections are competing and that it&#x27;s a waste of resources. It&#x27;s not that simple.&lt;&#x2F;p&gt;
+&lt;p&gt;A bit of context will be necessary to fully understand why it’s not exactly the case. The development of the community.vmware collection started during the vCenter 6.0 cycle. At this time, the de facto SDK to build Python applications was pyvmomi, which you may know as the vSphere SDK for Python. This Python library relies on the SOAP interface that has been around for more than a decade. By comparison, the vSphere REST interface was still a novelty. The support of some important APIs were missing and documentation was limited.&lt;&#x2F;p&gt;
+&lt;p&gt;Today, the situation has evolved. Pyvmomi is not actively maintained anymore and some new services are only exposed through the REST interface; a good example is the tagging API. VMware has also introduced a new Python SDK called vSphere Automation SDK (&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;vmware&#x2F;vsphere-automation-sdk-python&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;vmware&#x2F;vsphere-automation-sdk-python&lt;&#x2F;a&gt;) to consume this new API. For instance, this is what community.vmware_tag_info uses underneath.&lt;&#x2F;p&gt;
+&lt;p&gt;This new SDK comes at a cost for users. They need to pull an extra Python dependency in addition to pyvmomi and to make matters worse, this library is not on PyPI (See: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;vmware&#x2F;vsphere-automation-sdk-python&#x2F;issues&#x2F;38&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;vmware&#x2F;vsphere-automation-sdk-python&#x2F;issues&#x2F;38&lt;&#x2F;a&gt;), Python&#x27;s official library repository. They need to install it from GitHub instead. This is a source of confusion for our users.&lt;&#x2F;p&gt;
+&lt;p&gt;From a development perspective, we don&#x27;t like when a module needs to load a gazillion Python dependencies because this slows down the execution time and it&#x27;s a source of complexity. But we cannot ditch pyvmomi immediately because a lot of modules rely on it. We can potentially rewrite these modules to use the vSphere Automation SDK.&lt;&#x2F;p&gt;
+&lt;p&gt;These modules are already stable and of high quality. Many users depend on them. Modifying these modules to use the vSphere Automation SDK is risky. Any single regression would have a wide impact.&lt;&#x2F;p&gt;
+&lt;p&gt;Our users would be frustrated by such a transition, especially because it would bring absolutely zero new features to them. This also means we would have to reproduce the exact same behavior, and we would miss an opportunity to improve the modules.&lt;&#x2F;p&gt;
+&lt;p&gt;Technically speaking, an application that consumes a REST interface doesn&#x27;t really need an SDK. It can be handy sometimes, for instance for the authentication, but overall the standard HTTP client should be enough. After all, the &#x27;S&#x27; of REST stands for Simple for a reason.&lt;&#x2F;p&gt;
+&lt;p&gt;The vSphere REST API is not always consistent, but it&#x27;s well documented. VMware maintains a tool called vmware-openapi-generator (&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;vmware&#x2F;vmware-openapi-generator&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;vmware&#x2F;vmware-openapi-generator&lt;&#x2F;a&gt;) to extract it in a machine compatible format (Swagger 2.0 or OpenAPI 3).&lt;&#x2F;p&gt;
+&lt;p&gt;During our quest for a solution to this Python dependency problem, we&#x27;ve designed a Proof of Concept (PoC). It was based on a set of modules with no dependency on any third-party library. And of course, these modules were auto-generated. We&#x27;ve mentioned the conclusion of the PoC back in March during the VMware &#x2F; Ansible weekly meeting (&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible&#x2F;community&#x2F;issues&#x2F;423&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;ansible&#x2F;community&#x2F;issues&#x2F;423&lt;&#x2F;a&gt;).&lt;&#x2F;p&gt;
+&lt;p&gt;The feedback convinced us we were on the right path. And here we go, 5 months later. The first beta release of &lt;strong&gt;vmware.vmware_rest&lt;&#x2F;strong&gt; has just been announced on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.ansible.com&#x2F;blog&#x2F;introducing-the-vmware-rest-ansible-content-collection&quot;&gt;Ansible&#x27;s blog&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>CI of the Ansible modules for VMware: a retrospective</title>
+        <published>2020-08-21T20:13:14+00:00</published>
+        <updated>2020-08-21T20:13:14+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2020/08/vmware-ci-of-ansible-modules-a-retrospective/"/>
+        <id>https://goneri.lebouder.net/posts/2020/08/vmware-ci-of-ansible-modules-a-retrospective/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2020/08/vmware-ci-of-ansible-modules-a-retrospective/">&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.ansible.com&#x2F;integrations&#x2F;infrastructure&#x2F;vmware?hsLang=en-us&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;www.ansible.com&#x2F;hs-fs&#x2F;hubfs&#x2F;2016_Images&#x2F;Overview&#x2F;ansible-vmware-blog-300.png?width=300&amp;amp;height=200&amp;amp;name=ansible-vmware-blog-300.png&quot; alt=&quot;Simple VMware Provisioning, Management and Deprovisioning&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Since January 2020, every new Ansible VMware pull request is tested by the CI against a real VMware lab. Creating the CI environment against a real VMware lab has been a long journey, which I&#x27;ll share in this blog post.&lt;&#x2F;p&gt;
+&lt;p&gt;Ansible VMware provides more than 170 modules, each of them dedicated to a specific area. You can use them to manage your ESXi hosts, the vCenter instances, the vSAN, perform the common day-to-day guest management, etc.&lt;&#x2F;p&gt;
+&lt;p&gt;Our modules are maintained by a community of contributors, and a large number of the pull requests (PRs) are contributions from newcomers. The classic scenario is a user who has found a problem or a limitation with a module, and would like to address it.&lt;&#x2F;p&gt;
+&lt;p&gt;This is the reason why our contributors are not necessarily developers. The average contributor doesn&#x27;t necessarily have advanced Python experience. We can hardly ask them to write Python unit tests. Requiring this level of work creates a barrier to contribution. This would be a source of confusion and frustration and we would lose a lot of valuable contributions. However, they are power users. They have a great understanding of VMware and Ansible, and so we maintain a test playbook for most of the modules.&lt;&#x2F;p&gt;
+&lt;p&gt;Previously, when a new change was submitted, the CI was running the light Ansible sanity test suite and an integration test against govcsim, a VMware API simulator (&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;vmware&#x2F;govmomi&#x2F;tree&#x2F;master&#x2F;vcsim&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;vmware&#x2F;govmomi&#x2F;tree&#x2F;master&#x2F;vcsim&lt;&#x2F;a&gt;).&lt;&#x2F;p&gt;
+&lt;p&gt;govcsim is a handy piece of software; you can start it locally to mock a vSphere infrastructure. But it doesn&#x27;t fully support some important VMware components like the network devices or datastores. As a consequence, the core reviewers were asked to download the changeset locally, and run the functional tests against their own vSphere lab.&lt;&#x2F;p&gt;
+&lt;p&gt;In our context, a vSphere lab is:&lt;&#x2F;p&gt;
+&lt;p&gt;- a vCenter instance&lt;&#x2F;p&gt;
+&lt;p&gt;- 2 ESXi hosts&lt;&#x2F;p&gt;
+&lt;p&gt;- 2 NFS datastores, with some pre-existing files.&lt;&#x2F;p&gt;
+&lt;p&gt;We also had challenges in our test environment. Functional tests destroy or create network switches, enable IPv6, add new datastores, and rarely if ever restore the system to initial configuration once complete, leaving the labs in disarray and growing worse with each series of tests. Consequently, the reviews were slow, and we were wasting days fixing our infrastructures. Since the tests were not reproducible and done locally, it was hard to distinguish setup errors from actual issues and therefore it was hard to provide meaningful feedback to contributors: Is this error coming from my setup? I need to manually copy&#x2F;paste the error with the contributor, sometimes several days after the initial commit.&lt;&#x2F;p&gt;
+&lt;p&gt;This was a frustrating situation for us, and for the contributors. But well, we&#x27;ve spent years doing that...&lt;&#x2F;p&gt;
+&lt;p&gt;You may find we like to suffer, which is probably true to some extent, but the real problem is that it&#x27;s rather complex to automate the full deployment of a lab. vSphere is an appliance VM in the OVA format. It has to be deployed on an ESXi host. Officially, ESXi hosts can&#x27;t be virtualized, unless they run on ESXi hosts themselves. In addition, we use Evaluation licenses, and as a consequence, we cannot rely on features like snapshotting, and we have to redeploy our lab every 60 days.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;we-can-do-better-some-others-did&quot;&gt;We can do better! Some others did!&lt;&#x2F;h2&gt;
+&lt;p&gt;The Ansible network modules were facing similar challenges. Network devices are required to fully validate a change, but it&#x27;s costly to stack and maintain operation of hundreds of devices just for validation.&lt;&#x2F;p&gt;
+&lt;p&gt;They&#x27;ve decided to invest in OpenStack and a CI solution called Zuul-CI (https:&#x2F;&#x2F;zuul-ci.org&#x2F;). I don&#x27;t want to elaborate too much on Zuul since the topic itself is worth a book. But basically, every time a change gets pushed, Zuul will spawn a multi-node test environment, prepare the test execution using ... Ansible, Yeah! And finally, run the test and collect the result. This environment makes use of appliances coming from the vendors. It&#x27;s basically just a VM. OpenStack is pretty flexible for this use-case, especially when you&#x27;ve got top-notch support with the providers.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;let-s-build-some-vmware-cloud-images&quot;&gt;Let&#x27;s build some VMware Cloud images!&lt;&#x2F;h2&gt;
+&lt;p&gt;To run a VM in a cloud environment, it has to match the following requirements:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;use a single disk image, a qcow2 in the case of OpenStack.&lt;&#x2F;li&gt;
+&lt;li&gt;support the hardware exposed by the hypervisor, qemu-kvm in our case&lt;&#x2F;li&gt;
+&lt;li&gt;configure itself according to the metadata information exposed by the cloud provider (IP, SSH keys, etc). This service is handled by Cloud-Init most of the time.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h3 id=&quot;esxi-cloud-image&quot;&gt;ESXi cloud image&lt;&#x2F;h3&gt;
+&lt;p&gt;For ESXi, the first step was to deploy ESXi on libvirt&#x2F;qemu-kvm. This works fine as we avoid virtio. And with a bit more effort, we can automate the process ( &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;esxi-cloud-images&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;esxi-cloud-images&lt;&#x2F;a&gt; ). But our VM is not yet self-configuring. We need an alternative to Cloud-init. This is what esxi-cloud-init ( &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;esxi-cloud-init&#x2F;&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;esxi-cloud-init&#x2F;&lt;&#x2F;a&gt; ) will do for us. It reads the cloud metadata and prepares the network configuration of the ESXi host, and it also injects the SSH keys.&lt;&#x2F;p&gt;
+&lt;p&gt;The image build process is rather simple once you&#x27;ve got libvirt and virt-install on your machine:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;$ git clone https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;esxi-cloud-images
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;$ cd esxi-cloud-images&lt;&#x2F;p&gt;
+&lt;p&gt;$ .&#x2F;build.sh ~&#x2F;Downloads&#x2F;VMware-VMvisor-Installer-7.0.0-15525992.x86_64.iso&lt;&#x2F;p&gt;
+&lt;p&gt;(...)&lt;&#x2F;p&gt;
+&lt;p&gt;$ ls esxi-6.7.0-20190802001-STANDARD.qcow2&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;asciinema.org&#x2F;a&#x2F;349250&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;asciinema.org&#x2F;a&#x2F;349250.png&quot; width=&quot;836&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The image can run on OpenStack, but also on libvirt. Virt-Lightning (https:&#x2F;&#x2F;virt-lightning.org&#x2F;) is the tool we use to spawn our environment locally.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;lh6.googleusercontent.com&#x2F;rg2ydv_dKbG_8G1rKHzv8FiY05Pb9zBJNh9EWKGEZafsEqE7kyKFDiEGkOw9bGc8aNRWT75j5OytgCTPF5gsnetIMD4dwaVRKgk_Bp18GljioLziB14Q1U32lwLcD-83T7NlOps&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;vcenter-cloud-image-too&quot;&gt;vCenter cloud image too?&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;em&gt;update: See &lt;a href=&quot;&#x2F;posts&#x2F;2020&#x2F;12&#x2F;ansible-how-we-prepare-the-vsphere-instance-for-the-vmware-ci&#x2F;&quot;&gt;Ansible: How we prepare the vSphere instances of the VMware CI&lt;&#x2F;a&gt; for a more detailed explanation of the VCSA deployment process.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;We wanted to deploy vCenter on our instance, but this is daunting. vCenter has a slow installation process, it requires an ESXi host, and is extremely sensitive to any form of network configuration changes...&lt;&#x2F;p&gt;
+&lt;p&gt;So the initial strategy was to spawn a ESXi instance, and deploy vCenter on it. This is handled by ansible-role-vcenter-instance ( &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;ansible-role-vcenter-instance&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;ansible-role-vcenter-instance&lt;&#x2F;a&gt; ). The full process takes about 25m.&lt;&#x2F;p&gt;
+&lt;p&gt;We became operational but the deployment process overwhelmed our lab. Additionally, the ESXi instance (16GB of RAM) was too much for running on a laptop. I started investigating new options.&lt;&#x2F;p&gt;
+&lt;p&gt;Technically speaking, the vCenter Server Appliance or VCSA, is based on Photon Linux, the Linux distribution of VMware, and the VM actually comes with 15 large disks. This is a bit problematic since our final cloud image must be a single disk and be as small as possible. I developed this strategy:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;connect to the running VCSA, move all the content from the partition to the main partition, and drop the extra disk from the &#x2F;etc&#x2F;fstab&lt;&#x2F;li&gt;
+&lt;li&gt;do some extra things regarding the network and Cloud-init configuration.&lt;&#x2F;li&gt;
+&lt;li&gt;stop the server&lt;&#x2F;li&gt;
+&lt;li&gt;extract the raw disk image from the ESXi datastore&lt;&#x2F;li&gt;
+&lt;li&gt;convert it to the qcow2 format&lt;&#x2F;li&gt;
+&lt;li&gt;and voilà! You&#x27;ve got a nice cloud image of your vCenter.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;All the steps are automated by the following tool: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;vcsa_to_qcow2&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;virt-lightning&#x2F;vcsa_to_qcow2&lt;&#x2F;a&gt;. It also enables virtio for better performance.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;preparing-development-environment-locally&quot;&gt;Preparing development environment locally&lt;&#x2F;h3&gt;
+&lt;p&gt;To simplify the deployment, I use the following tool: https:&#x2F;&#x2F;github.com&#x2F;goneri&#x2F;deploy-vmware-ci. It will use virt-lightning to spawn the nodes, and do the post-configuration with Ansible. It reuses the roles that we consume in the CI to configure the vCenter, the host names, and populate the datastore.&lt;&#x2F;p&gt;
+&lt;p&gt;In this example, I use it to start my ESXi environment on my Lenovo T580 laptop; the full run takes 15 minutes: https:&#x2F;&#x2F;asciinema.org&#x2F;a&#x2F;349246&lt;&#x2F;p&gt;
+&lt;p&gt;Being able to redeploy a work environment in 15 minutes has been a life changer. I often recreate it several times a day. In addition, the local deployment workflow reproduces what we do in the CI, it&#x27;s handy to validate a changeset, or troubleshoot a problem.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-ci-integration&quot;&gt;The CI integration&lt;&#x2F;h3&gt;
+&lt;p&gt;Each Ansible module is different, which makes for different test requirements. We&#x27;ve got 3 topologies:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;vcenter_only: only one single vCenter instance&lt;&#x2F;li&gt;
+&lt;li&gt;vcenter_1esxi_with_nested: one vCenter with an ESXi, this ESXi is capable of starting a nested VM.&lt;&#x2F;li&gt;
+&lt;li&gt;vcenter_1_esxi_without_nested: the same, but this time, we don&#x27;t start nested VM. Compared to the previous case, this set-up is compatible with all our providers.&lt;&#x2F;li&gt;
+&lt;li&gt;vcenter_2_esxi_without_nested: well, like the previous one, but with a second ESXi, for instance to test ha or migration.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The nodeset definition is done in the following file: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ansible&#x2F;ansible-zuul-jobs&#x2F;blob&#x2F;master&#x2F;zuul.d&#x2F;nodesets.yaml&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;ansible&#x2F;ansible-zuul-jobs&#x2F;blob&#x2F;master&#x2F;zuul.d&#x2F;nodesets.yaml&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;We split the hours long test execution time on the different environments. An example of job result:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2020&#x2F;08&#x2F;vmware-ci-of-ansible-modules-a-retrospective&#x2F;image-8.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;As you can see, we still run govcsim in the CI, even if it&#x27;s superseded by a real test environment. Since govcsim jobs run faster, we assume that failure would also fail against the real lab and abort the other jobs. This is a way to save time and resources.&lt;&#x2F;p&gt;
+&lt;p&gt;I would like to thank Chuck Copello for the helpful review of this blog post.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

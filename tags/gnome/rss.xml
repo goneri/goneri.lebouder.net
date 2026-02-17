@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Gonéri&#x27;s blog - gnome</title>
+      <link>https://goneri.lebouder.net</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://goneri.lebouder.net/tags/gnome/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Sat, 12 Nov 2022 02:40:48 +0000</lastBuildDate>
+      <item>
+          <title>My GNOME configuration and its extensions</title>
+          <pubDate>Sat, 12 Nov 2022 02:40:48 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2022/11/my-gnome-configuration-and-its-extensions/</link>
+          <guid>https://goneri.lebouder.net/posts/2022/11/my-gnome-configuration-and-its-extensions/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2022/11/my-gnome-configuration-and-its-extensions/">&lt;p&gt;I&#x27;ve been using a slightly tweaked GNOME 3 for a while now. Before that, I was using the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;awesomewm.org&#x2F;&quot;&gt;Awesome Window Manager&lt;&#x2F;a&gt; and I was quite fond of the key bindings. In order to facilitate the transition, I tried to recreate them. The result is pretty good. I can navigate between my 9 different virtual desktops using the Windows (a.k.a. SUPER) key + a number. Windows + F also works; it will turn on fullscreen mode for a given window. Years after the migration to GNOME, I still use the bindings extensively. The following script configures GNOME with my configuration: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;b57a96915ea4a98f81df3bb57a41913e&quot;&gt;https:&#x2F;&#x2F;gist.github.com&#x2F;goneri&#x2F;b57a96915ea4a98f81df3bb57a41913e&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;It creates 9 virtual desktops on one single monitor that I can reach using the Super + $number key binding, e.g.: Windows + 6. In addition, it turns off the animations and the annoying alert sound.&lt;&#x2F;p&gt;
+&lt;p&gt;I also use a couple of extensions:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Application volume mixer&lt;&#x2F;strong&gt; to be able to adjust my mic volume level during meetings &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;extensions.gnome.org&#x2F;extension&#x2F;3499&#x2F;application-volume-mixer&#x2F;&quot;&gt;link&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Network stats&lt;&#x2F;strong&gt; to get some visibility on the network traffic &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;extensions.gnome.org&#x2F;extension&#x2F;4308&#x2F;network-stats&#x2F;&quot;&gt;link&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Sound Output Device Chooser&lt;&#x2F;strong&gt; to be able to switch the sound output between my Bluetooth speaker and my headset. I use it several times every day; it&#x27;s super handy. &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;extensions.gnome.org&#x2F;extension&#x2F;906&#x2F;sound-output-device-chooser&#x2F;&quot;&gt;link&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2022&#x2F;11&#x2F;my-gnome-configuration-and-its-extensions&#x2F;image.png&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2022&#x2F;11&#x2F;my-gnome-configuration-and-its-extensions&#x2F;image.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>eGPU, Wayland, Gnome3 and Fedora</title>
+          <pubDate>Fri, 12 Feb 2021 21:10:19 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2021/02/egpu-wayland-and-fedora-33/</link>
+          <guid>https://goneri.lebouder.net/posts/2021/02/egpu-wayland-and-fedora-33/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2021/02/egpu-wayland-and-fedora-33/">&lt;p&gt;I&#x27;ve just got a Razer Core X that I use with a Radeon graphics card. By default Wayland, well Mutter actually, continues to use the Intel card of my T580.&lt;&#x2F;p&gt;
+&lt;p&gt;To force it to use the second card, I had to add a udev rule and reboot. And that&#x27;s all!&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;$ cat &#x2F;etc&#x2F;udev&#x2F;rules.d&#x2F;61-mutter-primary-gpu.rules
+ENV{DEVNAME}==&amp;quot;&#x2F;dev&#x2F;dri&#x2F;card1&amp;quot;, TAG+=&amp;quot;mutter-device-preferred-primary&amp;quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;note: You need Gnome 3.38.2 for this to work properly. See: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;gitlab.gnome.org&#x2F;GNOME&#x2F;mutter&#x2F;-&#x2F;merge_requests&#x2F;1562&quot;&gt;https:&#x2F;&#x2F;gitlab.gnome.org&#x2F;GNOME&#x2F;mutter&#x2F;-&#x2F;merge_requests&#x2F;1562&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;update: the post was initially written for Fedora 33, but the fix also works great with Fedora 34.&lt;&#x2F;p&gt;
+</description>
+      </item>
+    </channel>
+</rss>

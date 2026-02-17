@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Gonéri&#x27;s blog - debian</title>
+      <link>https://goneri.lebouder.net</link>
+      <description></description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://goneri.lebouder.net/tags/debian/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Mon, 06 Oct 2014 19:57:17 +0000</lastBuildDate>
+      <item>
+          <title>Pbuilder on Debian kFreeBSD Wheezy</title>
+          <pubDate>Mon, 06 Oct 2014 19:57:17 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2014/10/pbuilder-on-debian-kfreebsd-wheezy/</link>
+          <guid>https://goneri.lebouder.net/posts/2014/10/pbuilder-on-debian-kfreebsd-wheezy/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2014/10/pbuilder-on-debian-kfreebsd-wheezy/">&lt;p&gt;There is a little trick if you want to use pbuilder on kFreeBSD. Add these lines in &#x2F;etc&#x2F;pbuilderrc:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;MIRRORSITE=http:&#x2F;&#x2F;cdn.debian.net&#x2F;debian
+USEPROC=yes
+USEDEVFS=yes
+USEDEVPTS=yes
+BINDMOUNTS=&amp;quot;&#x2F;home&#x2F;goneri&amp;quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Getting BURP to use Puppet CA</title>
+          <pubDate>Wed, 16 Oct 2013 13:20:56 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/</link>
+          <guid>https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/">&lt;p&gt;I&#x27;m a big fan of &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;burp.grke.org&#x2F;&quot;&gt;BURP&lt;&#x2F;a&gt; to maintain my backups. This article explains how to reuse the PuppetMaster CA for authentication. I use Debian burp package on Wheezy.&lt;&#x2F;p&gt;
+&lt;p&gt;First, you need to generate the dhfile.pem on both the server and the agent:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;openssl dhparam -outform PEM -out &#x2F;etc&#x2F;burp&#x2F;dhfile.pem 1024
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-server&quot;&gt;The server&lt;&#x2F;h2&gt;
+&lt;p&gt;The configuration is in &#x2F;etc&#x2F;burp&#x2F;burp-server.conf:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;mode = server
+(...)
+# ca_conf = &#x2F;etc&#x2F;burp&#x2F;CA.cnf
+# ca_name = burpCA
+# ca_server_name = burpserver
+# ca_burp_ca = &#x2F;usr&#x2F;sbin&#x2F;burp_ca
+(...)
+ssl_cert_ca = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;ca.pem
+ssl_cert = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;ca&#x2F;signed&#x2F;newpuppet.lebouder.net.pem
+ssl_key = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;private_keys&#x2F;newpuppet.lebouder.net.pem
+ssl_key_password = password
+ssl_dhfile = &#x2F;etc&#x2F;burp&#x2F;dhfile.pem
+(...)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-agent&quot;&gt;The agent&lt;&#x2F;h2&gt;
+&lt;p&gt;The configuration file is &#x2F;etc&#x2F;burp&#x2F;burp.conf:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;mode = client
+port = 4971
+server = newpuppet.lebouder.net
+ssl_cert_ca = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;ca.pem
+ssl_cert = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;newclient.lebouder.net.pem
+ssl_key = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;private_keys&#x2F;newclient.lebouder.net.pem
+ssl_peer_cn = newpuppet.lebouder.net
+(...)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;newpuppet.lebouder.net is the Puppet server.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Duide Antidote8 sur Debian Sid</title>
+          <pubDate>Fri, 09 Aug 2013 13:44:07 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2013/08/duide-antidote8-sur-debian-sid/</link>
+          <guid>https://goneri.lebouder.net/posts/2013/08/duide-antidote8-sur-debian-sid/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2013/08/duide-antidote8-sur-debian-sid/">&lt;p&gt;J’ai acheté le correcteur orthographique &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.druide.com&#x2F;antidote.html&quot;&gt;Antidote 8&lt;&#x2F;a&gt; que j’ai installé hier. L’outil est vraiment impressionnant et agréable à utiliser.&lt;&#x2F;p&gt;
+&lt;p&gt;L’installation sur Debian Sid n’est pas supportée, cependant son utilisation est possible. Je dois encore voir si je peux l’intégrer avec Firefox (Iceweasel) et Thunderbird (Icedove).&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;installation&quot;&gt;Installation&lt;&#x2F;h1&gt;
+&lt;pre&gt;&lt;code&gt;# apt-get install libx11-6 libxslt1.1 libvorbis0a libxrender1 libgstreamer-plugins-base0.10-0 libpulse0 libpulse0 libpulse-mainloop-glib0 libfreetype6libpulse-mainloop-glib0 libfontconfig1 libxext6 libicu48``# wget http:&#x2F;&#x2F;ftp.fr.debian.org&#x2F;debian&#x2F;pool&#x2F;main&#x2F;o&#x2F;openssl&#x2F;libssl0.9.8_0.9.8o-4squeeze14_amd64.deb
+# dpkg -i libssl0.9.8_0.9.8o-4squeeze14_amd64.deb
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre&gt;&lt;code&gt;# wget http:&#x2F;&#x2F;ftp.fr.debian.org&#x2F;debian&#x2F;pool&#x2F;main&#x2F;i&#x2F;icu&#x2F;libicu44_4.4.1-8_amd64.deb
+# dpkg -i libicu44_4.4.1-8_amd64.deb
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Pour éviter un problème avec les kernel &amp;gt;= 3 il faut faire une petite manip présentée ici : http:&#x2F;&#x2F;www.debian-fr.org&#x2F;certains-logiciels-dysfonctionnent-en-changeant-de-noyau-t42688.html&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;# wget https:&#x2F;&#x2F;mail.gnome.org&#x2F;archives&#x2F;evolution-list&#x2F;2003-December&#x2F;txtBEWSVk2eft.txt -O &#x2F;tmp&#x2F;uname.c
+$ (echo #define _GNU_SOURCE; cat &#x2F;tmp&#x2F;uname.c) &amp;gt; &#x2F;tmp&#x2F;uname.c
+$ gcc -shared -fPIC -ldl uname.c -o &#x2F;opt&#x2F;Druide&#x2F;Antidote8&#x2F;Programmes64&#x2F;fake-uname.so`
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Il ne reste plus qu&#x27;a ajouter les deux lignes suivantes au début du script &#x2F;opt&#x2F;Druide&#x2F;Antidote8&#x2F;Programmes64&#x2F;Antidote8.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;export LD_PRELOAD=&#x2F;opt&#x2F;Druide&#x2F;Antidote8&#x2F;Programmes64&#x2F;fake-uname.so
+export RELEASE=$(uname -r | sed &amp;#39;s&#x2F;^\(...\)&#x2F;\1.0-antidote-fix&#x2F;g&amp;#39;)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Debian Wheezy and cfengine</title>
+          <pubDate>Sat, 17 Nov 2012 20:10:24 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2012/11/debian-wheezy-and-cfengine/</link>
+          <guid>https://goneri.lebouder.net/posts/2012/11/debian-wheezy-and-cfengine/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2012/11/debian-wheezy-and-cfengine/">&lt;p&gt;How to bootstrap a cfengine node with Debian Wheezy Cfengine:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;# cp &#x2F;usr&#x2F;share&#x2F;doc&#x2F;cfengine3&#x2F;example_config&#x2F;* &#x2F;etc&#x2F;cfengine3&#x2F;
+# sed -i &amp;#39;s,&amp;quot;&#x2F;var&#x2F;lib&#x2F;cfengine3&#x2F;inputs&amp;quot;,&amp;quot;&#x2F;etc&#x2F;cfengine3&amp;quot;,&amp;#39; &#x2F;etc&#x2F;cfengine3&#x2F;update.cf
+# sed -i &amp;#39;s,RUN_CFEXECD=0,RUN_CFEXECD=1,&amp;#39; &#x2F;etc&#x2F;default&#x2F;cfengine3
+# &#x2F;etc&#x2F;init.d&#x2F;cfengine3 restart
+# cf-agent --bootstrap --policy-server 2a01:e35:242d:e930:250:XXXX:XXXX:XXXXX
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Prefetch apt packages</title>
+          <pubDate>Tue, 13 Nov 2012 10:26:46 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2012/11/prefetch-apt-packages/</link>
+          <guid>https://goneri.lebouder.net/posts/2012/11/prefetch-apt-packages/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2012/11/prefetch-apt-packages/">&lt;p&gt;I use this command to speed up deb package downloads. It will do parallel downloads of the required .deb files with puf.&lt;&#x2F;p&gt;
+&lt;p&gt;For example with otrs:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;cd &#x2F;var&#x2F;cache&#x2F;apt&#x2F;archives&#x2F; &amp;amp;&amp;amp; apt-get -y --print-uris install otrs|awk &amp;#39;{print $1}&amp;#39;|grep &amp;quot;&amp;#39;http&amp;quot; | xargs puf
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Debian Vserver cheat sheet</title>
+          <pubDate>Tue, 09 Mar 2010 17:55:05 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2010/03/debian-vserver-cheat-sheet/</link>
+          <guid>https://goneri.lebouder.net/posts/2010/03/debian-vserver-cheat-sheet/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2010/03/debian-vserver-cheat-sheet/">&lt;p&gt;This is just to keep track for myself on how to create a Vserver with Internet connectivity.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Create the network interface&lt;&#x2F;strong&gt; Edit &lt;code&gt;&#x2F;etc&#x2F;network&#x2F;interfaces&lt;&#x2F;code&gt; and add:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;auto dummy0
+iface dummy0 inet static address 192.168.50.1 netmask 255.255.255.0
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;strong&gt;Restart the network&lt;&#x2F;strong&gt; &lt;code&gt;&#x2F;etc&#x2F;init.d&#x2F;networking restart&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Turn the NAT on&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;echo 1 &amp;gt; &#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Replace eth0 with the network interface you use for your network access.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Create the VM&lt;&#x2F;strong&gt; &lt;code&gt;sudo vserver build build -n cyrus2.3 -m debootstrap --netdev dummy0 --interface 192.168.50.2&#x2F;24 -- -d lenny&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Enter the VM&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;sudo vserver cyrus2.3 start
+sudo vserver cyrus2.3 enter
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>SheevaPlug</title>
+          <pubDate>Wed, 30 Dec 2009 21:54:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2009/12/sheevaplug/</link>
+          <guid>https://goneri.lebouder.net/posts/2009/12/sheevaplug/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2009/12/sheevaplug/">&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;fr.wikipedia.org&#x2F;wiki&#x2F;SheevaPlug&quot;&gt;SheevaPlug&lt;&#x2F;a&gt; + Debian = ♥♥♥♥&lt;&#x2F;p&gt;
+&lt;p&gt;Thank you Martin Michlmayr!&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>thunderbird 2.0.0.23 built by Mozilla and Debian Squeeze</title>
+          <pubDate>Thu, 03 Sep 2009 16:40:04 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2009/09/thunderbird-2-0-0-23-built-by-mozilla-and-debian-squeeze/</link>
+          <guid>https://goneri.lebouder.net/posts/2009/09/thunderbird-2-0-0-23-built-by-mozilla-and-debian-squeeze/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2009/09/thunderbird-2-0-0-23-built-by-mozilla-and-debian-squeeze/">&lt;p&gt;Mozilla still builds against libstdc++5...&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;&#x2F;opt&#x2F;thunderbird-2.0.0.23$ .&#x2F;thunderbird
+.&#x2F;thunderbird-bin: error while loading shared libraries: libstdc++.so.5: cannot open shared object file: No such file or directory
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The solution is very simple. Just use libstdc++5 from Lenny:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;shell&quot;&gt;wget http:&#x2F;&#x2F;ftp.fi.debian.org&#x2F;debian&#x2F;pool&#x2F;main&#x2F;g&#x2F;gcc-3.3&#x2F;libstdc++5_3.3.6-18_i386.deb
+sudo dpkg -i libstdc++5_3.3.6-18_i386.deb
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>S270 Wifi au boot sur Debian Sid</title>
+          <pubDate>Sat, 07 Jan 2006 03:11:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/</link>
+          <guid>https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2006/01/s270-wifi-au-boot-sur-debian-sid/">&lt;p&gt;Ce soir, j&#x27;ai découvert que pour que les parametres wireless_* du &#x2F;etc&#x2F;network&#x2F;interfaces l&#x27;interface doit déjà être &quot;up&quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;Voila ce que ça donne :&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;iface eth1 inet dhcp
+# j&amp;#39;up l&amp;#39;interface avant tout
+pre-up ifconfig eth1 up
+wireless_mode managed
+wireless_channel 6
+wireless_nick clara
+wireless_key off
+# sinon j&amp;#39;ai des problemes de stablitié du signal
+wireles_rate 11M
+# essid en dernier !
+wireless_essid BZH
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;J&#x27;ai ce problème avec le chipset rt2500, ça mérite surement un rapport de bug :). A étudier…&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Klibido in Sid</title>
+          <pubDate>Sun, 18 Sep 2005 14:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/09/klibido-in-sid/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/09/klibido-in-sid/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/09/klibido-in-sid/">&lt;p&gt;So, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;packages.debian.org&#x2F;unstable&#x2F;kde&#x2F;klibido&quot;&gt;Klibido 0.2.4.1&lt;&#x2F;a&gt; is the first release to enter in Debian Sid :).&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>klibido</title>
+          <pubDate>Sat, 17 Sep 2005 12:11:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/09/klibido/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/09/klibido/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/09/klibido/">&lt;p&gt;Yesterday my Sponsor, Neil McGovern, uploaded klibido. That means, if every thing is ok, that klibido will enter Sid quickly.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>klibido 0.2.3.4.1</title>
+          <pubDate>Thu, 15 Sep 2005 00:14:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/09/klibido-0-2-3-4-1/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/09/klibido-0-2-3-4-1/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/09/klibido-0-2-3-4-1/">&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2005&#x2F;09&#x2F;klibido-0-2-3-4-1&#x2F;klibido-128.png&quot; alt=&quot;klibido-128.png&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Well, tonight a updated &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;klibido.sourceforge.net&#x2F;&quot;&gt;klibido&lt;&#x2F;a&gt; with the last bugs fix release from Bauno.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Sarge user:
+Add this line in your &#x2F;etc&#x2F;apt&#x2F;sources.list unless that&#x27;s allready done.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;deb http:&#x2F;&#x2F;orniere-du-globe.net&#x2F;debian&#x2F; .&#x2F;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Sid use:
+Add this line:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;deb http:&#x2F;&#x2F;orniere-du-globe.net&#x2F;debian**-sid**&#x2F; .&#x2F;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Then you&#x27;ve just to:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;apt-get update
+apt-get install klibido&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Ubuntu users, you&#x27;ll certainly have to rebuild the package. If you do the job, please can you submit a link with a fresh package in the comments.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>klibido 0.2.4</title>
+          <pubDate>Sat, 10 Sep 2005 01:01:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/09/klibido-0-2-4/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/09/klibido-0-2-4/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/09/klibido-0-2-4/">&lt;p&gt;New klibido release: 0.2.4-1&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;deb http:&#x2F;&#x2F;orniere-du-globe.net&#x2F;debian-sid&#x2F; .&#x2F;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Because of the gcc4 ABI transition, the package is break on Sarge.&lt;&#x2F;p&gt;
+&lt;p&gt;Update: Klibido is in Debian Unstable now. Don&#x27;t use this repository anymore.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Debian Sarge</title>
+          <pubDate>Sat, 20 Aug 2005 01:43:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/08/debian-sarge/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/08/debian-sarge/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/08/debian-sarge/">&lt;p&gt;Je commençais a en avoir marre de la migration vers gcc4 qui se passe en se moment sur Sid. Mon système devenait de plus en plus nonchalant. Je me suis donc installé une Sarge le temps que les choses se calment un peu. C&#x27;est cool de pouvoir faire un «apt-get install gnome kde» sans avoir un troupeau d&#x27;erreur qui pète a la gueule.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;orniere-du-globe.net&#x2F;debian&#x2F;&quot;&gt;Le paquet de klibido&lt;&#x2F;a&gt; ne s&#x27;installe pas sur Sid, je suis au courant. De toutes façons, c&#x27;est l&#x27;ensemble de KDE qui marche sur 3 roues en ce moment. Dès que possible, c&#x27;est a dire lorsque KDE 3.4 sera intégré, je metterai a jour le paquage de klibido pour gcc4 et qu&#x27;il puisse enfin rentrer sur la Sid.&lt;&#x2F;p&gt;
+&lt;p&gt;Ce soir, j&#x27;ai corrigé 2 bugs de klibido, maintenant on peut annuler si l&#x27;on a lancé klibido par erreur et que l&#x27;on ne veut pas le configurer. Il ne reste plus qu&#x27;a esperer que Bauno ne le trouve pas trop cracra et l&#x27;accepte :).&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>klibido 0.2.3-2</title>
+          <pubDate>Sat, 25 Jun 2005 00:48:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/06/klibido-0-2-3-2/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/06/klibido-0-2-3-2/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/06/klibido-0-2-3-2/">&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2005&#x2F;06&#x2F;klibido-0-2-3-2&#x2F;klibido-128-2.png&quot; alt=&quot;klibido-128-2.png&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve just finish to update the &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;klibido.sf.net&#x2F;&quot;&gt;klibido&lt;&#x2F;a&gt; package for Debian. For the moment, it can&#x27;t be upload in the official repository before the end of the &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;lists.debian.org&#x2F;debian-devel-announce&#x2F;2005&#x2F;06&#x2F;msg00004.html&quot;&gt;gcc4 ABI transition&lt;&#x2F;a&gt;. The majors changes are the inclusion of Bauno&#x27;s &quot;Please subscribe me!&quot; patch and another patch from Loïc Pefferkorn.&lt;&#x2F;p&gt;
+&lt;p&gt;Loïc Pefferkorn decided to package klibido for Ubuntu, since this distribution is based on Debian he asked me for working together. Welcome Loïc !
+Tonight i add a patch from him to move the &quot;klibido.desktop&quot; file to a more common place. Thanks ;).&lt;&#x2F;p&gt;
+&lt;p&gt;To install klibido on you Debian, please add this lines on your &#x2F;etc&#x2F;apt&#x2F;sources.list file.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;deb http:&#x2F;&#x2F;orniere-du-globe.net&#x2F;debian .&#x2F;
+deb-src http:&#x2F;&#x2F;orniere-du-globe.net&#x2F;debian .&#x2F;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Than you have just to update the index and install it.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;apt-get update
+apt-get install klibido&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+</description>
+      </item>
+      <item>
+          <title>UML avec rootstrap</title>
+          <pubDate>Sat, 18 Jun 2005 00:16:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/06/uml-avec-rootstrap/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/06/uml-avec-rootstrap/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/06/uml-avec-rootstrap/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;Depuis, quelques temps, je voulais pouvoir m&#x27;installer une &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.ubuntulinux.org&#x2F;&quot;&gt;Ubuntu&lt;&#x2F;a&gt; et une &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;fr.wikipedia.org&#x2F;wiki&#x2F;Debian&quot;&gt;Debian&lt;&#x2F;a&gt; Sarge afin de pouvoir mieux vérifier les paquages de &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;klibido.sourceforge.net&#x2F;&quot;&gt;Klibido&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.sukria.net&#x2F;fr&#x2F;&quot;&gt;Sukria&lt;&#x2F;a&gt; m&#x27;avait expliqué qu&#x27;il utilisait &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;linux-vserver.org&#x2F;&quot;&gt;vserver&lt;&#x2F;a&gt; pour avoir un système virtuel tous en gardant de très bonne performance. Je pensais aussi a Xen Linux qui permet plus ou moins la même chose. Ce qui m&#x27;a découragé, c&#x27;est que dans les deux cas, il faut recompiler la kernellette et j&#x27;ai un chipset IT8212 qui n&#x27;est supporté que dans les branche -ac et -mm du Kernel, or, j&#x27;ai clairement la flemme de me prendre la tête a repasser sur un kernel &quot;officiel&quot; pour ensuite le patcher.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;deploiment&quot;&gt;Déploiment&lt;&#x2F;h2&gt;
+&lt;p&gt;Donc me voila parti sur &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;usermodelinux.org&#x2F;&quot;&gt;UserModeLinux&lt;&#x2F;a&gt; (UML) qui est certe plus lent, mais qui marche très bien sur un kernel classique. Pour l&#x27;installation de la partition, j&#x27;ai utilisé rootstrap.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;apt-get install rootstrap user-mode-linux
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;La configuration est dans &#x2F;etc&#x2F;rootstrap&#x2F;rootstrap.conf&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;[global]
+fstype=ext2
+initialsize=2048
+freespace=0
+modules=network mkfs mount debian uml umount
+PATH=&#x2F;bin:&#x2F;sbin:&#x2F;usr&#x2F;bin:&#x2F;usr&#x2F;sbin
+
+[network]
+hostname=sarge
+interface=eth0
+transport=tuntap
+host=192.168.0.69
+uml=192.168.0.15
+nameserver=213.228.0.95
+gateway=192.168.0.1
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</description>
+      </item>
+      <item>
+          <title>Klibido dans Debian</title>
+          <pubDate>Fri, 17 Jun 2005 23:56:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://goneri.lebouder.net/posts/2005/06/klibido-dans-debian/</link>
+          <guid>https://goneri.lebouder.net/posts/2005/06/klibido-dans-debian/</guid>
+          <description xml:base="https://goneri.lebouder.net/posts/2005/06/klibido-dans-debian/">&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2005&#x2F;06&#x2F;klibido-dans-debian&#x2F;debian.orig.png&quot; alt=&quot;logo Debian&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Aujourd&#x27;hui, Neil McGovern, mon sponsor Debian a uploader klibido dans la distribution Debian Sid, le pocessus prend quelques jours et normalement d&#x27;ici le milieu de la semaine prochaine, le paquage devrait être disponible pour tous le monde.&lt;&#x2F;p&gt;
+&lt;p&gt;Donc, voila, si tous se passe bien, d&#x27;ici la fin de la semaine prochaine je serai officiellement maintenant Debian \o&#x2F;, a moi les bimbos nues ! Au passage, merci &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;www.sukria.net&#x2F;fr&#x2F;&quot;&gt;Alexis&lt;&#x2F;a&gt; pour ton aide ;).&lt;&#x2F;p&gt;
+</description>
+      </item>
+    </channel>
+</rss>

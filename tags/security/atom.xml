@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Gonéri&#x27;s blog - security</title>
+    <link rel="self" type="application/atom+xml" href="https://goneri.lebouder.net/tags/security/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://goneri.lebouder.net"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-09-17T21:03:40+00:00</updated>
+    <id>https://goneri.lebouder.net/tags/security/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Allow broken certificate for a specific host with Python&#x27;s requests</title>
+        <published>2025-09-17T21:03:40+00:00</published>
+        <updated>2025-09-17T21:03:40+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2025/09/allow-broken-certificate-for-a-specific-host-with-pythons-requests/"/>
+        <id>https://goneri.lebouder.net/posts/2025/09/allow-broken-certificate-for-a-specific-host-with-pythons-requests/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2025/09/allow-broken-certificate-for-a-specific-host-with-pythons-requests/">&lt;p&gt;After a bit of trial error, this is how you can allow requests to connect to a specific host, despite a broken certificate:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;python&quot;&gt;import requests
+import requests.adapters
+import ssl
+import urllib3
+from urllib3.util import create_urllib3_context
+
+class AllowBrokenSSLContextHTTPAdapter(requests.adapters.HTTPAdapter):
+    def __init__(self, **kwargs):
+        ssl_context = create_urllib3_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        self.ssl_context = ssl_context
+        super().__init__(**kwargs)
+
+    def init_poolmanager(self, connections, maxsize, block=False):
+        self.poolmanager = urllib3.poolmanager.PoolManager(
+            num_pools=connections,
+            maxsize=maxsize,
+            block=block,
+            ssl_context=self.ssl_context,
+        )
+
+    def send(self, request, **kwargs):
+        kwargs[&amp;quot;verify&amp;quot;] = self.ssl_context.check_hostname
+        return super().send(request, **kwargs)
+
+session = requests.session()
+session.mount(
+    &amp;quot;https:&#x2F;&#x2F;wrong.host.badssl.com&amp;quot;,
+    AllowBrokenSSLContextHTTPAdapter(),
+)
+session.get(&amp;quot;https:&#x2F;&#x2F;google.com&amp;quot;)
+session.get(&amp;quot;https:&#x2F;&#x2F;wrong.host.badssl.com&amp;quot;)
+print(&amp;quot;Can reach https:&#x2F;&#x2F;wrong.host.badssl.com despite the invalid hostname&amp;quot;)
+try:
+    result = session.get(&amp;quot;https:&#x2F;&#x2F;untrusted-root.badssl.com&#x2F;&amp;quot;)
+except requests.exceptions.SSLError:
+    print(&amp;quot;fails has expected&amp;quot;)
+else:
+    print(&amp;quot;Ooops&amp;quot;)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Connect to ZooKeeper over TLS&#x2F;SSL</title>
+        <published>2021-10-15T17:39:23+00:00</published>
+        <updated>2021-10-15T17:39:23+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2021/10/connect-to-zookeeper-over-tls-ssl/"/>
+        <id>https://goneri.lebouder.net/posts/2021/10/connect-to-zookeeper-over-tls-ssl/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2021/10/connect-to-zookeeper-over-tls-ssl/">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;goneri.lebouder.net&#x2F;posts&#x2F;2021&#x2F;10&#x2F;connect-to-zookeeper-over-tls-ssl&#x2F;zk_logo.png&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;zk_logo.png&quot; height=&quot;209&quot; width=&quot;147&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;It&#x27;s surprisingly tricky to connect to a ZooKeeper cluster over TLS&#x2F;SSL using the zkCli.sh command. You&#x27;ve got to wrap the command and pass some extra incantations. Here is the script I use. My certificates are in &#x2F;etc&#x2F;zookeeper&#x2F;ca, so you may need to adjust that to match your local installation.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;#!&#x2F;bin&#x2F;bash
+
+ZK_CLIENT_HEAP=&amp;quot;${ZK_CLIENT_HEAP:-256}&amp;quot;
+export ZK_CLIENT_SSL=&amp;quot;-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty -Dzookeeper.ssl.keyStore.location=&#x2F;etc&#x2F;zookeeper&#x2F;ca&#x2F;keystores&#x2F;server.pem -Dzookeeper.ssl.trustStore.location=&#x2F;etc&#x2F;zookeeper&#x2F;ca&#x2F;certs&#x2F;cacert.pem -Dzookeeper.client.secure=true&amp;quot;
+export CLIENT_JVMFLAGS=&amp;quot;-Xmx${ZK_CLIENT_HEAP}m $ZK_CLIENT_SSL $CLIENT_JVMFLAGS&amp;quot;
+&#x2F;opt&#x2F;zookeeper&#x2F;bin&#x2F;zkCli.sh -server my-host-fqdn:2281
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Getting BURP to use Puppet CA</title>
+        <published>2013-10-16T13:20:56+00:00</published>
+        <updated>2013-10-16T13:20:56+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/"/>
+        <id>https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2013/10/getting-burp-to-use-puppet-ca/">&lt;p&gt;I&#x27;m a big fan of &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;burp.grke.org&#x2F;&quot;&gt;BURP&lt;&#x2F;a&gt; to maintain my backups. This article explains how to reuse the PuppetMaster CA for authentication. I use Debian burp package on Wheezy.&lt;&#x2F;p&gt;
+&lt;p&gt;First, you need to generate the dhfile.pem on both the server and the agent:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;openssl dhparam -outform PEM -out &#x2F;etc&#x2F;burp&#x2F;dhfile.pem 1024
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-server&quot;&gt;The server&lt;&#x2F;h2&gt;
+&lt;p&gt;The configuration is in &#x2F;etc&#x2F;burp&#x2F;burp-server.conf:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;mode = server
+(...)
+# ca_conf = &#x2F;etc&#x2F;burp&#x2F;CA.cnf
+# ca_name = burpCA
+# ca_server_name = burpserver
+# ca_burp_ca = &#x2F;usr&#x2F;sbin&#x2F;burp_ca
+(...)
+ssl_cert_ca = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;ca.pem
+ssl_cert = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;ca&#x2F;signed&#x2F;newpuppet.lebouder.net.pem
+ssl_key = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;private_keys&#x2F;newpuppet.lebouder.net.pem
+ssl_key_password = password
+ssl_dhfile = &#x2F;etc&#x2F;burp&#x2F;dhfile.pem
+(...)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-agent&quot;&gt;The agent&lt;&#x2F;h2&gt;
+&lt;p&gt;The configuration file is &#x2F;etc&#x2F;burp&#x2F;burp.conf:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;mode = client
+port = 4971
+server = newpuppet.lebouder.net
+ssl_cert_ca = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;ca.pem
+ssl_cert = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;certs&#x2F;newclient.lebouder.net.pem
+ssl_key = &#x2F;var&#x2F;lib&#x2F;puppet&#x2F;ssl&#x2F;private_keys&#x2F;newclient.lebouder.net.pem
+ssl_peer_cn = newpuppet.lebouder.net
+(...)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;newpuppet.lebouder.net is the Puppet server.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Finally, a 4096 GnuPG key</title>
+        <published>2013-06-18T12:42:20+00:00</published>
+        <updated>2013-06-18T12:42:20+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2013/06/finally-a-4096-gnupg-key/"/>
+        <id>https://goneri.lebouder.net/posts/2013/06/finally-a-4096-gnupg-key/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2013/06/finally-a-4096-gnupg-key/">&lt;pre&gt;&lt;code data-lang=&quot;gpg&quot;&gt;-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+I finally generated a 4096 key ( 0x049ED9B94765572E ) which is signed
+by my old key 0x37D9412C. I will revoke this old key in the coming months.
+
+The old 1024bit key:
+pub 1024D&#x2F;37D9412C 2004-08-18
+Key fingerprint = D3BC 65BB 48B1 1DA8 BC8A 5C88 B0A4 C5A4 37D9 412C
+uid Gonéri Le Bouder
+uid Gonéri Le Bouder
+uid Gonéri Le Bouder
+uid Gonéri Le Bouder
+uid [jpeg image of size 7650]
+uid Gonéri Le Bouder (Professional address)
+uid [jpeg image of size 4672]
+sub 1024g&#x2F;E47802B2 2004-08-18
+sub 2048R&#x2F;F89D348A 2013-06-01
+
+The new key:
+pub 4096R&#x2F;4765572E 2013-06-18 [expires: 2023-07-15]
+Key fingerprint = 1FF3 68E8 0199 1373 1705 B8AF 049E D9B9 4765 572E
+uid Gonéri Le Bouder
+uid Gonéri Le Bouder
+uid Gonéri Le Bouder
+uid [jpeg image of size 7650]
+uid Gonéri Le Bouder
+sub 4096R&#x2F;E496738B 2013-06-18
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.15 (GNU&#x2F;Linux)
+
+iEYEARECAAYFAlJlJjsACgkQsKTFpDfZQSxwzwCeLDuJoMOwJ4H2fbQionyejDck
+GX8Anjp0V+rZHJ5fLlLv3yXWbsBt9K5m
+=RHzK
+-----END PGP SIGNATURE-----
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>OpenSSL1.0.0e+Net::SSLeay on Windows</title>
+        <published>2011-12-03T01:24:37+00:00</published>
+        <updated>2011-12-03T01:24:37+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://goneri.lebouder.net/posts/2011/12/openssl1-0-0enetssleay-on-windows/"/>
+        <id>https://goneri.lebouder.net/posts/2011/12/openssl1-0-0enetssleay-on-windows/</id>
+        
+        <content type="html" xml:base="https://goneri.lebouder.net/posts/2011/12/openssl1-0-0enetssleay-on-windows/">&lt;p&gt;I managed to get Net::SSLeay to work with the latest OpenSSL release. Here are just some notes for myself.&lt;&#x2F;p&gt;
+&lt;p&gt;OpenSSL test-suite build will fail but the .a and the openssl.exe files are ok.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;; LIBPATH=`echo $LIBPATH | sed -e &amp;#39;s&#x2F; &#x2F;:&#x2F;g&amp;#39;`; LD\_LIBRARY\_PATH=$LIBPATH:$LD\_LIBRARY\_PATH ${LDCMD} ${LDFLAGS} -o ${APPNAME:=ideatest.exe} ideatest.o ${LIBDEPS} )
+make[2]: Leaving directory `&#x2F;cygdrive&#x2F;c&#x2F;strawberry&#x2F;openssl-1.0.0e&#x2F;test&amp;#39;
+gcc -I.. -I..&#x2F;include -DOPENSSL\_THREADS -D\_MT -DDSO\_WIN32 -DL\_ENDIAN -DWIN32\_LEAN\_AND\_MEAN -fomit-frame-pointer -O3 -march=i486 -Wall -DOPENSSL\_BN\_ASM\_PART\_WORDS -DOPENSSL\_IA32\_SSE2 -DOPENSSL\_BN\_ASM\_MONT -DSHA1\_ASM -DSHA256\_ASM -DSHA512\_ASM -DMD5\_ASM -DRMD160\_ASM -DAES\_ASM -DWHIRLPOOL\_ASM -c -o md2test.o md2test.c
+md2test.c:1: error: expected identifier or &amp;#39;(&amp;#39; before &amp;#39;!&amp;#39; token
+md2test.c:1: error: stray &amp;#39;\\377&amp;#39; in program
+md2test.c:1: error: stray &amp;#39;\\376&amp;#39; in program
+md2test.c:1:14: warning: null character(s) ignored
+md2test.c:1:16: warning: null character(s) ignored
+md2test.c:1:18: warning: null character(s) ignored
+md2test.c:1:20: warning: null character(s) ignored
+md2test.c:1:22: warning: null character(s) ignored
+md2test.c:1:24: warning: null character(s) ignored
+md2test.c:1:26: warning: null character(s) ignored
+md2test.c:1:28: warning: null character(s) ignored
+md2test.c:1:30: warning: null character(s) ignored
+md2test.c:1:32: warning: null character(s) ignored
+md2test.c:1:34: warning: null character(s) ignored
+: recipe for target `md2test.o&amp;#39; failed
+make[1]: \*\*\* [md2test.o] Error 1
+make[1]: Leaving directory `&#x2F;cygdrive&#x2F;c&#x2F;strawberry&#x2F;openssl-1.0.0e&#x2F;test&amp;#39;
+Makefile:255: recipe for target `build\_tests&amp;#39; failed
+make: \*\*\* [build\_tests] Error 1 Administrator@ordi-de-gon▒ri &#x2F;cygdrive&#x2F;c&#x2F;strawberry&#x2F;openssl-1.0.0e
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The openssl.exe binary is in apps&#x2F; on Windows, not bin. Net::SSLeay&#x27;s Makefile.PL file fails to find the OpenSSL distribution because of that.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;(...)
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x251a): undefined reference to `\_imp\_\_CertOpenStore@20&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x255f): undefined reference to `imp\_\_CertFreeCertificateContext@4&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x2576): undefined reference to `\_imp\_\_CertCloseStore@8&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x25d5): undefined reference to `\_imp\_\_CertEnumCertificatesInStore@8&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x2e1a): undefined reference to `\_imp\_\_CertOpenStore@20&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x2e4d): undefined reference to `\_imp\_\_CertEnumCertificatesInStore@8&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x2f28): undefined reference to `\_imp\_\_CertDuplicateCertificateContext@4&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x2fb1): undefined reference to `\_imp\_\_CertCloseStore@8&amp;#39;
+c:\\strawberry\\openssl-1.0.0e\\libcrypto.a(e\_capi.o):e\_capi.c:(.text+0x30e6): undefined reference to `\_imp\_\_CertFreeCertificateContext@4&amp;#39;
+collect2: ld returned 1 exit status
+dmake: Error code 129, while making &amp;#39;blib\\arch\\auto\\Net\\SSLeay\\SSLeay.dll&amp;#39;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The patch to apply to get Net::SSLeay to build.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;diff&quot;&gt;--- Net-SSLeay-1.42.orig&#x2F;inc&#x2F;Module&#x2F;Install&#x2F;PRIVATE&#x2F;Net&#x2F;SSLeay.pm 2011-10-03 08:23:34.000000000 +0200
++++ Net-SSLeay-1.42&#x2F;inc&#x2F;Module&#x2F;Install&#x2F;PRIVATE&#x2F;Net&#x2F;SSLeay.pm 2011-12-03 02:22:28.286660290 +0100
+@@ -90,7 +90,7 @@ EOM # libeay32 and ssleay32. # This construction will not complain as long as it find at least one # libssl32.a is made by openssl onWin21 with the ms&#x2F;minw32.bat builder
+- push @{ $opts-\&amp;gt;{lib\_links} }, qw( libeay32MD ssleay32MD libeay32 ssleay32 libssl32);
++ push @{ $opts-\&amp;gt;{lib\_links} }, qw( libssl libcrypto Crypt32 ); } else { $opts-\&amp;gt;{optimize} = &amp;#39;-O2 -g&amp;#39;; push @{ $opts-\&amp;gt;{lib\_links} },
+@@ -172,9 +172,10 @@ sub find\_openssl\_exec { my ($self, $prefix) = @\_; my $exe\_path;
+- for my $subdir (qw( bin sbin out32dll )) {
++ for my $subdir (qw( apps bin sbin out32dll )) { my $path = File::Spec-\&amp;gt;catfile($prefix, $subdir, &amp;quot;openssl$Config{\_exe}&amp;quot;);
+- if ( -x $path ) {
++
++ if ( -e $path ) { return $path; } }
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+</feed>
